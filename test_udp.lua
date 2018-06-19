@@ -15,9 +15,9 @@ while true do
 		local to_send = struct.pack('Bhh', LED_RAW, 0, 30)
 		for j=0,30 do
 			to_send = to_send .. struct.pack('BBB',
-				((math.sin(((j+i)%t/t) * 2 * math.pi + math.pi) + 1) / 2) * 50,
-				((math.sin(((j+i)%t/t) * 2 * math.pi) + 1) / 2) * 10,
-				((math.sin(((j+i)%t/t) * 2 * math.pi) + 1) / 2) * 255
+				((math.sin(((j+i)%t/t) * 2 * math.pi + math.pi) + 1) / 2) * 20,
+				((math.sin(((j+i)%t/t) * 2 * math.pi) + 1) / 2) * 20,
+				((math.sin(((j+i)%t/t) * 2 * math.pi) + 1) / 2) * 100 + 40
 			)
 		end
 		assert(udp:sendto(to_send, ip, port))
