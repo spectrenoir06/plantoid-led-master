@@ -1,17 +1,19 @@
 local socket = require("socket")
+
 require "struct"
 
-local LED_IP        = "192.168.11.109"
+local LED_IP        = "192.168.12.50"
 local LED_PORT      = 12345
-local SERVER_PORT   = 1234
+local SERVER_PORT   = 8000
 
 local TYPE_LED_RAW  = 0
 local TYPE_GET_INFO = 1
 
 local LED_FRAMERATE = 20
 
+
 local udp = assert(socket.udp())
-udp:setsockname("*", LED_PORT)
+udp:setsockname("*", SERVER_PORT)
 udp:settimeout(0)
 
 function send_led(c)
@@ -45,7 +47,7 @@ while true do
 
 	data, ip, port = udp:receivefrom() -- receive from led, adc and super collider
 	if data then
-		print("Received: ", ip, port)
+		print("Received: ", ip, port, #data)
 		print(data)
 		-- udp:sendto(data, ip, port)
 	end
