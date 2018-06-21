@@ -1,15 +1,16 @@
 #!/usr/bin/env lua
 
-local socket = require("socket")
+local socket  = require("socket")
 local inspect = require("inspect")
-local osc = require "osc"
+local osc     = require("osc")
+
 require "struct"
 
 local LED_IP        = "192.168.12.50"
 local LED_PORT      = 12345
 
-local MUSIC_IP        = "127.0.0.1"
-local MUSIC_PORT      = 54321
+local MUSIC_IP       = "127.0.0.1"
+local MUSIC_PORT     = 54321
 
 local SERVER_PORT   = 8000
 
