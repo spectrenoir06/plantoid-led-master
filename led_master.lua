@@ -1,3 +1,5 @@
+#!/usr/bin/env lua
+
 local socket = require("socket")
 local inspect = require("inspect")
 local osc = require "osc"
