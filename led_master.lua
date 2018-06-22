@@ -1,10 +1,9 @@
 #!/usr/bin/env lua
 
+require("lib.osc")
 local socket  = require("socket")
-local inspect = require("inspect")
-local osc     = require("osc")
-
-require "struct"
+local inspect = require("lib.inspect")
+local struct  = require("lib.struct")
 
 local LED_IP        = "192.168.12.50"
 local LED_PORT      = 12345
@@ -91,7 +90,7 @@ while true do
 
 	if replay then
 		if replay_index < replay_len then
-			if replay_dump[replay_index][1] <= socket.gettime() - time_start_cpu then
+			while replay_dump[replay_index][1] <= socket.gettime() - time_start_cpu do
 				local to_send = { replay_dump[replay_index][2], { 'f', replay_dump[replay_index][3]}}
 				--print(inspect(to_send))
 				sensors[replay_dump[replay_index][2]] = replay_dump[replay_index][3]
@@ -113,9 +112,9 @@ while true do
 			sensors[addr] = value[2]
 			os.execute("clear")
 			print(inspect(sensors))
-			print(socket.gettime() - time_start_cpu, addr, value[2])
+			-- print(socket.gettime() - time_start_cpu, addr, value[2])
 			file:write((socket.gettime() - time_start_cpu)..";"..addr..";"..value[2].."\n")
 		end
 	end
-	-- socket.sleep(0.0001)
+	socket.sleep(0.0001)
 end
