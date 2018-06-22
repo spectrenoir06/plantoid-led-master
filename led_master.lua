@@ -93,7 +93,10 @@ while true do
 		if replay_index < replay_len then
 			if replay_dump[replay_index][1] <= socket.gettime() - time_start_cpu then
 				local to_send = { replay_dump[replay_index][2], { 'f', replay_dump[replay_index][3]}}
-				print(inspect(to_send))
+				--print(inspect(to_send))
+				sensors[replay_dump[replay_index][2]] = replay_dump[replay_index][3]
+				os.execute("clear")
+				print(inspect(sensors))
 				assert(udp:sendto(osc.encode(to_send), MUSIC_IP, MUSIC_PORT))
 				replay_index = replay_index + 1
 			end
@@ -108,9 +111,11 @@ while true do
 			local addr = osc.get_addr_from_data(data)
 			local value = osc.decode(data)
 			sensors[addr] = value[2]
+			os.execute("clear")
+			print(inspect(sensors))
 			print(socket.gettime() - time_start_cpu, addr, value[2])
 			file:write((socket.gettime() - time_start_cpu)..";"..addr..";"..value[2].."\n")
 		end
 	end
-	socket.sleep(0.0001)
+	-- socket.sleep(0.0001)
 end
