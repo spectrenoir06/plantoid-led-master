@@ -1,8 +1,11 @@
 # plantoid-led-master
 
 ### dependence
-lua-socket
-lua posix
+```
+luarocks install luasocket
+luarocks install luaposix
+luarocks install lpack
+```
 
 ### runs serveur and dump ( dump/log.dump )
 ```
