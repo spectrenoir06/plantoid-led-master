@@ -1,9 +1,9 @@
 # plantoid-led-master
 
-## runs serveur and dump ( dump/log.dump )
+### runs serveur and dump ( dump/log.dump )
 
 ./led_master.lua
 
-## replay dump
+### replay dump
 
 ./led_master.lua replay dump/big.dump
