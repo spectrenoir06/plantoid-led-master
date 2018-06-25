@@ -4,8 +4,10 @@ require("lib.osc")
 local socket  = require("socket")
 local inspect = require("lib.inspect")
 local struct  = require("lib.struct")
+local signal  = require("posix.signal")
 
-local LED_IP        = "192.168.11.50"        -- ip to connect to led driver
+
+local LED_IP        = "192.168.12.50"        -- ip to connect to led driver
 local LED_PORT      = 12345                  -- port to connect to led driver
 
 local CLIENT_MUSIC_IP       = "127.0.0.1"    -- ip to connect to super collider
@@ -42,11 +44,8 @@ udp:setsockname("*", SERVER_SENSOR_PORT)
 udp:settimeout(0)
 
 
-
-
-
 function send_led(c)
-	local to_send = struct.pack('Bhh', TYPE_LED_RAW_RGBW, 0, 93)
+	local to_send = struct.pack('Bhh', TYPE_LED_RAW, 0, 93)
 	for j=0,93 do
 		local r, g, b = color_wheel(c*5)
 		to_send = to_send .. struct.pack('BBB', r, g, b)
@@ -84,6 +83,20 @@ function color_wheel(WheelPos)
 	end
 end
 
+signal.signal(signal.SIGINT, function(signum)
+	io.write("\n")
+
+	local to_send = struct.pack('Bhh', TYPE_LED_RAW, 0, 93)
+	for j=0,93 do
+		to_send = to_send .. struct.pack('BBB', 0, 0, 0)
+	end
+	assert(udp:sendto(to_send, LED_IP, LED_PORT))
+
+	udp:close();
+	-- put code to save some stuff here
+	os.exit(128 + signum)
+end)
+
 
 if arg[1] == "replay" then
 	print("Start replay:", arg[2])
@@ -93,7 +106,7 @@ if arg[1] == "replay" then
 else
 	replay = false
 	print("start dump:", "log.dump")
-	file = io.open("log.dump", "w")
+	file = io.open("dump/log.dump", "w")
 	file:write(time_start_epoch .. "\n")
 end
 
@@ -116,7 +129,7 @@ while true do
 				sensors[replay_dump[replay_index][2]] = replay_dump[replay_index][3]
 				os.execute("clear")
 				print(inspect(sensors))
-				assert(udp:sendto(osc.encode(to_send), MUSIC_IP, MUSIC_PORT))
+				assert(udp:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 				replay_index = replay_index + 1
 			end
 		else
