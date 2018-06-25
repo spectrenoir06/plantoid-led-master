@@ -7,11 +7,11 @@ local struct  = require("lib.struct")
 local signal  = require("posix.signal")
 
 
-local LED_IP        = "192.168.12.50"        -- ip to connect to led driver
-local LED_PORT      = 12345                  -- port to connect to led driver
+local LED_IP             = "192.168.12.50"        -- ip to connect to led driver
+local LED_PORT           = 12345                  -- port to connect to led driver
 
-local CLIENT_MUSIC_IP       = "127.0.0.1"    -- ip to connect to super collider
-local CLIENT_MUSIC_PORT     = 54321          -- port to connect to super collider
+local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
+local CLIENT_MUSIC_PORT  = 54321             -- port to connect to super collider
 
 local SERVER_SENSOR_PORT = 8000              -- port to listen to sensors OSC data
 local SERVER_MUSIC_PORT  = 8001              -- port to listen to super collider OSC data
