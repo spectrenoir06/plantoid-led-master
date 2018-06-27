@@ -2,6 +2,8 @@
 
 ### dependence
 ```
+lua 5.1
+
 luarocks install luasocket
 luarocks install luaposix
 luarocks install lpack
