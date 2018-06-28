@@ -6,23 +6,20 @@ local inspect = require("lib.inspect")
 local struct  = require("lib.struct")
 local signal  = require("posix.signal")
 
-
-local LED_IP             = "192.168.12.50"        -- ip to connect to led driver
-local LED_PORT           = 12345                  -- port to connect to led driver
-
+local Segment = require("class.Segment")
 
 local REMOTE = {
 	{
 		ip   = "192.168.12.49",
 		port = 12345,
 		nb   = 30,
-		type = "RGBW"
+		RGBW = true
 	},
 	{
 		ip   = "192.168.12.50",
 		port = 12345,
 		nb   = 93,
-		type = "RGBW"
+		RGBW = true
 	}
 }
 
@@ -32,13 +29,6 @@ local CLIENT_MUSIC_PORT  = 54321             -- port to connect to super collide
 local SERVER_SENSOR_PORT = 8000              -- port to listen to sensors OSC data
 local SERVER_MUSIC_PORT  = 8001              -- port to listen to super collider OSC data
 local SERVER_DATA_PORT   = 8002              -- port to listen to other data ( led info, cmd, ...)
-
-local TYPE_LED_RAW                 = 0
-local TYPE_LED_RAW_AND_UPDATE      = 1
-local TYPE_LED_RAW_RGBW            = 2
-local TYPE_LED_RAW_RGBW_AND_UPDATE = 3
-local TYPE_LED_UPDATE              = 4
-local TYPE_GET_INFO                = 5
 
 local LED_FRAMERATE = 15
 
@@ -61,14 +51,6 @@ local counter = 0
 local udp = assert(socket.udp())
 udp:setsockname("*", SERVER_SENSOR_PORT)
 udp:settimeout(0)
-
-function set_segment(remote, color, nb_led)
-	local to_send = struct.pack('Bhh', remote.type == "RGBW" and TYPE_LED_RAW_RGBW_AND_UPDATE or TYPE_LED_RAW_AND_UPDATE, 0, nb_led)
-	for j=0, nb_led do
-		to_send = to_send .. struct.pack(remote.type == "RGBW" and 'BBBB' or 'BBB', color.r, color.g, color.b, color.w or 0)
-	end
-	assert(udp:sendto(to_send, remote.ip, remote.port))
-end
 
 function load_dump(name)
 	local file = io.open(name, "r")
@@ -104,7 +86,7 @@ signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
 
 	for k,v in ipairs(REMOTE) do
-		set_segment(v, {r=0,g=0,b=0}, v.nb)
+		-- set_segment(v, {r=0,g=0,b=0}, v.nb)
 	end
 
 	udp:close();
@@ -125,6 +107,11 @@ else
 	file:write(time_start_epoch .. "\n")
 end
 
+local seg = {
+	Segment:new(30, REMOTE[1], udp),
+	Segment:new(93, REMOTE[2], udp)
+}
+
 while true do
 	dt = socket.gettime() - time
 	time = socket.gettime()
@@ -132,9 +119,16 @@ while true do
 	timer_led = timer_led + dt
 	if timer_led > (1 / LED_FRAMERATE) then
 		local r, g, b = color_wheel(counter)
-
-		set_segment(REMOTE[1], {r=r,g=g,b=b}, 30)
-		set_segment(REMOTE[2], {r=r,g=g,b=b}, 93)
+		for i=0,92 do
+			local r, g ,b = color_wheel(i/92 * 255)
+			seg[2]:setPixel(i, {r,g,b})
+		end
+		for i=0,29 do
+			local r, g ,b = color_wheel(i/29 * 255)
+			seg[1]:setPixel(i, {r,g,b})
+		end
+		seg[1]:update()
+		seg[2]:update()
 		counter = counter + 1
 		timer_led = 0
 	end
