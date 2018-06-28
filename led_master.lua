@@ -52,6 +52,12 @@ local udp = assert(socket.udp())
 udp:setsockname("*", SERVER_SENSOR_PORT)
 udp:settimeout(0)
 
+local seg = {
+	Segment:new(30, REMOTE[1], udp),
+	Segment:new(93, REMOTE[2], udp)
+}
+
+
 function load_dump(name)
 	local file = io.open(name, "r")
 	local lines = {}
@@ -85,8 +91,8 @@ end
 signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
 
-	for k,v in ipairs(REMOTE) do
-		-- set_segment(v, {r=0,g=0,b=0}, v.nb)
+	for k,v in ipairs(seg) do
+		v:off()
 	end
 
 	udp:close();
@@ -107,28 +113,19 @@ else
 	file:write(time_start_epoch .. "\n")
 end
 
-local seg = {
-	Segment:new(30, REMOTE[1], udp),
-	Segment:new(93, REMOTE[2], udp)
-}
-
 while true do
 	dt = socket.gettime() - time
 	time = socket.gettime()
 
 	timer_led = timer_led + dt
 	if timer_led > (1 / LED_FRAMERATE) then
-		local r, g, b = color_wheel(counter)
-		for i=0,92 do
-			local r, g ,b = color_wheel(i/92 * 255)
-			seg[2]:setPixel(i, {r,g,b})
+		for k,v in ipairs(seg) do
+			for i=0, v.size-1 do
+				local r, g ,b = color_wheel(i/(v.size-1) * 255)
+				v:setPixel(i, {r,g,b})
+			end
+			v:update()
 		end
-		for i=0,29 do
-			local r, g ,b = color_wheel(i/29 * 255)
-			seg[1]:setPixel(i, {r,g,b})
-		end
-		seg[1]:update()
-		seg[2]:update()
 		counter = counter + 1
 		timer_led = 0
 	end
@@ -161,5 +158,5 @@ while true do
 			file:write((socket.gettime() - time_start_cpu)..";"..addr..";"..value[2].."\n")
 		end
 	end
-	socket.sleep(0.0001)
+	socket.sleep(0.001)
 end
