@@ -5,23 +5,14 @@ local socket  = require("socket")
 local inspect = require("lib.inspect")
 local struct  = require("lib.struct")
 local signal  = require("posix.signal")
+local json    = require("lib.json")
 
-local Segment = require("class.Segment")
+local Plantoid = require("class.Plantoid")
 
-local REMOTE = {
-	{
-		ip   = "192.168.12.49",
-		port = 12345,
-		nb   = 30,
-		RGBW = true
-	},
-	{
-		ip   = "192.168.12.50",
-		port = 12345,
-		nb   = 93,
-		RGBW = true
-	}
-}
+local file = io.open("map.json", "r")
+local text = file:read("*a")
+local data = json.decode(text)
+file:close()
 
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 54321             -- port to connect to super collider
@@ -52,11 +43,7 @@ local udp = assert(socket.udp())
 udp:setsockname("*", SERVER_SENSOR_PORT)
 udp:settimeout(0)
 
-local seg = {
-	Segment:new(30, REMOTE[1], udp),
-	Segment:new(93, REMOTE[2], udp)
-}
-
+local plant = Plantoid:new(data[1], udp)
 
 function load_dump(name)
 	local file = io.open(name, "r")
@@ -91,9 +78,7 @@ end
 signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
 
-	for k,v in ipairs(seg) do
-		v:off()
-	end
+	plant:off()
 
 	udp:close();
 	-- put code to save some stuff here
@@ -119,13 +104,33 @@ while true do
 
 	timer_led = timer_led + dt
 	if timer_led > (1 / LED_FRAMERATE) then
-		for k,v in ipairs(seg) do
-			for i=0, v.size-1 do
-				local r, g ,b = color_wheel(i/(v.size-1) * 255)
-				v:setPixel(i, {r,g,b})
+		-- plant:setPixel(0, "Petales", 1, {255,0,0})
+		-- plant:setPixel(0, "Petales", 2, {0,255,0})
+		-- plant:setPixel(0, "Petales", 3, {0,0,255})
+		-- plant:show("Petales")
+
+		for pet=1,3 do
+			local size = plant.parts["Petales"][pet].size-1
+			for i=0, size do
+				local r,g,b = color_wheel(i/size*255)
+				plant:setPixel(i, {r,g,b}, "Petales", pet)
 			end
-			v:update()
 		end
+		plant:show("Petales")
+
+		local size = plant.parts["Spots"][1].size-1
+		for i=0, size do
+			local r,g,b = color_wheel(i/size*255)
+			plant:setPixel(i, {r,g,b}, "Spots", 1)
+		end
+		plant:show("Spots")
+
+		-- for k,v in ipairs(seg) do
+		-- 		local r, g ,b = color_wheel(i/(v.size-1) * 255)
+		-- 		v:setPixel(i, {r,g,b})
+		-- 	end
+		-- 	v:update()
+		-- end
 		counter = counter + 1
 		timer_led = 0
 	end

@@ -24,16 +24,16 @@ function init_tab(nb, color)
 	return t
 end
 
-function Segment:initialize(size, remote, socket)
-	self.data = init_tab(size)
+function Segment:initialize(remote, socket)
+	self.data = init_tab(remote.size)
 	self.remote = remote
-	self.size = size
 	self.RGBW = remote.RGBW
+	self.size = remote.size
 	self.socket  = socket
 end
 
 function Segment:setPixel(index, color)
-	-- print("setPixel",index, self.size)
+	print("setPixel",index, self.size)
 	if index < 0 or index > (self.size - 1) then
 		return false
 	end
@@ -51,7 +51,7 @@ end
 
 
 function Segment:send(off, size, update)
-	-- print("send",off,size,update)
+	print("send",off,size,update)
 	local cmd = self.RGBW and TYPE_LED_RAW_RGBW or TYPE_LED_RAW
 	local color = self.RGBW and "bbbb" or "bbb"
 	if update then
@@ -64,7 +64,7 @@ function Segment:send(off, size, update)
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 end
 
-function Segment:update()
+function Segment:show()
 	local nb_update = math.ceil(self.size / MAX_UPDATE)
 	for i=1, nb_update-1 do
 		self:send((i-1) * MAX_UPDATE, MAX_UPDATE, false)
@@ -81,7 +81,7 @@ end
 
 function Segment:off()
 	self:clear()
-	self:update()
+	self:show()
 end
 
 return Segment

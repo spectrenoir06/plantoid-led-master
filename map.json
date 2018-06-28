@@ -1,0 +1,45 @@
+[
+	{
+		"name": "Plantoid_test",
+		"remotes": {
+			"petales": {
+				"ip"   : "192.168.12.49",
+				"port" : 12345,
+				"size" : 30,
+				"RGBW" : true
+			},
+			"spot": {
+				"ip"   : "192.168.12.50",
+				"port" : 12345,
+				"size" : 93,
+				"RGBW" : true
+			}
+		},
+		"parts": {
+			"Petales": [
+				{
+					"remote": "petales",
+					"off": 0,
+					"size": 10
+				},
+				{
+					"remote": "petales",
+					"off": 10,
+					"size": 10
+				},
+				{
+					"remote": "petales",
+					"off": 20,
+					"size": 10
+				}
+			],
+			"Spots": [
+				{
+					"remote": "spot",
+					"off": 0,
+					"size": 93
+				}
+			]
+		}
+	}
+]
