@@ -3,12 +3,6 @@ local Segment = require('class.Segment')
 
 local Plantoid = class('Plantoid')
 
-local _spot_len    = 241
-local _petal_len   = 180
-local _feuille_len = 180
-local _support_len = 180
-local _tige_len    = 180
-
 function Plantoid:initialize(data, socket)
 	self.segments = {}
 	for k,v in pairs(data.remotes) do
@@ -20,6 +14,18 @@ end
 function Plantoid:setPixel(index_led, color, part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	self.segments[part.remote]:setPixel(index_led + part.off, color)
+end
+
+function Plantoid:setAllPixel(color, part_name, part_number)
+	local size = self:getPartSize(part_name, part_number)
+	for i=0,size-1 do
+		self:setPixel(i, color, part_name, part_number)
+	end
+end
+
+function Plantoid:getPartSize(part_name, part_number)
+	-- print("getPartSize",part_name,part_number)
+	return self.parts[part_name][part_number].size
 end
 
 function Plantoid:show(part_name, part_number)

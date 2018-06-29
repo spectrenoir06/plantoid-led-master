@@ -65,13 +65,13 @@ function color_wheel(WheelPos)
 	WheelPos = WheelPos % 255
 	WheelPos = 255 - WheelPos
 	if (WheelPos < 85) then
-		return 255 - WheelPos * 3, 0, WheelPos * 3
+		return {255 - WheelPos * 3, 0, WheelPos * 3}
 	elseif (WheelPos < 170) then
 		WheelPos = WheelPos - 85
-		return 0, WheelPos * 3, 255 - WheelPos * 3
+		return {0, WheelPos * 3, 255 - WheelPos * 3}
 	else
 		WheelPos = WheelPos - 170
-		return WheelPos * 3, 255 - WheelPos * 3, 0
+		return {WheelPos * 3, 255 - WheelPos * 3, 0}
 	end
 end
 
@@ -104,33 +104,20 @@ while true do
 
 	timer_led = timer_led + dt
 	if timer_led > (1 / LED_FRAMERATE) then
-		-- plant:setPixel(0, "Petales", 1, {255,0,0})
-		-- plant:setPixel(0, "Petales", 2, {0,255,0})
-		-- plant:setPixel(0, "Petales", 3, {0,0,255})
-		-- plant:show("Petales")
+		-- plant:setPixel(0, {0,255,0}, "Petales", 2)
+		-- plant:setPixel(0, {0,0,255}, "Petales", 3)
 
-		for pet=1,3 do
-			local size = plant.parts["Petales"][pet].size-1
+		for petale_nb=1, 3 do
+			local size = plant:getPartSize("Petales", petale_nb)
 			for i=0, size do
-				local r,g,b = color_wheel(i/size*255)
-				plant:setPixel(i, {r,g,b}, "Petales", pet)
+				plant:setPixel(i, color_wheel(i/size*255), "Petales", petale_nb)
 			end
 		end
 		plant:show("Petales")
 
-		local size = plant.parts["Spots"][1].size-1
-		for i=0, size do
-			local r,g,b = color_wheel(i/size*255)
-			plant:setPixel(i, {r,g,b}, "Spots", 1)
-		end
+		plant:setAllPixel({100,0,0}, "Spots", 1)
 		plant:show("Spots")
 
-		-- for k,v in ipairs(seg) do
-		-- 		local r, g ,b = color_wheel(i/(v.size-1) * 255)
-		-- 		v:setPixel(i, {r,g,b})
-		-- 	end
-		-- 	v:update()
-		-- end
 		counter = counter + 1
 		timer_led = 0
 	end

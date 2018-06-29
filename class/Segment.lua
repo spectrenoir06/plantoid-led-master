@@ -17,8 +17,8 @@ local MAX_UDP_SIZE = 1400
 local MAX_UPDATE = 100
 
 function init_tab(nb, color)
-	local t  = {}
-	for i=1,nb do
+	local t = {}
+	for i=1, nb do
 		t[i] = color or {0,0,0,0}
 	end
 	return t
@@ -33,7 +33,7 @@ function Segment:initialize(remote, socket)
 end
 
 function Segment:setPixel(index, color)
-	print("setPixel",index, self.size)
+	-- print("setPixel",index, self.size)
 	if index < 0 or index > (self.size - 1) then
 		return false
 	end
