@@ -2,13 +2,13 @@
 	{
 		"name": "Plantoid_test",
 		"remotes": {
-			"petales": {
+			"Petales": {
 				"ip"   : "192.168.12.49",
 				"port" : 12345,
 				"size" : 30,
 				"RGBW" : true
 			},
-			"spot": {
+			"Spots": {
 				"ip"   : "192.168.12.50",
 				"port" : 12345,
 				"size" : 93,
@@ -18,26 +18,137 @@
 		"parts": {
 			"Petales": [
 				{
-					"remote": "petales",
+					"remote": "Petales",
 					"off": 0,
 					"size": 10
 				},
 				{
-					"remote": "petales",
+					"remote": "Petales",
 					"off": 10,
 					"size": 10
 				},
 				{
-					"remote": "petales",
+					"remote": "Petales",
 					"off": 20,
 					"size": 10
 				}
 			],
 			"Spots": [
 				{
-					"remote": "spot",
+					"remote": "Spots",
 					"off": 0,
 					"size": 93
+				}
+			]
+		}
+	},
+	{
+		"name": "Plantoid_Moyen",
+		"remotes": {
+			"Petales": {
+				"ip"   : "192.168.12.60",
+				"port" : 12345,
+				"size" : 288
+			},
+			"Spots": {
+				"ip"   : "192.168.12.61",
+				"port" : 12345,
+				"RGBW" : true,
+				"size" : 241
+			},
+			"Feuilles": {
+				"ip"   : "192.168.12.62",
+				"port" : 12345,
+				"size" : 756
+			},
+			"Tige_et_support": {
+				"ip"   : "192.168.12.63",
+				"port" : 12345,
+				"size" : 420
+			},
+		},
+		"parts": {
+			"Petales": [
+				{
+					"remote": "Petales",
+					"off": 0,
+					"size": 72
+				},
+				{
+					"remote": "Petales",
+					"off": 72,
+					"size": 72
+				},
+				{
+					"remote": "Petales",
+					"off": 180,
+					"size": 144
+				}
+			],
+			"Spots": [
+				{
+					"remote": "Spots",
+					"off": 0,
+					"size": 241
+				}
+			],
+			"Feuilles": [
+				{
+					"remote": "Feuilles",
+					"off": 0,
+					"size": 216
+				},
+				{
+					"remote": "Feuilles",
+					"off": 216,
+					"size": 162
+				},
+				{
+					"remote": "Feuilles",
+					"off": 278,
+					"size": 216
+				},
+				{
+					"remote": "Feuilles",
+					"off": 594,
+					"size": 162
+				},
+			],
+			"Tiges": [
+				{
+					"remote": "Tige_et_support",
+					"off": 0,
+					"size": 90
+				},
+				{
+					"remote": "Tige_et_support",
+					"off": 90,
+					"size": 90,
+					"invert": true
+				}
+			],
+			"Supports": [
+				{
+					"remote": "Tige_et_support",
+					"off": 180,
+					"size": 60
+				},
+				{
+					"remote": "Tige_et_support",
+					"off": 240,
+					"size": 60,
+					"invert": true
+				},
+				{
+					"remote": "Tige_et_support",
+					"off": 300,
+					"size": 60
+				},
+				{
+					"remote": "Tige_et_support",
+					"off": 360,
+					"size": 60,
+					"invert": true
 				}
 			]
 		}

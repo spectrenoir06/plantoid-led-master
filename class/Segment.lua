@@ -14,7 +14,7 @@ local TYPE_LED_UPDATE              = 4
 local TYPE_GET_INFO                = 5
 
 local MAX_UDP_SIZE = 1400
-local MAX_UPDATE = 100
+local MAX_UPDATE = 10
 
 function init_tab(nb, color)
 	local t = {}
@@ -65,12 +65,15 @@ function Segment:send(off, size, update)
 end
 
 function Segment:show()
-	local nb_update = math.ceil(self.size / MAX_UPDATE)
-	for i=1, nb_update-1 do
-		self:send((i-1) * MAX_UPDATE, MAX_UPDATE, false)
-	end
-	local last_off = MAX_UPDATE * (nb_update-1)
-	self:send(last_off, self.size - last_off, true)
+	-- local nb_update = math.ceil(self.size / MAX_UPDATE)
+	-- print("nb_update", nb_update)
+	-- for i=1, nb_update-1 do
+	-- 	self:send((i-1) * MAX_UPDATE, MAX_UPDATE, false)
+	-- end
+	-- local last_off = MAX_UPDATE * (nb_update-1)
+	-- self:send(last_off, self.size - last_off, true)
+
+	self:send(0, self.size, true)
 end
 
 function Segment:clear()
