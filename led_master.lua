@@ -15,8 +15,8 @@ local text = file:read("*a")
 local data = json.decode(text)
 file:close()
 
-local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
-local CLIENT_MUSIC_PORT  = 54321             -- port to connect to super collider
+local CLIENT_MUSIC_IP    = "192.168.1.37"       -- ip to connect to super collider
+local CLIENT_MUSIC_PORT  = 8000             -- port to connect to super collider
 
 local SERVER_SENSOR_PORT = 8000              -- port to listen to sensors OSC data
 local SERVER_MUSIC_PORT  = 8001              -- port to listen to super collider OSC data
@@ -46,19 +46,35 @@ udp:settimeout(0)
 
 local plant = Plantoid:new(data[2], udp)
 
+function SecondsToClock(seconds)
+	local seconds = tonumber(seconds)
+
+	if seconds <= 0 then
+		return "00:00:00";
+	else
+		hours = string.format("%02.f", math.floor(seconds/3600));
+		mins = string.format("%02.f", math.floor(seconds/60 - (hours*60)));
+		secs = string.format("%02.f", math.floor(seconds - hours*3600 - mins *60));
+		return hours..":"..mins..":"..secs
+	end
+end
+
 function load_dump(name)
 	local file = io.open(name, "r")
 	local lines = {}
+	local lst_time = 0
 
 	local timestamp = file:read()
 
 	while true do
 		line = file:read()
 		if line == nil then break end
-		time, address, index ,data = line:match("([^,]+);([^,]+);([^,]+);([^,]+)")
+		local time, address, index ,data = line:match("([^,]+);([^,]+);([^,]+);([^,]+)")
+		lst_time = time
 		table.insert(lines, {tonumber(time), address, tonumber(index), tonumber(data)})
 	end
 	file:close()
+	print(SecondsToClock(lst_time))
 	return lines
 end
 
@@ -99,11 +115,8 @@ else
 	file:write(time_start_epoch .. "\n")
 end
 
--- local seg = Segment:initialize(data[2].remotes.Spots[1], udp)
-
-test = true
-
 while true do
+	-- print(time)
 	dt = socket.gettime() - time
 	time = socket.gettime()
 
@@ -178,13 +191,16 @@ while true do
 		-- -- 	end
 
 		-- -- end
-
-		-- plant:setAllPixel(
-		-- 	color_wheel(counter),
-		-- 	"Spots",
-		-- 	1
-		-- )
-		-- plant:show("Spots",1)
+		local c  = color_wheel(counter)
+		c[1] = c[1] / 4
+		c[2] = c[2] / 4
+		c[3] = c[3] / 4
+		plant:setAllPixel(
+			c,
+			"Tiges",
+			1
+		)
+		--plant:show("Tiges",1)
 		-- plant.segments[1]:show("Spots", 1)
 		-- plant:send(100, 100, true)
 		-- print(plant:getPartSize("Spots",1))
@@ -196,11 +212,25 @@ while true do
 	if replay then
 		if replay_index < replay_len then
 			if replay_dump[replay_index][1] <= socket.gettime() - time_start_cpu then
-				local to_send = { replay_dump[replay_index][2], { 'f', replay_dump[replay_index][3]}}
+				local sensor_addr  = replay_dump[replay_index][2]
+				local sensor_index = replay_dump[replay_index][3]
+				local sensor_value = replay_dump[replay_index][4]
+
+				local to_send = {
+					replay_dump[replay_index][2],
+					{
+						'i', sensor_index,
+						"f", sensor_value
+					}
+				}
 				-- print(inspect(to_send))
-				sensors[replay_dump[replay_index][2]] = replay_dump[replay_index][3]
-				os.execute("clear")
-				print(inspect(sensors))
+				if sensors[sensor_addr] == nil then
+					sensors[sensor_addr] = {}
+				end
+				sensors[sensor_addr][sensor_index + 1] = sensor_value
+				-- os.execute("clear")
+				-- print(inspect(sensors))
+
 				assert(udp:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 				replay_index = replay_index + 1
 			end
@@ -211,18 +241,21 @@ while true do
 	else
 		local data, ip, port = udp:receivefrom() -- receive data from led, adc or super collider
 		if data then
-			-- print("Received: ", ip, port, #data);
-			local addr = osc.get_addr_from_data(data)
-			local value = osc.decode(data)
-			if sensors[addr] == nil then
-				sensors[addr] = {}
+			print("Received: ", ip, port, #data);
+			local sensor_addr  = osc.get_addr_from_data(data)
+			local sensor_data  = osc.decode(data)
+			local sensor_index = value[2]
+			local sensor_value = value[4]
+
+			if sensors[sensor_addr] == nil then
+				sensors[sensor_addr] = {}
 			end
-			-- print(inspect(value))
-			sensors[addr][value[2]+1] = value[4]
+
+			sensors[sensor_addr][sensor_index + 1] = sensor_value
 			os.execute("clear")
 			print(inspect(sensors))
 			-- print(socket.gettime() - time_start_cpu, addr, value[2])
-			file:write((socket.gettime() - time_start_cpu)..";"..addr..";"..value[2]..";"..value[4].."\n")
+			file:write((socket.gettime() - time_start_cpu)..";"..addr..";"..sensor_index..";"..sensor_value.."\n")
 		end
 	end
 	socket.sleep(0.001)

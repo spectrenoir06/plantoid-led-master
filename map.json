@@ -118,11 +118,11 @@
 				{
 					"remote": "Tige_et_support",
 					"off": 0,
-					"size": 90
+					"size": 400
 				},
 				{
 					"remote": "Tige_et_support",
-					"off": 90,
+					"off": 400,
 					"size": 90,
 					"invert": true
 				}
