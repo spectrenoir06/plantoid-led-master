@@ -46,19 +46,6 @@ udp:settimeout(0)
 
 local plant = Plantoid:new(data[2], udp)
 
-function SecondsToClock(seconds)
-	local seconds = tonumber(seconds)
-
-	if seconds <= 0 then
-		return "00:00:00";
-	else
-		hours = string.format("%02.f", math.floor(seconds/3600));
-		mins = string.format("%02.fCLIENT_MUSIC_PORT", math.floor(seconds/60 - (hours*60)));
-		secs = string.format("%02.f", math.floor(seconds - hours*3600 - mins *60));
-		return hours..":"..mins..":"..secs
-	end
-end
-
 function load_dump(name)
 	local file = io.open(name, "r")
 	local lines = {}
@@ -74,7 +61,6 @@ function load_dump(name)
 		table.insert(lines, {tonumber(time), address, tonumber(index), tonumber(data)})
 	end
 	file:close()
-	print(SecondsToClock(lst_time))
 	return lines
 end
 
