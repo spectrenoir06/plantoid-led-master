@@ -54,7 +54,7 @@
 				"ip"   : "192.168.12.61",
 				"port" : 12345,
 				"RGBW" : true,
-				"size" : 241
+				"size" : 93
 			},
 			"Feuilles": {
 				"ip"   : "192.168.12.62",
@@ -64,7 +64,7 @@
 			"Tige_et_support": {
 				"ip"   : "192.168.12.63",
 				"port" : 12345,
-				"size" : 420
+				"size" : 500
 			},
 		},
 		"parts": {
@@ -89,7 +89,7 @@
 				{
 					"remote": "Spots",
 					"off": 0,
-					"size": 241
+					"size": 93
 				}
 			],
 			"Feuilles": [
@@ -117,37 +117,37 @@
 			"Tiges": [
 				{
 					"remote": "Tige_et_support",
-					"off": 0,
-					"size": 400
+					"off": 114,
+					"size": 52
 				},
 				{
 					"remote": "Tige_et_support",
-					"off": 400,
-					"size": 90,
+					"off": 166,
+					"size": 52,
 					"invert": true
 				}
 			],
 			"Supports": [
 				{
 					"remote": "Tige_et_support",
-					"off": 180,
-					"size": 60
+					"off": 0,
+					"size": 58
 				},
 				{
 					"remote": "Tige_et_support",
-					"off": 240,
-					"size": 60,
+					"off": 58,
+					"size": 56,
 					"invert": true
 				},
 				{
 					"remote": "Tige_et_support",
-					"off": 300,
-					"size": 60
+					"off": 218,
+					"size": 53
 				},
 				{
 					"remote": "Tige_et_support",
-					"off": 360,
-					"size": 60,
+					"off": 271,
+					"size": 53,
 					"invert": true
 				}
 			]

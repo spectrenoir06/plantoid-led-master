@@ -15,14 +15,14 @@ local text = file:read("*a")
 local data = json.decode(text)
 file:close()
 
-local CLIENT_MUSIC_IP    = "192.168.1.37"       -- ip to connect to super collider
-local CLIENT_MUSIC_PORT  = 8000             -- port to connect to super collider
+local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
+local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
 
 local SERVER_SENSOR_PORT = 8000              -- port to listen to sensors OSC data
 local SERVER_MUSIC_PORT  = 8001              -- port to listen to super collider OSC data
 local SERVER_DATA_PORT   = 8002              -- port to listen to other data ( led info, cmd, ...)
 
-local LED_FRAMERATE = 15
+local LED_FRAMERATE = 5
 
 local dt = 0.000001
 local time = socket.gettime()
@@ -53,7 +53,7 @@ function SecondsToClock(seconds)
 		return "00:00:00";
 	else
 		hours = string.format("%02.f", math.floor(seconds/3600));
-		mins = string.format("%02.f", math.floor(seconds/60 - (hours*60)));
+		mins = string.format("%02.fCLIENT_MUSIC_PORT", math.floor(seconds/60 - (hours*60)));
 		secs = string.format("%02.f", math.floor(seconds - hours*3600 - mins *60));
 		return hours..":"..mins..":"..secs
 	end
@@ -170,7 +170,7 @@ while true do
 		-- 	off = 183
 		-- 	local k,v = 1, t[test]
 		-- 	local s, e = pos_f*v, pos_f*v + v - 1
-		-- 	print(k,v,off,pos_f,s,e)
+		-- 	print(k,v,off,pos_f,s,8000e)
 		-- 	-- print(s,e)
 		-- 	for i=s, e do
 		-- 		print(i)
@@ -191,16 +191,30 @@ while true do
 		-- -- 	end
 
 		-- -- end
-		local c  = color_wheel(counter)
-		c[1] = c[1] / 4
-		c[2] = c[2] / 4
-		c[3] = c[3] / 4
-		plant:setAllPixel(
-			c,
-			"Tiges",
-			1
-		)
-		--plant:show("Tiges",1)
+		-- local c  = color_wheel(counter)
+		-- c[1] = c[1] / 4
+		-- c[2] = c[2] / 4
+		-- c[3] = c[3] / 4
+		-- plant:setAllPixel(
+		-- 	color_wheel(counter*2),
+		-- 	"Tiges",
+		-- 	1
+		-- )
+		local seg = plant.segments["Tige_et_support"]
+
+		local color = color_wheel(counter)
+
+		plant:setAllPixel(color, "Supports", 1)
+		plant:setAllPixel(color, "Supports", 2)
+		plant:setAllPixel(color, "Supports", 3)
+		plant:setAllPixel(color, "Supports", 4)
+		plant:setAllPixel(color, "Tiges", 1)
+		plant:setAllPixel(color, "Tiges", 2)
+
+		-- plant:show()
+		seg:show()
+
+		-- Segment:show()
 		-- plant.segments[1]:show("Spots", 1)
 		-- plant:send(100, 100, true)
 		-- print(plant:getPartSize("Spots",1))
@@ -217,7 +231,7 @@ while true do
 				local sensor_value = replay_dump[replay_index][4]
 
 				local to_send = {
-					replay_dump[replay_index][2],
+					sensor_addr,
 					{
 						'i', sensor_index,
 						"f", sensor_value
@@ -228,8 +242,8 @@ while true do
 					sensors[sensor_addr] = {}
 				end
 				sensors[sensor_addr][sensor_index + 1] = sensor_value
-				-- os.execute("clear")
-				-- print(inspect(sensors))
+				os.execute("clear")
+				print(inspect(sensors))
 
 				assert(udp:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 				replay_index = replay_index + 1
@@ -241,11 +255,12 @@ while true do
 	else
 		local data, ip, port = udp:receivefrom() -- receive data from led, adc or super collider
 		if data then
-			print("Received: ", ip, port, #data);
+			assert(udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+			-- print("Received: ", ip, port, #data);
 			local sensor_addr  = osc.get_addr_from_data(data)
 			local sensor_data  = osc.decode(data)
-			local sensor_index = value[2]
-			local sensor_value = value[4]
+			local sensor_index = sensor_data[2]
+			local sensor_value = sensor_data[4]
 
 			if sensors[sensor_addr] == nil then
 				sensors[sensor_addr] = {}
@@ -255,7 +270,7 @@ while true do
 			os.execute("clear")
 			print(inspect(sensors))
 			-- print(socket.gettime() - time_start_cpu, addr, value[2])
-			file:write((socket.gettime() - time_start_cpu)..";"..addr..";"..sensor_index..";"..sensor_value.."\n")
+			file:write((socket.gettime() - time_start_cpu)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
 		end
 	end
 	socket.sleep(0.001)

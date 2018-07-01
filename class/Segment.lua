@@ -12,9 +12,11 @@ local TYPE_LED_RAW_RGBW            = 2
 local TYPE_LED_RAW_RGBW_AND_UPDATE = 3
 local TYPE_LED_UPDATE              = 4
 local TYPE_GET_INFO                = 5
+local TYPE_LED_BIG_TEST            = 6
+local TYPE_LED_TEST                = 7
 
 local MAX_UDP_SIZE = 1400
-local MAX_UPDATE = 10
+local MAX_UPDATE = 250
 
 function init_tab(nb, color)
 	local t = {}
@@ -51,29 +53,35 @@ end
 
 
 function Segment:send(off, size, update)
-	print("send",off,size,update)
+	-- print("send",off,size,update)
 	local cmd = self.RGBW and TYPE_LED_RAW_RGBW or TYPE_LED_RAW
 	local color = self.RGBW and "bbbb" or "bbb"
 	if update then
 		cmd = cmd + 1
 	end
 	local to_send = pack('bhh', cmd, off, size)
-	for j=off+1, off + size do
-		to_send = to_send .. pack(color, self.data[j][1], self.data[j][2], self.data[j][3], self.data[j][4] or 0)
+	for j=off, (off + size)-1 do
+		-- print(j,off,size)
+		-- print("",self.data[j][1], self.data[j][2], self.data[j][3], self.data[j][4] or 0)
+		to_send = to_send .. pack(color, self.data[j+1][1], self.data[j+1][2], self.data[j+1][3], self.data[j+1][4] or 0)
 	end
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 end
 
 function Segment:show()
-	-- local nb_update = math.ceil(self.size / MAX_UPDATE)
+	local nb_update = math.ceil(self.size / MAX_UPDATE)
 	-- print("nb_update", nb_update)
-	-- for i=1, nb_update-1 do
-	-- 	self:send((i-1) * MAX_UPDATE, MAX_UPDATE, false)
-	-- end
-	-- local last_off = MAX_UPDATE * (nb_update-1)
-	-- self:send(last_off, self.size - last_off, true)
+	for i=1, nb_update-1 do
+		self:send((i-1) * MAX_UPDATE, MAX_UPDATE, true)
+	end
+	local last_off = MAX_UPDATE * (nb_update-1)
+	self:send(last_off, self.size - last_off, true)
 
-	self:send(0, self.size, true)
+	-- self:send(0, 10, true)
+	-- self:send(10, 10, true)
+	-- self:send(20, 10, true)
+	-- self:send(30, 10, true)
+	-- self:send(40, 10, true)
 end
 
 function Segment:clear()
