@@ -2,42 +2,44 @@
 	{
 		"name": "Plantoid_test",
 		"remotes": {
-			"Petales": {
-				"ip"   : "192.168.12.49",
-				"port" : 12345,
-				"size" : 30,
-				"RGBW" : true
-			},
 			"Spots": {
-				"ip"   : "192.168.12.50",
+				"ip"   : "192.168.11.109",
 				"port" : 12345,
 				"size" : 93,
 				"RGBW" : true
 			}
 		},
 		"parts": {
-			"Petales": [
-				{
-					"remote": "Petales",
-					"off": 0,
-					"size": 10
-				},
-				{
-					"remote": "Petales",
-					"off": 10,
-					"size": 10
-				},
-				{
-					"remote": "Petales",
-					"off": 20,
-					"size": 10
-				}
-			],
-			"Spots": [
+			"Anneaux": [
 				{
 					"remote": "Spots",
 					"off": 0,
-					"size": 93
+					"size": 32
+				},
+				{
+					"remote": "Spots",
+					"off": 32,
+					"size": 24
+				},
+				{
+					"remote": "Spots",
+					"off": 56,
+					"size": 16
+				},
+				{
+					"remote": "Spots",
+					"off": 72,
+					"size": 12
+				},
+				{
+					"remote": "Spots",
+					"off": 84,
+					"size": 8
+				},
+				{
+					"remote": "Spots",
+					"off": 92,
+					"size": 1
 				}
 			]
 		}

@@ -12,11 +12,11 @@ local TYPE_LED_RAW_RGBW            = 2
 local TYPE_LED_RAW_RGBW_AND_UPDATE = 3
 local TYPE_LED_UPDATE              = 4
 local TYPE_GET_INFO                = 5
-local TYPE_LED_BIG_TEST            = 6
-local TYPE_LED_TEST                = 7
+local TYPE_LED_TEST                = 6
+local TYPE_LED_RGBW_SET            = 7
+local TYPE_LED_LERP                = 8
 
-local MAX_UDP_SIZE = 1400
-local MAX_UPDATE = 250
+local MAX_UPDATE = 300
 
 function init_tab(nb, color)
 	local t = {}
@@ -34,25 +34,96 @@ function Segment:initialize(remote, socket)
 	self.socket  = socket
 end
 
+
+----- Only update master -----
+
+
 function Segment:setPixel(index, color)
 	-- print("setPixel",index, self.size)
 	if index < 0 or index > (self.size - 1) then
 		return false
+	else
+		color[4] = color[4] or 0
+		self.data[index+1] = color
 	end
-	if #color < 4 then
-		color[4] = 0
-	end
-	self.data[index+1] = color
 end
 
-function Segment:setAll(color)
+function Segment:setAllPixels(color)
 	for i=0, self.size-1 do
 		self:setPixel(i, color)
 	end
 end
 
+function Segment:clear()
+	self:setAllPixels({0,0,0,0})
+end
 
-function Segment:send(off, size, update)
+
+----- Update master and send to driver -----
+
+function Segment:show()
+	self:sendRawData(TYPE_LED_UPDATE, 0, 0, nil)
+end
+
+function Segment:sendPixels(off, color, size)
+	size = size or 1
+	for i=off, off+size-1 do
+		self:setPixel(i, color)
+	end
+	self:sendRawData(TYPE_LED_RGBW_SET, off, size, pack("bbbb", color[1], color[2], color[3], color[4] or 0))
+end
+
+function Segment:sendAll(update)
+	local nb_update = math.ceil(self.size / MAX_UPDATE)
+	-- print("nb_update", nb_update)
+	for i=0, nb_update-2 do
+		self:sendRawRGBData(i * MAX_UPDATE, MAX_UPDATE, false)
+	end
+	local last_off = MAX_UPDATE * (nb_update-1)
+	self:sendRawRGBData(last_off, self.size - last_off, update)
+end
+
+function Segment:sendLerp(off, color1, color2, size)
+	color1[4] = color1[4] or 0
+	color2[4] = color2[4] or 0
+
+	self:sendRawData(TYPE_LED_LERP, off, size,
+		pack("bbbbbbbb",
+		color1[1], color1[2], color1[3], color1[4],
+		color2[1], color2[2], color2[3], color2[4]
+	))
+
+	local ir = (color2[1] - color1[1]) / size
+	local ig = (color2[2] - color1[2]) / size
+	local ib = (color2[3] - color1[3]) / size
+	local iw = (color2[4] - color1[4]) / size
+	print(ir,ig,ib,iw)
+	for i=0, size-1 do
+		print(color1[1],color1[2],color1[3])
+		self:setPixel(i + off, {math.floor(color1[1]),math.floor(color1[2]),math.floor(color1[3]),math.floor(color1[4])});
+		color1[1] = color1[1] + ir
+		color1[2] = color1[2] + ig
+		color1[3] = color1[3] + ib
+		color1[4] = color1[4] + iw
+	end
+end
+
+function Segment:off()
+	self:sendPixels(0, {0,0,0,0}, self.size)
+	self:show()
+end
+
+
+-------------------------------------
+
+
+function Segment:sendRawData(cmd, off, size, data)
+	-- print("send",off,size,update)
+	local to_send = pack('bhh', cmd, off, size) .. (data or "")
+	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
+end
+
+function Segment:sendRawRGBData(off, size, update)
 	-- print("send",off,size,update)
 	local cmd = self.RGBW and TYPE_LED_RAW_RGBW or TYPE_LED_RAW
 	local color = self.RGBW and "bbbb" or "bbb"
@@ -66,33 +137,6 @@ function Segment:send(off, size, update)
 		to_send = to_send .. pack(color, self.data[j+1][1], self.data[j+1][2], self.data[j+1][3], self.data[j+1][4] or 0)
 	end
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
-end
-
-function Segment:show()
-	local nb_update = math.ceil(self.size / MAX_UPDATE)
-	-- print("nb_update", nb_update)
-	for i=1, nb_update-1 do
-		self:send((i-1) * MAX_UPDATE, MAX_UPDATE, true)
-	end
-	local last_off = MAX_UPDATE * (nb_update-1)
-	self:send(last_off, self.size - last_off, true)
-
-	-- self:send(0, 10, true)
-	-- self:send(10, 10, true)
-	-- self:send(20, 10, true)
-	-- self:send(30, 10, true)
-	-- self:send(40, 10, true)
-end
-
-function Segment:clear()
-	for i=0, self.size-1 do
-		self:setPixel(i, {0,0,0,0})
-	end
-end
-
-function Segment:off()
-	self:clear()
-	self:show()
 end
 
 return Segment

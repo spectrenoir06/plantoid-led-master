@@ -18,13 +18,12 @@ end
 
 function Plantoid:setAllPixel(color, part_name, part_number)
 	local size = self:getPartSize(part_name, part_number)
-	for i=0,size-1 do
+	for i=0, size-1 do
 		self:setPixel(i, color, part_name, part_number)
 	end
 end
 
 function Plantoid:getPartSize(part_name, part_number)
-	-- print("getPartSize",part_name,part_number)
 	return self.parts[part_name][part_number].size
 end
 

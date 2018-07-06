@@ -3,7 +3,6 @@
 require("lib.osc")
 local socket  = require("socket")
 local inspect = require("lib.inspect")
-local struct  = require("lib.struct")
 local signal  = require("posix.signal")
 local json    = require("lib.json")
 
@@ -44,7 +43,7 @@ local udp = assert(socket.udp())
 udp:setsockname("*", SERVER_SENSOR_PORT)
 udp:settimeout(0)
 
-local plant = Plantoid:new(data[2], udp)
+local plant = Plantoid:new(data[1], udp)
 
 function load_dump(name)
 	local file = io.open(name, "r")
@@ -186,19 +185,33 @@ while true do
 		-- 	"Tiges",
 		-- 	1
 		-- )
-		local seg = plant.segments["Tige_et_support"]
+		local seg = plant.segments["Spots"]
+		-- seg:setAllPixels({0,0,0,1})
+		-- seg:sendPixels(31, {0,100,0})
+		-- seg:sendAll(true)
+		-- -- seg:show()
 
-		local color = color_wheel(counter)
+		-- local color = color_wheel(counter)
 
-		plant:setAllPixel(color, "Supports", 1)
-		plant:setAllPixel(color, "Supports", 2)
-		plant:setAllPixel(color, "Supports", 3)
-		plant:setAllPixel(color, "Supports", 4)
-		plant:setAllPixel(color, "Tiges", 1)
-		plant:setAllPixel(color, "Tiges", 2)
+		-- plant:setAllPixel({10,0,0}, "Anneaux", 1)
+		-- plant:setAllPixel({0,10,0}, "Anneaux", 2)
+		-- plant:setAllPixel({0,0,10}, "Anneaux", 3)
+		-- plant:setAllPixel({10,0,0}, "Anneaux", 4)
+		-- plant:setAllPixel({0,10,0}, "Anneaux", 5)
+		-- plant:setAllPixel({0,0,10}, "Anneaux", 6)
+
+
+		seg:sendLerp(0,{100,0,0},{0,100,0},32)
+
+
+		-- plant:setAllPixel(color, "Supports", 2)
+		-- plant:setAllPixel(color, "Supports", 3)
+		-- plant:setAllPixel(color, "Supports", 4)
+		-- plant:setAllPixel(color, "Tiges", 1)
+		-- plant:setAllPixel(color, "Tiges", 2)
 
 		-- plant:show()
-		seg:show()
+		seg:sendAll(true)
 
 		-- Segment:show()
 		-- plant.segments[1]:show("Spots", 1)
