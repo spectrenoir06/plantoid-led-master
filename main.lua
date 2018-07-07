@@ -44,8 +44,8 @@ function love.draw()
 			for m,x in ipairs(w) do
 				love.graphics.print(x.size, 50, y)
 				local rect_size = 10
-				if (x.size * 10) > 500 then
-					rect_size = 500 / x.size
+				if (x.size * 10) > 450 then
+					rect_size = 450 / x.size
 				end
 				love.graphics.rectangle("line", 80, y, rect_size*x.size, 10)
 				for i=0, x.size-1 do
