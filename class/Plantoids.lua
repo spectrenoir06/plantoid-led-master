@@ -37,10 +37,7 @@ function Plantoids:initialize(replay_file)
 
 	self.timer_check  = 10
 
-	local file = io.open("map.json", "r")
-	local text = file:read("*a")
-	local data = json.decode(text)
-	file:close()
+	local data = require("map")
 
 	for k,v in ipairs(data) do
 		self.plants[k] = Plantoid:new(v, self.udp)

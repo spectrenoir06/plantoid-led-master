@@ -6,7 +6,6 @@ lua 5.1
 
 luarocks install luasocket
 luarocks install luaposix
-luarocks install lpack
 ```
 
 ### runs serveur and dump ( dump/log.dump )
