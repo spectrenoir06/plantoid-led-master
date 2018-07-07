@@ -61,12 +61,12 @@ function Plantoids:initialize(replay_file)
 	return self
 end
 
-function Plantoids:update(dt)
+function Plantoids:update(dt, dont_send_led)
 
 	self.timer_led   = self.timer_led + dt
 	self.timer_check = self.timer_check + dt
 
-	if self.timer_led > (1 / LED_FRAMERATE) then
+	if not dont_send_led and self.timer_led > (1 / LED_FRAMERATE) then
 		self:update_led()
 		self.counter = self.counter + 1
 		self.timer_led = 0
@@ -188,14 +188,40 @@ function Plantoids:update_led()
 	plant:sendAll(true) -- send all rgbw data to driver, ( true if update led)
 
 
-	-- local plant = self.plants[1]
-	-- local seg   = plant.segments["Spots"]
-	-- seg:setAllPixels({10,0,0})
-	-- seg:sendLerp(0,{100,0,0}, {0,100,0}, 1000)
-	-- seg:sendAll(true)
-	-- plant:show()
+	local plant = self.plants[3]
+	plant:setAllPixel({255,0,0},   "Petales", 1)
+	plant:setAllPixel({0,255,0},   "Petales", 2)
+	plant:setAllPixel({0,0,255},   "Petales", 3)
+	plant:setAllPixel({255,255,0}, "Petales", 4)
+	plant:setAllPixel({0,255,255}, "Petales", 5)
+	plant:setAllPixel({255,0,255}, "Petales", 6)
 
-	-- plant:show()
+	plant:sendLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 1)
+	plant:sendLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 2)
+
+	plant:sendPixels(0, {255,100,0}, nil, "Supports", 1)
+	plant:sendPixels(0, {255,100,0}, nil, "Supports", 2)
+	plant:sendPixels(0, {255,100,0}, nil, "Supports", 3)
+	plant:sendPixels(0, {255,100,0}, nil, "Supports", 4)
+
+	plant:sendLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 1)
+	plant:sendLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 1)
+
+	plant:sendLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 2)
+	plant:sendLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 2)
+
+	plant:sendLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 3)
+	plant:sendLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 3)
+
+	plant:sendLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 4)
+	plant:sendLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 4)
+
+	plant:sendPixels(0, {0,0,0,100}, nil, "Spots", 1)
+
+	plant:setPixel(10, {0,0,255}, "Supports", 1) -- test invert
+	plant:setPixel(10, {0,0,255}, "Supports", 2) -- test invert
+
+	plant:show()
 end
 
 ---------------------------------------------------------------

@@ -55,6 +55,23 @@ function Segment:setAllPixels(color)
 	end
 end
 
+function Segment:setLerp(off, color1, color2, size)
+	color1[4] = color1[4] or 0
+	color2[4] = color2[4] or 0
+
+	local ir = (color2[1] - color1[1]) / size
+	local ig = (color2[2] - color1[2]) / size
+	local ib = (color2[3] - color1[3]) / size
+	local iw = (color2[4] - color1[4]) / size
+	for i=0, size-1 do
+		self:setPixel(i + off, {math.floor(color1[1]),math.floor(color1[2]),math.floor(color1[3]),math.floor(color1[4])});
+		color1[1] = color1[1] + ir
+		color1[2] = color1[2] + ig
+		color1[3] = color1[3] + ib
+		color1[4] = color1[4] + iw
+	end
+end
+
 function Segment:clear()
 	self:setAllPixels({0,0,0,0})
 end
@@ -85,26 +102,12 @@ function Segment:sendAll(update)
 end
 
 function Segment:sendLerp(off, color1, color2, size)
-	color1[4] = color1[4] or 0
-	color2[4] = color2[4] or 0
-
 	self:sendRawData(TYPE_LED_LERP, off, size,
 		pack("bbbbbbbb",
-		color1[1], color1[2], color1[3], color1[4],
-		color2[1], color2[2], color2[3], color2[4]
+		color1[1], color1[2], color1[3], color1[4] or 0,
+		color2[1], color2[2], color2[3], color2[4] or 0
 	))
-
-	local ir = (color2[1] - color1[1]) / size
-	local ig = (color2[2] - color1[2]) / size
-	local ib = (color2[3] - color1[3]) / size
-	local iw = (color2[4] - color1[4]) / size
-	for i=0, size-1 do
-		self:setPixel(i + off, {math.floor(color1[1]),math.floor(color1[2]),math.floor(color1[3]),math.floor(color1[4])});
-		color1[1] = color1[1] + ir
-		color1[2] = color1[2] + ig
-		color1[3] = color1[3] + ib
-		color1[4] = color1[4] + iw
-	end
+	self:setLerp(off, color1, color2, size)
 end
 
 function Segment:off()

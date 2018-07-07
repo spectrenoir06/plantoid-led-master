@@ -17,10 +17,12 @@ function Plantoid:getPartSize(part_name, part_number)
 end
 
 
-
 function Plantoid:setPixel(index_led, color, part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	if part.size > index_led then
+		if part.invert then
+			index_led = part.size - index_led
+		end
 		self.segments[part.remote]:setPixel(index_led + part.off, color)
 	end
 end
@@ -39,7 +41,18 @@ function Plantoid:setAllPixel(color, part_name, part_number, size)
 	end
 end
 
+function Plantoid:sendLerp(off, color1, color2, size, part_name, part_number)
+	local part = self.parts[part_name][part_number]
+	if part.invert then
+		color1, color2 = color2, color1
+	end
+	self.segments[part.remote]:sendLerp(off + part.off, color1, color2, size or part.size)
+end
 
+function Plantoid:sendPixels(off, color, size, part_name, part_number)
+	local part = self.parts[part_name][part_number]
+	self.segments[part.remote]:sendPixels(off + part.off, color, size or part.size)
+end
 
 function Plantoid:sendAll(update, part_name, part_number)
 	if part_name then

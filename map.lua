@@ -78,7 +78,7 @@ return {
 			Petales =  {
 				ip    =  "192.168.12.60",
 				port  =  12345,
-				size  =  288
+				size  =  432
 			},
 			Spots =  {
 				ip    =  "192.168.12.61",
@@ -109,6 +109,26 @@ return {
 					off =  72,
 					size =  72
 				},
+				{
+					remote =  "Petales",
+					off =  144,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  216,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  288,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  360,
+					size =  72
+				},
 			},
 			Spots =  {
 				{
@@ -130,7 +150,7 @@ return {
 				},
 				{
 					remote =  "Feuilles",
-					off =  278,
+					off =  378,
 					size =  216
 				},
 				{
