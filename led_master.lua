@@ -6,7 +6,9 @@ local Plantoids = require("class.Plantoids")
 local dt = 0.000001
 local time = socket.gettime()
 
-local plants = Plantoids:new("dump/bretagne4.dump")
+local replay_file = (arg[1] == "replay") and arg[2] or nil
+
+local plants = Plantoids:new(replay_file)
 
 signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
