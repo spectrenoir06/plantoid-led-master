@@ -2,9 +2,16 @@ local Plantoids = require("class.Plantoids")
 
 function love.load(cmd, replay_file)
 	plants = Plantoids:new((cmd == "replay") and replay_file or nil)
+	width, height = love.graphics.getWidth(), love.graphics.getHeight()
 end
 
 function love.draw()
+	if love.system.getOS() == "Android" then
+		love.graphics.translate(width/2, height/2)
+		love.graphics.rotate(-math.pi / 2)
+		love.graphics.translate(-height/2, -width/2)
+	end
+
 	local y = 10
 	-- love.graphics.print(love.timer.getFPS(), 200, 5)
 	for k,v in ipairs(plants.plants) do

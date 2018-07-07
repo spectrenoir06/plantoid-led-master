@@ -25,7 +25,7 @@ function Plantoids:initialize(replay_file)
 	self.plants  = {}
 
 	self.udp = assert(socket.udp())
-	self.udp:setsockname("*", SERVER_SENSOR_PORT)
+	self.udp:setsockname("0.0.0.0", SERVER_SENSOR_PORT)
 	self.udp:settimeout(0)
 
 	self.timer_led    = 0
@@ -52,7 +52,10 @@ function Plantoids:initialize(replay_file)
 		self.replay = false
 		print("start dump:", "log.dump")
 		self.dump_file = io.open("dump/log.dump", "w")
-		self.dump_file:write(os.time(os.date("!*t")).."\n")
+		if self.dump_file then
+			self.dump_file:write(os.time(os.date("!*t")).."\n")
+			self.dump = true
+		end
 	end
 
 	return self
@@ -123,7 +126,9 @@ function Plantoids:update(dt)
 				os.execute("clear")
 				print(inspect(self.sensors))
 				-- print(socket.gettime() - time_start, addr, value[2])
-				self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
+				if self.dump then
+					self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
+				end
 				assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 			end) then
 

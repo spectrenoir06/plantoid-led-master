@@ -1,4 +1,4 @@
-local map =  {
+return {
 	{
 		name = "Plantoid_test",
 		remotes =  {
@@ -42,6 +42,34 @@ local map =  {
 					size =  1
 				}
 			}
+		}
+	},
+	{
+		name = "Plantoid_Petit",
+		remotes =  {
+			Petales =  {
+				ip    =  "192.168.12.50",
+				port  =  12345,
+				size  =  288
+			},
+			Spots =  {
+				ip    =  "192.168.12.51",
+				port  =  12345,
+				RGBW  =  true,
+				size  =  93
+			},
+			Feuilles =  {
+				ip    =  "192.168.12.52",
+				port  =  12345,
+				size  =  756
+			},
+			Tige_et_support =  {
+				ip    =  "192.168.12.53",
+				port  =  12345,
+				size  =  500
+			},
+		},
+		parts =  {
 		}
 	},
 	{
@@ -149,7 +177,33 @@ local map =  {
 				}
 			}
 		}
-	}
+	},
+	{
+		name = "Plantoid_Grand",
+		remotes =  {
+			Petales =  {
+				ip    =  "192.168.12.70",
+				port  =  12345,
+				size  =  288
+			},
+			Spots =  {
+				ip    =  "192.168.12.71",
+				port  =  12345,
+				RGBW  =  true,
+				size  =  93
+			},
+			Feuilles =  {
+				ip    =  "192.168.12.72",
+				port  =  12345,
+				size  =  756
+			},
+			Tige_et_support =  {
+				ip    =  "192.168.12.73",
+				port  =  12345,
+				size  =  500
+			},
+		},
+		parts =  {
+		}
+	},
 }
-
-return map
