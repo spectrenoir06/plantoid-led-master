@@ -16,7 +16,7 @@ local TYPE_LED_TEST                = 6
 local TYPE_LED_RGBW_SET            = 7
 local TYPE_LED_LERP                = 8
 
-local MAX_UPDATE = 300
+local MAX_UPDATE = 320 -- max 320 after the driver explode
 
 function init_tab(nb, color)
 	local t = {}

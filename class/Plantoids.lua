@@ -172,21 +172,15 @@ function Plantoids:update_led()
 	plant:setAllPixel(color,    "Anneaux", 5)
 	plant:setAllPixel({0,0,10}, "Anneaux", 6)
 
-	plant:setPixel(8, {0,0,255}, "Anneaux", 1)
-
 	plant:sendAll(true) -- send all rgbw data to driver, ( true if update led)
 
-	local plant = self.plants[2]
-	local seg   = plant.segments["Feuilles"]
-	seg:sendLerp(0,{100,0,0}, {0,100,0}, 756)
-	plant:show()
 
-
-	-- plant:setAllPixel({10,0,0}, "Supports", 1)
-	-- plant:setAllPixel({10,0,0}, "Supports", 2)
-	-- plant:setAllPixel({10,0,0}, "Supports", 3)
-	-- plant:setAllPixel({10,0,0}, "Supports", 4)
-
+	-- local plant = self.plants[1]
+	-- local seg   = plant.segments["Spots"]
+	-- seg:setAllPixels({10,0,0})
+	-- seg:sendLerp(0,{100,0,0}, {0,100,0}, 1000)
+	-- seg:sendAll(true)
+	-- plant:show()
 
 	-- plant:show()
 end
