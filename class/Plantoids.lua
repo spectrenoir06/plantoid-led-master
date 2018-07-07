@@ -10,7 +10,9 @@ require("lib.utils")
 
 local Plantoids = class('Plantoids')
 
-local LED_FRAMERATE      = 15
+local LED_FRAMERATE      = 15 -- Hz
+local CHECK_REMOTES      = 10 -- secondes
+
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
 
@@ -32,6 +34,8 @@ function Plantoids:initialize(replay_file)
 	self.replay_dump  = {}
 	self.time_start   = socket.gettime()
 	self.counter      = 0
+
+	self.timer_check  = 10
 
 	local file = io.open("map.json", "r")
 	local text = file:read("*a")
@@ -59,13 +63,18 @@ end
 
 function Plantoids:update(dt)
 
-	self.timer_led = self.timer_led + dt
+	self.timer_led   = self.timer_led + dt
+	self.timer_check = self.timer_check + dt
+
 	if self.timer_led > (1 / LED_FRAMERATE) then
-
 		self:update_led()
-
 		self.counter = self.counter + 1
 		self.timer_led = 0
+	end
+
+	if self.timer_check > CHECK_REMOTES then
+		self:checkInfo()
+		self.timer_check = 0
 	end
 
 	if self.replay then
@@ -102,22 +111,33 @@ function Plantoids:update(dt)
 	else
 		local data, ip, port = self.udp:receivefrom() -- receive data from led, adc or super collider
 		if data then
-			assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
-			-- print("Received: ", ip, port, #data);
-			local sensor_addr  = osc.get_addr_from_data(data)
-			local sensor_data  = osc.decode(data)
-			local sensor_index = sensor_data[2]
-			local sensor_value = sensor_data[4]
+			if pcall(function ()
+				local sensor_addr  = osc.get_addr_from_data(data)
+				local sensor_addr  = osc.get_addr_from_data(data)
+				local sensor_data  = osc.decode(data)
+				local sensor_index = sensor_data[2]
+				local sensor_value = sensor_data[4]
 
-			if sensors[sensor_addr] == nil then
-				sensors[sensor_addr] = {}
+				if self.sensors[sensor_addr] == nil then
+					self.sensors[sensor_addr] = {}
+				end
+
+				self.sensors[sensor_addr][sensor_index + 1] = sensor_value
+				os.execute("clear")
+				print(inspect(self.sensors))
+				-- print(socket.gettime() - time_start, addr, value[2])
+				self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
+				assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+			end) then
+
+			else
+				-- print("Received: ", ip, port, data);
+				local seg = self:getSegmentFromIp(ip)
+				if seg then
+					seg.alive = 3
+				end
 			end
 
-			sensors[sensor_addr][sensor_index + 1] = sensor_value
-			os.execute("clear")
-			print(inspect(sensors))
-			-- print(socket.gettime() - time_start, addr, value[2])
-			file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
 		end
 	end
 end
@@ -152,11 +172,22 @@ function Plantoids:update_led()
 	plant:setAllPixel(color,    "Anneaux", 5)
 	plant:setAllPixel({0,0,10}, "Anneaux", 6)
 
-	plant:setPixel(8, color, "Anneaux", 1)
-
-	-- seg:sendLerp(0,{100,0,0}, {0,100,0}, 32)
+	plant:setPixel(8, {0,0,255}, "Anneaux", 1)
 
 	plant:sendAll(true) -- send all rgbw data to driver, ( true if update led)
+
+	local plant = self.plants[2]
+	local seg   = plant.segments["Feuilles"]
+	seg:sendLerp(0,{100,0,0}, {0,100,0}, 756)
+	plant:show()
+
+
+	-- plant:setAllPixel({10,0,0}, "Supports", 1)
+	-- plant:setAllPixel({10,0,0}, "Supports", 2)
+	-- plant:setAllPixel({10,0,0}, "Supports", 3)
+	-- plant:setAllPixel({10,0,0}, "Supports", 4)
+
+
 	-- plant:show()
 end
 
@@ -165,6 +196,24 @@ function Plantoids:stop()
 		plant:off()
 	end
 	self.udp:close();
+end
+
+function Plantoids:getSegmentFromIp(ip)
+	for k,v in ipairs(self.plants) do
+		for l,w in pairs(v.segments) do
+			if w.remote.ip == ip then
+				return w
+			end
+		end
+	end
+end
+
+function Plantoids:checkInfo()
+	for k,v in ipairs(self.plants) do
+		for l,w in pairs(v.segments) do
+			w:checkInfo()
+		end
+	end
 end
 
 return Plantoids

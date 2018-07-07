@@ -32,6 +32,7 @@ function Segment:initialize(remote, socket)
 	self.RGBW = remote.RGBW
 	self.size = remote.size
 	self.socket  = socket
+	self.alive = 0
 end
 
 
@@ -135,6 +136,13 @@ function Segment:sendRawRGBData(off, size, update)
 		to_send = to_send .. pack(color, self.data[j+1][1], self.data[j+1][2], self.data[j+1][3], self.data[j+1][4] or 0)
 	end
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
+end
+
+function Segment:checkInfo()
+	local to_send = pack('b', TYPE_GET_INFO)
+	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
+	self.alive = self.alive - 1
+	if self.alive < 0 then self.alive = 0 end
 end
 
 return Segment

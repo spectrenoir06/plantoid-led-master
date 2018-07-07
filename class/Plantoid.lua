@@ -5,6 +5,7 @@ local Plantoid = class('Plantoid')
 
 function Plantoid:initialize(data, socket)
 	self.segments = {}
+	self.name = data.name
 	for k,v in pairs(data.remotes) do
 		self.segments[k] = Segment:new(v, socket)
 	end
@@ -17,11 +18,17 @@ end
 
 
 
-
 function Plantoid:setPixel(index_led, color, part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	if part.size > index_led then
 		self.segments[part.remote]:setPixel(index_led + part.off, color)
+	end
+end
+
+function Plantoid:getPixel(index_led, part_name, part_number)
+	local part = self.parts[part_name][part_number]
+	if part.size > index_led then
+		return self.segments[part.remote].data[index_led + part.off + 1]
 	end
 end
 
