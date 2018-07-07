@@ -21,14 +21,16 @@ local SERVER_SENSOR_PORT = 8000              -- port to listen to sensors OSC da
 local SERVER_MUSIC_PORT  = 8001              -- port to listen to super collider OSC data
 local SERVER_DATA_PORT   = 8002              -- port to listen to other data ( led info, cmd, ...)
 
-local LED_FRAMERATE = 5
+local LED_FRAMERATE = 15
 
 local dt = 0.000001
 local time = socket.gettime()
 
 local timer_led = 0
 
-sensors = {}
+local sensors = {}
+local plants = {}
+
 
 local replay       = false
 local replay_index = 1
@@ -43,7 +45,27 @@ local udp = assert(socket.udp())
 udp:setsockname("*", SERVER_SENSOR_PORT)
 udp:settimeout(0)
 
-local plant = Plantoid:new(data[1], udp)
+function update_led(c)
+	local plant = plants[1]
+
+	local color = color_wheel(c*3)
+
+	plant:setAllPixel({10,0,0}, "Anneaux", 1)
+	plant:setAllPixel({0,10,0}, "Anneaux", 2)
+	plant:setAllPixel({0,0,10}, "Anneaux", 3)
+	plant:setAllPixel({10,0,0}, "Anneaux", 4)
+	plant:setAllPixel(color,    "Anneaux", 5)
+	plant:setAllPixel({0,0,10}, "Anneaux", 6)
+
+	plant:setPixel(8, color, "Anneaux", 1)
+
+	-- seg:sendLerp(0,{100,0,0}, {0,100,0}, 32)
+
+
+	plant:sendAll(true) -- send all rgbw data to driver, ( true if update led)
+	-- plant:show()
+end
+
 
 function load_dump(name)
 	local file = io.open(name, "r")
@@ -80,10 +102,10 @@ end
 signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
 
-	plant:off()
-
+	for k,plant in ipairs(plants) do
+		plant:off()
+	end
 	udp:close();
-	-- put code to save some stuff here
 	os.exit(128 + signum)
 end)
 
@@ -100,123 +122,19 @@ else
 	file:write(time_start_epoch .. "\n")
 end
 
+
+for k,v in ipairs(data) do
+	plants[k] = Plantoid:new(v, udp)
+end
+
 while true do
-	-- print(time)
 	dt = socket.gettime() - time
 	time = socket.gettime()
 
 	timer_led = timer_led + dt
 	if timer_led > (1 / LED_FRAMERATE) then
 
-		-- plant:setPixel(0, {0,255,0}, "Petales", 2)
-		-- plant:setPixel(0, {0,0,255}, "Petales", 3)
-
-		-- for petale_nb=1, 3 do
-			-- local size = plant:getPartSize("Spots", 1)
-			-- for i=0, size do
-			-- 	plant:setPixel(i, color_wheel(i+counter/size*255), "Spots", 1)
-			-- end
-		-- end
-		-- plant:show("Petales")
-		-- for i=0,counter do
-		-- 	plant:setPixel(i, {0,0,0,10}, "Spots", 1)
-		-- end
-
-		-- local test = counter % 30
-
-		-- for i=0, test do
-		-- 	plant:setPixel(i, {0,0,0,50}, "Spots", 1)
-		-- end
-
-		-- local t = {
-		-- 	1,
-		-- 	8,
-		-- 	12,
-		-- 	16,
-		-- 	24,
-		-- 	32,
-		-- 	40,
-		-- 	48,
-		-- 	60,
-		-- }
-
-		-- local pos = 0 --counter % 60
-		-- local pos_f = pos / 60
-		-- local off = 0
-
-
-		-- -- off = 181
-
-		-- -- for k,v in ipairs(t) do
-		-- 	local test = 8
-		-- 	for i=1, test do
-		-- 		off = off + t[i]
-		-- 	end
-		-- 	off = 183
-		-- 	local k,v = 1, t[test]
-		-- 	local s, e = pos_f*v, pos_f*v + v - 1
-		-- 	print(k,v,off,pos_f,s,8000e)
-		-- 	-- print(s,e)
-		-- 	for i=s, e do
-		-- 		print(i)
-		-- 		if i > (pos_f*v + v/2) then
-		-- 			plant:setPixel((i%v)+off, {255,0,0,0}, "Spots", 1)
-		-- 		else
-		-- 			plant:setPixel((i%v) + off, {0,255,0,0}, "Spots", 1)
-		-- 		end
-		-- 	end
-		-- 	off = off + v
-		-- -- end
-		-- -- 	for i=pos_f*v, pos_f*v + v do
-		-- -- 		if i > (pos_f*v+v/2) then
-		-- -- 			plant:setPixel((i%v)+133, {255,0,0,0}, "Spots", 1)
-		-- -- 		else
-		-- -- 			plant:setPixel((i%v)+133, {0,255,0,0}, "Spots", 1)
-		-- -- 		end
-		-- -- 	end
-
-		-- -- end
-		-- local c  = color_wheel(counter)
-		-- c[1] = c[1] / 4
-		-- c[2] = c[2] / 4
-		-- c[3] = c[3] / 4
-		-- plant:setAllPixel(
-		-- 	color_wheel(counter*2),
-		-- 	"Tiges",
-		-- 	1
-		-- )
-		local seg = plant.segments["Spots"]
-		-- seg:setAllPixels({0,0,0,1})
-		-- seg:sendPixels(31, {0,100,0})
-		-- seg:sendAll(true)
-		-- -- seg:show()
-
-		-- local color = color_wheel(counter)
-
-		-- plant:setAllPixel({10,0,0}, "Anneaux", 1)
-		-- plant:setAllPixel({0,10,0}, "Anneaux", 2)
-		-- plant:setAllPixel({0,0,10}, "Anneaux", 3)
-		-- plant:setAllPixel({10,0,0}, "Anneaux", 4)
-		-- plant:setAllPixel({0,10,0}, "Anneaux", 5)
-		-- plant:setAllPixel({0,0,10}, "Anneaux", 6)
-
-
-		seg:sendLerp(0,{100,0,0},{0,100,0},32)
-
-
-		-- plant:setAllPixel(color, "Supports", 2)
-		-- plant:setAllPixel(color, "Supports", 3)
-		-- plant:setAllPixel(color, "Supports", 4)
-		-- plant:setAllPixel(color, "Tiges", 1)
-		-- plant:setAllPixel(color, "Tiges", 2)
-
-		-- plant:show()
-		seg:sendAll(true)
-
-		-- Segment:show()
-		-- plant.segments[1]:show("Spots", 1)
-		-- plant:send(100, 100, true)
-		-- print(plant:getPartSize("Spots",1))
+		update_led(counter)
 
 		counter = counter + 1
 		timer_led = 0

@@ -11,9 +11,18 @@ function Plantoid:initialize(data, socket)
 	self.parts = data.parts
 end
 
+function Plantoid:getPartSize(part_name, part_number)
+	return self.parts[part_name][part_number].size
+end
+
+
+
+
 function Plantoid:setPixel(index_led, color, part_name, part_number)
 	local part = self.parts[part_name][part_number]
-	self.segments[part.remote]:setPixel(index_led + part.off, color)
+	if part.size > index_led then
+		self.segments[part.remote]:setPixel(index_led + part.off, color)
+	end
 end
 
 function Plantoid:setAllPixel(color, part_name, part_number)
@@ -23,8 +32,26 @@ function Plantoid:setAllPixel(color, part_name, part_number)
 	end
 end
 
-function Plantoid:getPartSize(part_name, part_number)
-	return self.parts[part_name][part_number].size
+
+
+function Plantoid:sendAll(update, part_name, part_number)
+	if part_name then
+		if part_number then
+			self.segments[self.parts[part_name][part_number].remote]:sendAll(update)
+		else
+			local to_update = {}
+			for k,v in ipairs(self.parts[part_name]) do
+				to_update[v.remote] = self.segments[v.remote]
+			end
+			for k,v in pairs(to_update) do
+				v:sendAll(update)
+			end
+		end
+	else
+		for k,v in pairs(self.segments) do
+			v:sendAll(update)
+		end
+	end
 end
 
 function Plantoid:show(part_name, part_number)

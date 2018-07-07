@@ -97,9 +97,7 @@ function Segment:sendLerp(off, color1, color2, size)
 	local ig = (color2[2] - color1[2]) / size
 	local ib = (color2[3] - color1[3]) / size
 	local iw = (color2[4] - color1[4]) / size
-	print(ir,ig,ib,iw)
 	for i=0, size-1 do
-		print(color1[1],color1[2],color1[3])
 		self:setPixel(i + off, {math.floor(color1[1]),math.floor(color1[2]),math.floor(color1[3]),math.floor(color1[4])});
 		color1[1] = color1[1] + ir
 		color1[2] = color1[2] + ig
