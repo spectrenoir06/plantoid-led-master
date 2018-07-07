@@ -165,7 +165,16 @@ function Plantoids:update_led()
 
 	local color = color_wheel(self.counter)
 
-	plant:setAllPixel({10,0,0}, "Anneaux", 1)
+	local temp = self:getSensorValue("/plantoid/1/1/temp", 0)
+
+	if temp then
+		local temp = temp / 40
+		plant:setAllPixel({0,0,0,0}, "Anneaux", 1)
+		plant:setAllPixel({0,0,0,10}, "Anneaux", 1, temp * 32)
+	else
+		plant:setAllPixel({10,0,0}, "Anneaux", 1)
+	end
+
 	plant:setAllPixel({0,10,0}, "Anneaux", 2)
 	plant:setAllPixel({0,0,10}, "Anneaux", 3)
 	plant:setAllPixel({10,0,0}, "Anneaux", 4)
@@ -206,6 +215,17 @@ function Plantoids:checkInfo()
 	for k,v in ipairs(self.plants) do
 		for l,w in pairs(v.segments) do
 			w:checkInfo()
+		end
+	end
+end
+
+function Plantoids:getSensorValue(addr, index)
+	local s = self.sensors[addr]
+	if s then
+		if index then
+			return s[index+1]
+		else
+			return s
 		end
 	end
 end

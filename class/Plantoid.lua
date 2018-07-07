@@ -32,9 +32,9 @@ function Plantoid:getPixel(index_led, part_name, part_number)
 	end
 end
 
-function Plantoid:setAllPixel(color, part_name, part_number)
-	local size = self:getPartSize(part_name, part_number)
-	for i=0, size-1 do
+function Plantoid:setAllPixel(color, part_name, part_number, size)
+	local len = size or self:getPartSize(part_name, part_number)
+	for i=0, len-1 do
 		self:setPixel(i, color, part_name, part_number)
 	end
 end
