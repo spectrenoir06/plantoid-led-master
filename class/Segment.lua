@@ -1,8 +1,8 @@
 local class = require 'lib.middleclass'
 
-local lpack = require("pack")
-local pack = string.pack
-local upack = string.unpack
+local struct = require("lib.struct")
+local pack = struct.pack
+local upack = struct.unpack
 
 local Segment = class('Segment')
 

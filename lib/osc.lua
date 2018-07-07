@@ -20,9 +20,13 @@ local base = _G
 local string = require("string")
 local table = require("table")
 -- local socket = require("socket") -- only needed in client / server
-local lpack = require("pack")
-local pack = string.pack
-local upack = string.unpack
+-- local lpack = require("pack")
+-- local pack = string.pack
+-- local upack = string.unpack
+
+local struct = require("lib.struct")
+local pack = struct.pack
+local upack = struct.unpack
 
 --------------------------------
 -- Module declaration

@@ -11,7 +11,7 @@ require("lib.utils")
 local Plantoids = class('Plantoids')
 
 local LED_FRAMERATE      = 15 -- Hz
-local CHECK_REMOTES      = 10 -- secondes
+local CHECK_REMOTES      = 3 -- secondes
 
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
@@ -160,6 +160,8 @@ function Plantoids:load_dump(name)
 	return lines
 end
 
+------------------- LED Controle ------------------------
+
 function Plantoids:update_led()
 	local plant = self.plants[1]
 
@@ -193,6 +195,8 @@ function Plantoids:update_led()
 
 	-- plant:show()
 end
+
+---------------------------------------------------------------
 
 function Plantoids:stop()
 	for k,plant in ipairs(self.plants) do
