@@ -22,7 +22,7 @@ function Plantoid:setPixel(index_led, color, part_name, part_number)
 	-- if index_led < part.size then
 		index_led = index_led%part.size
 		if part.invert then
-			index_led = part.size - index_led
+			index_led = part.size - index_led-1
 		end
 		self.segments[part.remote]:setPixel(index_led + part.off, color)
 	-- end
@@ -30,9 +30,8 @@ end
 
 function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
 	local part = self.parts[part_name][part_number]
-	if part.invert then
-		color1, color2 = color2, color1
-	end
+	off = off or 0
+	size = size or part.size - off
 
 	color1[4] = color1[4] or 0
 	color2[4] = color2[4] or 0
@@ -42,7 +41,16 @@ function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
 	local ib = (color2[3] - color1[3]) / size
 	local iw = (color2[4] - color1[4]) / size
 	for i=0, size-1 do
-		self:setPixel(i + off, {math.floor(color1[1]),math.floor(color1[2]),math.floor(color1[3]),math.floor(color1[4])},part_name, part_number);
+		self:setPixel(i + off,
+			{
+				math.floor(color1[1]),
+				math.floor(color1[2]),
+				math.floor(color1[3]),
+				math.floor(color1[4])
+			},
+			part_name,
+			part_number
+		);
 		color1[1] = color1[1] + ir
 		color1[2] = color1[2] + ig
 		color1[3] = color1[3] + ib
@@ -133,6 +141,22 @@ function Plantoid:show(part_name, part_number)
 	else
 		for k,v in pairs(self.segments) do
 			v:show()
+		end
+	end
+end
+
+function Plantoid:clear(part_name, part_number)
+	if part_name then
+		if part_number then
+			self.segments[self.parts[part_name][part_number].remote]:clear(nil, nil)
+		else
+			for k,v in ipairs(self.parts[part_name]) do
+				self.segments[v.remote]:clear(v.off, v.size)
+			end
+		end
+	else
+		for k,v in pairs(self.segments) do
+			v:clear()
 		end
 	end
 end

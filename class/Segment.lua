@@ -35,13 +35,20 @@ function Segment:initialize(remote, socket)
 	self.alive = 0
 end
 
+local floor = math.floor
+
 
 ----- Only update master -----
 
 
 function Segment:setPixel(index, color)
 	-- print("setPixel",index, self.size)
-	local c = {color[1], color[2], color[3], color[4] or 0}
+	local c = {
+		floor(color[1]),
+		floor(color[2]),
+		floor(color[3]),
+		floor(color[4] or 0)
+	}
 	if index < 0 or index > (self.size - 1) then
 		return false
 	else
@@ -64,7 +71,7 @@ function Segment:setLerp(off, color1, color2, size)
 	local ib = (color2[3] - color1[3]) / size
 	local iw = (color2[4] - color1[4]) / size
 	for i=0, size-1 do
-		self:setPixel(i + off, {math.floor(color1[1]),math.floor(color1[2]),math.floor(color1[3]),math.floor(color1[4])});
+		self:setPixel(i + off, color1);
 		color1[1] = color1[1] + ir
 		color1[2] = color1[2] + ig
 		color1[3] = color1[3] + ib
@@ -72,8 +79,12 @@ function Segment:setLerp(off, color1, color2, size)
 	end
 end
 
-function Segment:clear()
-	self:setAllPixels({0,0,0,0})
+function Segment:clear(off, size)
+	off = off or 0
+	size = size or self.size - off
+	for i=off, size-1 do
+		self:setPixel(i, {0,0,0,0})
+	end
 end
 
 
@@ -85,8 +96,8 @@ end
 
 function Segment:sendPixels(off, color, size)
 	size = size or 1
-	for i=off, off+size-1 do
-		self:setPixel(i, color)
+	for i=0, size-1 do
+		self:setPixel(i + off, color)
 	end
 	self:sendRawData(TYPE_LED_RGBW_SET, off, size, pack("bbbb", color[1], color[2], color[3], color[4] or 0))
 end
