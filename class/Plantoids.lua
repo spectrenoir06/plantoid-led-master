@@ -118,7 +118,13 @@ function Plantoids:update(dt, dont_send_led)
 		local data, ip, port = self.socket_osc:receivefrom() -- receive data from adc or super collider
 		if data then
 			if ip == "127.0.0.1" then
-				print("Super collider Data")
+				local osc_addr  = osc.get_addr_from_data(data)
+				local osc_data  = osc.decode(data)
+				print("Super collider Data:")
+				print("address:", osc_addr)
+				for i=1,#osc_data do
+					print(osc_data[i*2], osc_data[(i*2)+1])
+				end
 			else
 				local sensor_addr  = osc.get_addr_from_data(data)
 				local sensor_data  = osc.decode(data)
