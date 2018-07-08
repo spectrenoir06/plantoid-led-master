@@ -1,9 +1,12 @@
-function moving_dot(plant, partname, partnumber, index)
+function moving_dot(plant, partname, partnumber, index, color)
+	-- plant:setAllPixel({0,0,0,0}, partname, partnumber)
+	plant:setPixel(index, color, partname, partnumber)
+end
 
-  plant:sendPixels(0, {0,0,0,0}, nil, partname, partnumber)
-  plant:sendPixels(index, {255,0,0,0}, 1, partname, partnumber)
-  plant:show()
-
+function movinLerp(plant, index)
+	plant:setAllPixel({0,0,0,0}, "Anneaux", 1)
+	plant:setLerp(index, {255,0,0}, {0,0,255}, 16, "Anneaux" , 1)
+	plant:setLerp(index - 16, {0,0,255}, {255,0,0}, 16, "Anneaux" , 1)
 end
 
 
@@ -11,15 +14,24 @@ end
 
 function animation_test(plantoids)
 
-  local plant = plantoids.plants[1]
+	local plant = plantoids.plants[1]
 
-  moving_dot(plant, "Anneaux", 1, plantoids.counter%32)
-  moving_dot(plant, "Anneaux", 2, plantoids.counter%24)
-  moving_dot(plant, "Anneaux", 3, plantoids.counter%16)
-  moving_dot(plant, "Anneaux", 4, plantoids.counter%12)
-  moving_dot(plant, "Anneaux", 5, plantoids.counter%8)
-  moving_dot(plant, "Anneaux", 6, plantoids.counter%2)
 
+	local color = color_wheel(plantoids.counter)
+
+
+	movinLerp(plant, plantoids.counter%32)
+
+	moving_dot(plant, "Anneaux", 1, plantoids.counter%32, color)
+	-- moving_dot(plant, "Anneaux", 2, plantoids.counter%24, color)
+	-- moving_dot(plant, "Anneaux", 3, plantoids.counter%16, color)
+	-- moving_dot(plant, "Anneaux", 4, plantoids.counter%12, color)
+	-- moving_dot(plant, "Anneaux", 5, plantoids.counter%8, color)
+	-- moving_dot(plant, "Anneaux", 6, plantoids.counter%2, color)
+
+
+
+	  plant:sendAll(true)
 
 
 
