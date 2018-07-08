@@ -18,17 +18,21 @@ local CHECK_REMOTES      = 3 -- secondes
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
 
-local SERVER_SENSOR_PORT = 8000              -- port to listen to sensors OSC data
-local SERVER_MUSIC_PORT  = 8001              -- port to listen to super collider OSC data
-local SERVER_DATA_PORT   = 8002              -- port to listen to other data ( led info, cmd, ...)
+local SERVER_OSC_PORT    = 8000              -- port to listen to sensors OSC data
+local SERVER_DATA_PORT   = 8001              -- port to listen to other data ( led info, cmd, ...)
 
 function Plantoids:initialize(replay_file)
 	self.sensors = {}
 	self.plants  = {}
 
-	self.udp = assert(socket.udp())
-	self.udp:setsockname("0.0.0.0", SERVER_SENSOR_PORT)
-	self.udp:settimeout(0)
+	self.socket_osc = assert(socket.udp())
+	self.socket_osc:setsockname("0.0.0.0", SERVER_OSC_PORT)
+	self.socket_osc:settimeout(0)
+
+	self.socket_data = assert(socket.udp())
+	self.socket_data:setsockname("0.0.0.0", SERVER_DATA_PORT)
+	self.socket_data:settimeout(0)
+
 
 	self.timer_led    = 0
 	self.replay       = false
@@ -42,7 +46,7 @@ function Plantoids:initialize(replay_file)
 	local data = require("map")
 
 	for k,v in ipairs(data) do
-		self.plants[k] = Plantoid:new(v, self.udp)
+		self.plants[k] = Plantoid:new(v, self.socket_data)
 	end
 
 	if replay_file then
@@ -103,7 +107,7 @@ function Plantoids:update(dt, dont_send_led)
 					}
 				}
 
-				assert(self.udp:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+				assert(self.socket_osc:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 				self.replay_index = self.replay_index + 1
 			end
 		else
@@ -111,37 +115,37 @@ function Plantoids:update(dt, dont_send_led)
 			-- break
 		end
 	else
-		local data, ip, port = self.udp:receivefrom() -- receive data from led, adc or super collider
+		local data, ip, port = self.socket_osc:receivefrom() -- receive data from adc or super collider
 		if data then
 			if ip == "127.0.0.1" then
 				print("Super collider Data")
 			else
-				if pcall(function ()
-					local sensor_addr  = osc.get_addr_from_data(data)
-					local sensor_data  = osc.decode(data)
-					local sensor_index = sensor_data[2]
-					local sensor_value = sensor_data[4]
+				local sensor_addr  = osc.get_addr_from_data(data)
+				local sensor_data  = osc.decode(data)
+				local sensor_index = sensor_data[2]
+				local sensor_value = sensor_data[4]
 
-					if self.sensors[sensor_addr] == nil then
-						self.sensors[sensor_addr] = {}
-					end
-					self.sensors[sensor_addr][sensor_index + 1] = sensor_value
-
-					if self.dump then
-						self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
-					end
-				end) then
-					os.execute("clear")
-					print(inspect(self.sensors))
-
-					assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
-				else
-					print("Received: ", ip, port, data);
-					local seg = self:getSegmentFromIp(ip)
-					if seg then
-						seg.alive = 2
-					end
+				if self.sensors[sensor_addr] == nil then
+					self.sensors[sensor_addr] = {}
 				end
+				self.sensors[sensor_addr][sensor_index + 1] = sensor_value
+
+				if self.dump then
+					self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
+				end
+
+				os.execute("clear")
+				print(inspect(self.sensors))
+
+				assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+			end
+		end
+		local data, ip, port = self.socket_data:receivefrom()
+		if data then
+			print("Received:", ip, port, data);
+			local seg = self:getSegmentFromIp(ip)
+			if seg then
+				seg.alive = 2
 			end
 		end
 	end
@@ -177,7 +181,8 @@ function Plantoids:stop()
 	for k,plant in ipairs(self.plants) do
 		plant:off()
 	end
-	self.udp:close();
+	self.socket_osc:close();
+	self.socket_data:close();
 end
 
 function Plantoids:getSegmentFromIp(ip)
