@@ -5,7 +5,7 @@ local json     = require("lib.json")
 local inspect  = require("lib.inspect")
 local socket   = require("socket")
 
-local animation = require("anim-test")
+local animation = require("animation")
 
 require("lib.osc")
 require("lib.utils")
