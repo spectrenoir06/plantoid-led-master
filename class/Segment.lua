@@ -41,11 +41,11 @@ end
 
 function Segment:setPixel(index, color)
 	-- print("setPixel",index, self.size)
+	local c = {color[1], color[2], color[3], color[4] or 0}
 	if index < 0 or index > (self.size - 1) then
 		return false
 	else
-		color[4] = color[4] or 0
-		self.data[index+1] = color
+		self.data[index+1] = c
 	end
 end
 

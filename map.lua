@@ -3,7 +3,7 @@ return {
 		name = "Plantoid_test",
 		remotes =  {
 			Spots =  {
-				ip    =  "192.168.0.144",
+				ip    =  "192.168.0.145",
 				port  =  12345,
 				size =  93,
 				RGBW  =  true
@@ -224,6 +224,26 @@ return {
 			},
 		},
 		parts =  {
+		}
+	},
+	{
+		name = "Plantoid_test2",
+		remotes =  {
+			Spots =  {
+				ip    =  "192.168.0.144",
+				port  =  12345,
+				size =  29,
+				RGBW  =  true
+			}
+		},
+		parts =  {
+			Tiges =  {
+				{
+					remote =  "Spots",
+					off =  0,
+					size =  29
+				}
+			}
 		}
 	},
 }

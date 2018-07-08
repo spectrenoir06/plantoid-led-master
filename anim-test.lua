@@ -1,37 +1,84 @@
+local tween = require 'lib.tween'
+
+local test = { value = 0}
+local test_tween = tween.new(3, test, {value = 29},"outQuint")
+
 function moving_dot(plant, partname, partnumber, index, color)
 	-- plant:setAllPixel({0,0,0,0}, partname, partnumber)
 	plant:setPixel(index, color, partname, partnumber)
 end
 
-function movinLerp(plant, index)
-	plant:setAllPixel({0,0,0,0}, "Anneaux", 1)
-	plant:setLerp(index, {255,0,0}, {0,0,255}, 16, "Anneaux" , 1)
-	plant:setLerp(index - 16, {0,0,255}, {255,0,0}, 16, "Anneaux" , 1)
+function movinLerp(plant, index, part_name, part_number)
+	plant:setAllPixel({0,0,0,0}, part_name, part_number)
+	plant:setLerp(index, {102,0,204}, {255,0,102}, 16, part_name , part_number)
+	plant:setLerp(index - 16, {255,0,102}, {102,0,204}, 16, part_name , part_number)
 end
 
+
+function start_breath(plant, counter)
+	local value = ((math.cos(counter/10)+1)/2)
+	local test = math.floor(value * 19)
+	print(test)
+	plant:setLerpBright(10, 1, 0, test, "Tiges" , 1)
+	for i=test+10, 29 do
+		plant:setPixel(i ,{0,0,0,0}, "Tiges", 1)
+	end
+
+end
 
 
 
 function animation_test(plantoids)
 
-	local plant = plantoids.plants[1]
 
 
-	local color = color_wheel(plantoids.counter)
+	local plant = plantoids.plants[5]
 
 
-	movinLerp(plant, plantoids.counter%32)
+	-- plant:setAllPixel({153/2,0,204/2,0}, "Tiges", 1)
+	plant:setLerp(0, {255,0, 0}, {0, 255, 0}, 29, "Tiges", 1)
 
-	moving_dot(plant, "Anneaux", 1, plantoids.counter%32, color)
-	-- moving_dot(plant, "Anneaux", 2, plantoids.counter%24, color)
-	-- moving_dot(plant, "Anneaux", 3, plantoids.counter%16, color)
-	-- moving_dot(plant, "Anneaux", 4, plantoids.counter%12, color)
-	-- moving_dot(plant, "Anneaux", 5, plantoids.counter%8, color)
-	-- moving_dot(plant, "Anneaux", 6, plantoids.counter%2, color)
+	-- movinLerp(plant, plantoids.counter%29, "Tiges", 1)
+	-- start_breath(plant, plantoids.counter)
+
+	-- plant:setLerpBright(0, 1, 0, 29, "Tiges" , 1)
+
+	plant:sendAll(true)
+
+
+	-- local color = color_wheel(plantoids.counter)
 
 
 
-	  plant:sendAll(true)
+	-- test_tween:update(1/15)
+
+
+    -- local temp = plantoids:getSensorValue("/plantoid/1/1/temp", 0)
+
+	-- print(test.value)
+
+    --
+	-- plant:setAllPixel({0,0,0}, "Anneaux", 1)
+	-- plant:setAllPixel({0,0,0}, "Anneaux", 2)
+	-- plant:setAllPixel({0,0,0}, "Anneaux", 3)
+	-- plant:setAllPixel({0,0,0}, "Anneaux", 4)
+	-- plant:setAllPixel({0,0,0}, "Anneaux", 5)
+	-- plant:setAllPixel({0,0,0}, "Anneaux", 6)
+    --
+    --
+	-- movinLerp(plant, plantoids.counter%32, "Tiges", 1)
+    --
+	-- moving_dot(plant, "Anneaux", 1, plantoids.counter%32, color)
+	-- moving_dot(plant, "Anneaux", 2, plantoids.counter%24, {0,0,100})
+	-- moving_dot(plant, "Anneaux", 3, plantoids.counter%16, {0,0,100})
+	-- moving_dot(plant, "Anneaux", 4, plantoids.counter%12, {0,0,100})
+	-- moving_dot(plant, "Anneaux", 5, plantoids.counter%8, {0,0,100})
+	-- moving_dot(plant, "Anneaux", 6, plantoids.counter%2, {0,0,100})
+
+
+	-- plant:setAllPixel(color, "Tiges", 1)
+
+
 
 
 
@@ -39,7 +86,6 @@ function animation_test(plantoids)
 
   -- local color = color_wheel(plantoids.counter)
   --
-  -- local temp = plantoids:getSensorValue("/plantoid/1/1/temp", 0)
   --
   -- if temp then
   --   local temp = temp / 40

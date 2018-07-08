@@ -4,6 +4,7 @@ function love.load(cmd, replay_file)
 	plants = Plantoids:new((cmd == "replay") and replay_file or nil)
 	width, height = love.graphics.getWidth(), love.graphics.getHeight()
 	mode = 0
+	local r,g,b = 0,0,0
 end
 
 function love.draw()
@@ -74,7 +75,7 @@ end
 
 function love.mousepressed( x, y, button, istouch )
 	print(x,y,button,istouch)
-	mode = (mode + 1)%5
+	mode = (mode + 1)%(#plants.plants+1)
 end
 
 function love.keypressed( key, scancode, isrepeat )

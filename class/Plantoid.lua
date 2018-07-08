@@ -50,6 +50,24 @@ function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
 	end
 end
 
+function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_number)
+	local part = self.parts[part_name][part_number]
+	if part.invert then
+		bright1, bright2 = bright2, bright1
+	end
+
+	local ib = (bright2 - bright1) / size
+	bright1 = bright1 + ib
+
+	for i=0, size-1 do
+		local color = self:getPixel(i + off, part_name, part_number)
+		color[1] = math.max(math.ceil(color[1] * bright1), 0)
+		color[2] = math.max(math.ceil(color[2] * bright1), 0)
+		color[3] = math.max(math.ceil(color[3] * bright1), 0)
+		bright1 = bright1 + ib
+	end
+end
+
 
 
 function Plantoid:getPixel(index_led, part_name, part_number)
