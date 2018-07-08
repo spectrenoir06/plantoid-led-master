@@ -1,7 +1,7 @@
 local Plantoids = require("class.Plantoids")
 
-function love.load(cmd, replay_file)
-	plants = Plantoids:new((cmd == "replay") and replay_file or nil)
+function love.load(arg)
+	plants = Plantoids:new((arg[1] == "replay") and arg[2] or nil)
 	width, height = love.graphics.getWidth(), love.graphics.getHeight()
 	mode = 0
 	local r,g,b = 0,0,0
