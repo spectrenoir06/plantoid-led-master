@@ -113,35 +113,36 @@ function Plantoids:update(dt, dont_send_led)
 	else
 		local data, ip, port = self.udp:receivefrom() -- receive data from led, adc or super collider
 		if data then
-			if pcall(function ()
-				local sensor_addr  = osc.get_addr_from_data(data)
-				local sensor_addr  = osc.get_addr_from_data(data)
-				local sensor_data  = osc.decode(data)
-				local sensor_index = sensor_data[2]
-				local sensor_value = sensor_data[4]
-
-				if self.sensors[sensor_addr] == nil then
-					self.sensors[sensor_addr] = {}
-				end
-
-				self.sensors[sensor_addr][sensor_index + 1] = sensor_value
-				os.execute("clear")
-				print(inspect(self.sensors))
-				-- print(socket.gettime() - time_start, addr, value[2])
-				if self.dump then
-					self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
-				end
-				assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
-			end) then
-
+			if ip == "127.0.0.1" then
+				print("Super collider Data")
 			else
-				-- print("Received: ", ip, port, data);
-				local seg = self:getSegmentFromIp(ip)
-				if seg then
-					seg.alive = 3
+				if pcall(function ()
+					local sensor_addr  = osc.get_addr_from_data(data)
+					local sensor_data  = osc.decode(data)
+					local sensor_index = sensor_data[2]
+					local sensor_value = sensor_data[4]
+
+					if self.sensors[sensor_addr] == nil then
+						self.sensors[sensor_addr] = {}
+					end
+					self.sensors[sensor_addr][sensor_index + 1] = sensor_value
+
+					if self.dump then
+						self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
+					end
+				end) then
+					os.execute("clear")
+					print(inspect(self.sensors))
+
+					assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+				else
+					print("Received: ", ip, port, data);
+					local seg = self:getSegmentFromIp(ip)
+					if seg then
+						seg.alive = 2
+					end
 				end
 			end
-
 		end
 	end
 end
