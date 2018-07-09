@@ -37,29 +37,32 @@ function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	off = off or 0
 	size = size or part.size - off
-
-	color1[4] = color1[4] or 0
-	color2[4] = color2[4] or 0
+	local c = {
+		color1[1],
+		color1[2],
+		color1[3],
+		color1[4] or 0,
+	}
 
 	local ir = (color2[1] - color1[1]) / (size-1)
 	local ig = (color2[2] - color1[2]) / (size-1)
 	local ib = (color2[3] - color1[3]) / (size-1)
-	local iw = (color2[4] - color1[4]) / (size-1)
+	local iw = ((color2[4] or 0) - (color1[4] or 0)) / (size-1)
 	for i=0, size-1 do
 		self:setPixel(i + off,
 			{
-				math.floor(color1[1]+.5),
-				math.floor(color1[2]+.5),
-				math.floor(color1[3]+.5),
-				math.floor(color1[4]+.5)
+				math.floor(c[1]+.5),
+				math.floor(c[2]+.5),
+				math.floor(c[3]+.5),
+				math.floor(c[4]+.5)
 			},
 			part_name,
 			part_number
 		);
-		color1[1] = color1[1] + ir
-		color1[2] = color1[2] + ig
-		color1[3] = color1[3] + ib
-		color1[4] = color1[4] + iw
+		c[1] = c[1] + ir
+		c[2] = c[2] + ig
+		c[3] = c[3] + ib
+		c[4] = c[4] + iw
 	end
 end
 

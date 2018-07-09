@@ -21,10 +21,13 @@ function moving_dot(plant, part_name, part_number, index, color)
 	plant:setPixel(index, color, part_name, part_number)
 end
 
-function movinLerp(plant, index, part_name, part_number)
-	plant:setAllPixel({0,0,0,0}, part_name, part_number)
-	plant:setLerp(index, {102,0,204}, {255,0,102}, 16, part_name , part_number)
-	plant:setLerp(index - 16, {255,0,102}, {102,0,204}, 16, part_name , part_number)
+function movinLerp(plant, index, color1, color2, part_name, part_number)
+	plant:clear(part_name, part_number)
+	plant:setLerp(index,    color1, color2, 15, part_name, part_number)
+	plant:setLerp(index+15, color2, color1, 15, part_name, part_number)
+
+	plant:setLerp(index-15, color2, color1, 15, part_name, part_number)
+	plant:setLerp(index-30, color1, color2, 15, part_name, part_number)
 end
 
 
@@ -61,10 +64,9 @@ function led_animation(plantoids)
 
 	local plant = plantoids.plants[5]
 
-	-- plant:setAllPixel({153/2,0,204/2,0}, "Tiges", 1)
-	plant:setLerp(0, {255,0, 0}, {0, 255, 0}, 29, "Tiges", 1)
+	-- plant:setLerp(0, {255,0, 0}, {0, 255, 0}, 29, "Tiges", 1)
 
-	-- movinLerp(plant, plantoids.counter%29, "Tiges", 1)
+	movinLerp(plant, plantoids.counter%30, {255,0,0}, {0,0,255}, "Tiges", 1)
 	-- start_breath(plant, plantoids.counter)
 
 	-- plant:setLerpBright(0, 1, 0, 29, "Tiges" , 1)
