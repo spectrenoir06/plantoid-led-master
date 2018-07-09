@@ -16,6 +16,11 @@
 
 ]]--
 
+
+function courbe(value)
+	return ((math.cos(value*math.pi*2)+1)/2)
+end
+
 function moving_dot(plant, part_name, part_number, index, color)
 	plant:clear(part_name, part_number)
 	plant:setPixel(index, color, part_name, part_number)
@@ -32,8 +37,7 @@ end
 
 
 function start_breath(plant, counter)
-	local value = ((math.cos(counter/10)+1)/2)
-	local test = math.floor(value * 19)
+	local test = math.floor(courbe(counter/50) * 19)
 	plant:setLerpBright(10, 1, 0, test, "Tiges" , 1)
 	for i=test+10, 29 do
 		plant:setPixel(i ,{0,0,0,0}, "Tiges", 1)
@@ -64,10 +68,8 @@ function led_animation(plantoids)
 
 	local plant = plantoids.plants[5]
 
-	-- plant:setLerp(0, {255,0, 0}, {0, 255, 0}, 29, "Tiges", 1)
-
-	movinLerp(plant, plantoids.counter%30, {255,0,0}, {0,0,255}, "Tiges", 1)
-	-- start_breath(plant, plantoids.counter)
+	movinLerp(plant, plantoids.counter/5%30, {255,0,0}, {255,100,0}, "Tiges", 1)
+	start_breath(plant, plantoids.counter)
 
 	-- plant:setLerpBright(0, 1, 0, 29, "Tiges" , 1)
 
