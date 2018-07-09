@@ -8,11 +8,11 @@ function love.load(arg)
 end
 
 function love.draw()
-	if love.system.getOS() == "Android" then
-		love.graphics.translate(width/2, height/2)
-		love.graphics.rotate(-math.pi / 2)
-		love.graphics.translate(-height/2, -width/2)
-	end
+	-- if love.system.getOS() == "Android" then
+	-- 	love.graphics.translate(width/2, height/2)
+	-- 	love.graphics.rotate(-math.pi / 2)
+	-- 	love.graphics.translate(-height/2, -width/2)
+	-- end
 
 	local y = 10
 	if mode == 0 then
