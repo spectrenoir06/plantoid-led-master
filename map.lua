@@ -76,7 +76,7 @@ return {
 		name =  "Plantoid_Moyen",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.12.60",
+				ip    =  "192.168.12.68",
 				port  =  12345,
 				size  =  432
 			},
@@ -229,19 +229,47 @@ return {
 	{
 		name = "Plantoid_test2",
 		remotes =  {
-			Spots =  {
-				ip    =  "192.168.0.144",
+			All =  {
+				ip    =  "192.168.12.60",
 				port  =  12345,
-				size =  30,
-				RGBW  =  true
+				size =  240,
+				RGBW  =  false
 			}
 		},
 		parts =  {
 			Tiges =  {
 				{
-					remote =  "Spots",
+					remote =  "All",
 					off =  0,
-					size =  30
+					size =  38
+				},
+				{
+					remote =  "All",
+					off =  204,
+					size =  38,
+					invert = true
+				}
+			},
+			Petales =  {
+				{
+					remote =  "All",
+					off =  48,
+					size =  27
+				},
+				{
+					remote =  "All",
+					off =  75,
+					size =  38
+				},
+				{
+					remote =  "All",
+					off =  113,
+					size =  35
+				},
+				{
+					remote =  "All",
+					off =  148,
+					size =  35
 				}
 			}
 		}

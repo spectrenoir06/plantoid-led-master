@@ -22,7 +22,7 @@ function courbe(value)
 end
 
 function moving_dot(plant, part_name, part_number, index, color)
-	plant:clear(part_name, part_number)
+	-- plant:clear(part_name, part_number)
 	local size = plant:getPartSize(part_name, part_number)
 
 	index = index%size
@@ -69,49 +69,61 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local color = color_wheel(plantoids.counter)
 
-	test_horloge(plantoids, color)
+	-- test_horloge(plantoids, color)
 
 	local plant = plantoids.plants[5]
-
-	movinLerp(plant, plantoids.counter*2%30, {255,0,0}, {0,0,255}, 30, "Tiges", 1)
-	start_breath(plant, plantoids.counter, 10, 35, "Tiges", 1)
-
-	plant:sendAll(true)
-
-
-	local plant = plantoids.plants[3]
 
 	plant:setAllPixel({255,0,0},   "Petales", 1)
 	plant:setAllPixel({0,255,0},   "Petales", 2)
 	plant:setAllPixel({0,0,255},   "Petales", 3)
-	plant:setAllPixel({255,255,0}, "Petales", 4)
-	plant:setAllPixel({0,255,255}, "Petales", 5)
-	plant:setAllPixel({255,0,255}, "Petales", 6)
+	plant:setAllPixel({255,0,255}, "Petales", 4)
 
-	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 1)
-	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 2)
+	-- plant:setLerp(0, {255,0,0}, {0,255,0}, nil, "Petales", 1)
 
-	moving_dot(plant, "Supports", 1, plantoids.counter, color)
-	moving_dot(plant, "Supports", 2, plantoids.counter, color)
-	moving_dot(plant, "Supports", 3, plantoids.counter, color)
-	moving_dot(plant, "Supports", 4, plantoids.counter, color)
 
-	plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 1)
-	plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 1)
 
-	plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 2)
-	plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 2)
+	-- plant:setAllPixel({255,255,0}, "Tiges", 2)
+	movinLerp(plant, plantoids.counter%38, {255,0,0}, {255,100,0}, 38, "Tiges", 1)
+	movinLerp(plant, plantoids.counter%38, {255,0,0}, {255,100,0}, 38, "Tiges", 2)
+	-- start_breath(plant, plantoids.counter, 10, 35, "Tiges", 1)
 
-	plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 3)
-	plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 3)
-
-	plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 4)
-	plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 4)
-
-	plant:setPixel(10, {0,0,255}, "Supports", 1) -- test invert
-	plant:setPixel(10, {0,0,255}, "Supports", 2) -- test invert
+	moving_dot(plant, "Tiges", 1, plantoids.counter, color)
+	moving_dot(plant, "Tiges", 2, plantoids.counter, color)
 
 	plant:sendAll(true)
+
+	-- local plant = plantoids.plants[3]
+	-- plant:setAllPixel({255,0,0},   "Petales", 1)
+	-- plant:setAllPixel({0,255,0},   "Petales", 2)
+	-- plant:setAllPixel({0,0,255},   "Petales", 3)
+	-- plant:setAllPixel({255,255,0}, "Petales", 4)
+	-- plant:setAllPixel({0,255,255}, "Petales", 5)
+	-- plant:setAllPixel({255,0,255}, "Petales", 6)
+
+	-- plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 1)
+	-- plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 2)
+
+	-- moving_dot(plant, "Supports", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Supports", 2, plantoids.counter, color)
+	-- moving_dot(plant, "Supports", 3, plantoids.counter, color)
+	-- moving_dot(plant, "Supports", 4, plantoids.counter, color)
+
+	-- plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 1)
+	-- plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 1)
+
+	-- plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 2)
+	-- plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 2)
+
+	-- plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 3)
+	-- plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 3)
+
+	-- plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 4)
+	-- plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 4)
+
+	-- plant:setPixel(10, {0,0,255}, "Supports", 1) -- test invert
+	-- plant:setPixel(10, {0,0,255}, "Supports", 2) -- test invert
+
+	-- plant:sendAll(true)
 
 end
 

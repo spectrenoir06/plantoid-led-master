@@ -16,7 +16,7 @@ local TYPE_LED_TEST                = 6
 local TYPE_LED_RGBW_SET            = 7
 local TYPE_LED_LERP                = 8
 
-local MAX_UPDATE = 320 -- max 320 after the driver explode
+local MAX_UPDATE_SIZE = 1280 -- max 1280 after the driver explode == 320 RGBW LEDs or 426 RGB LEDs
 
 function init_tab(nb, color)
 	local t = {}
@@ -100,12 +100,16 @@ function Segment:sendPixels(off, color, size)
 end
 
 function Segment:sendAll(update)
-	local nb_update = math.ceil(self.size / MAX_UPDATE)
+	local max_update = math.floor(MAX_UPDATE_SIZE / 3)
+	if self.RGBW then
+		max_update = math.floor(MAX_UPDATE_SIZE / 4)
+	end
+	local nb_update = math.ceil(self.size / max_update)
 	-- print("nb_update", nb_update)
 	for i=0, nb_update-2 do
-		self:sendRawRGBData(i * MAX_UPDATE, MAX_UPDATE, false)
+		self:sendRawRGBData(i * max_update, max_update, false)
 	end
-	local last_off = MAX_UPDATE * (nb_update-1)
+	local last_off = max_update * (nb_update-1)
 	self:sendRawRGBData(last_off, self.size - last_off, update)
 end
 
