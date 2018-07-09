@@ -38,7 +38,7 @@ end
 
 function start_breath(plant, counter)
 	local test = math.floor(courbe(counter/50) * 19)
-	plant:setLerpBright(10, 1, 0, test, "Tiges" , 1)
+	plant:setLerpBright(8, 1, 0, test+2, "Tiges" , 1)
 	for i=test+10, 29 do
 		plant:setPixel(i ,{0,0,0,0}, "Tiges", 1)
 	end
