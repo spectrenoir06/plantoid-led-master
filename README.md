@@ -16,3 +16,8 @@ luarocks install luaposix
 ```
 ./led_master.lua replay dump/big.dump
 ```
+
+### runs serveur with Love
+```
+love .
+```
