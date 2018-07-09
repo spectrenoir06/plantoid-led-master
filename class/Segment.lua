@@ -82,8 +82,8 @@ end
 function Segment:clear(off, size)
 	off = off or 0
 	size = size or self.size - off
-	for i=off, size-1 do
-		self:setPixel(i, {0,0,0,0})
+	for i=0, size-1 do
+		self:setPixel(i+off, {0,0,0,0})
 	end
 end
 
