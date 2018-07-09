@@ -74,10 +74,12 @@ function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_num
 
 	for i=0, size-1 do
 		local color = self:getPixel(i + off, part_name, part_number)
-		color[1] = math.max(math.ceil(color[1] * bright1), 0)
-		color[2] = math.max(math.ceil(color[2] * bright1), 0)
-		color[3] = math.max(math.ceil(color[3] * bright1), 0)
-		bright1 = bright1 + ib
+		if color then
+			color[1] = math.max(math.ceil(color[1] * bright1), 0)
+			color[2] = math.max(math.ceil(color[2] * bright1), 0)
+			color[3] = math.max(math.ceil(color[3] * bright1), 0)
+			bright1 = bright1 + ib
+		end
 	end
 end
 

@@ -232,7 +232,7 @@ return {
 			Spots =  {
 				ip    =  "192.168.0.144",
 				port  =  12345,
-				size =  29,
+				size =  30,
 				RGBW  =  true
 			}
 		},
@@ -241,7 +241,7 @@ return {
 				{
 					remote =  "Spots",
 					off =  0,
-					size =  29
+					size =  30
 				}
 			}
 		}
