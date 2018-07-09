@@ -14,11 +14,11 @@ function love.draw()
 	-- 	love.graphics.translate(-height/2, -width/2)
 	-- end
 
-	love.graphics.print(love.graphics.getWidth().."/"..love.graphics.getHeight(), 0,0)
+	-- love.graphics.print(love.graphics.getWidth().."/"..love.graphics.getHeight(), 0,0)
 
 	local y = 10
 	if mode == 0 then
-		love.graphics.print(love.timer.getFPS(), 200, 5)
+		-- love.graphics.print(love.timer.getFPS(), 200, 5)
 		for k,v in ipairs(plants.plants) do
 			love.graphics.print("["..k.."]  "..v.name, 10, y)
 			y = y + 20
@@ -47,8 +47,8 @@ function love.draw()
 			for m,x in ipairs(w) do
 				love.graphics.print(x.size, 50, y)
 				local rect_size = 10
-				if (x.size * 10) > 450 then
-					rect_size = 450 / x.size
+				if (x.size * 10) > 300 then
+					rect_size = 300 / x.size
 				end
 				love.graphics.rectangle("line", 80, y, rect_size*x.size, 10)
 				for i=0, x.size-1 do
