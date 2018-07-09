@@ -30,13 +30,15 @@ function moving_dot(plant, part_name, part_number, index, color)
 	plant:setPixel(index, color, part_name, part_number)
 end
 
-function movinLerp(plant, index, color1, color2, size, part_name, part_number)
+function movinLerp(plant, index, color1, color2, part_name, part_number)
 	plant:clear(part_name, part_number)
-	plant:setLerp(index,    color1, color2, size/2, part_name, part_number)
-	plant:setLerp(index+size/2, color2, color1, size/2, part_name, part_number)
+	local size = plant:getPartSize(part_name, part_number)
+	index = index % (size)
+	plant:setLerp(index, color1, color2, math.floor(size/2+.5), part_name, part_number)
+	plant:setLerp(index+size/2, color2, color1, math.floor(size/2+.5), part_name, part_number)
 
-	plant:setLerp(index-size/2, color2, color1, size/2, part_name, part_number)
-	plant:setLerp(index-size, color1, color2, size/2, part_name, part_number)
+	plant:setLerp(index-size/2, color2, color1, math.floor(size/2+.5), part_name, part_number)
+	plant:setLerp(index-size, color1, color2, math.floor(size/2+.5), part_name, part_number)
 end
 
 
@@ -73,24 +75,38 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[5]
 
-	plant:setAllPixel({255,0,0},   "Petales", 1)
-	plant:setAllPixel({0,255,0},   "Petales", 2)
-	plant:setAllPixel({0,0,255},   "Petales", 3)
-	plant:setAllPixel({255,0,255}, "Petales", 4)
-
-	-- plant:setLerp(0, {255,0,0}, {0,255,0}, nil, "Petales", 1)
-
-
-
 	-- plant:setAllPixel({255,255,0}, "Tiges", 2)
-	movinLerp(plant, plantoids.counter%38, {255,0,0}, {255,100,0}, 38, "Tiges", 1)
-	movinLerp(plant, plantoids.counter%38, {255,0,0}, {255,100,0}, 38, "Tiges", 2)
-	-- start_breath(plant, plantoids.counter, 10, 35, "Tiges", 1)
+	movinLerp(plant, plantoids.counter, {0,255,0}, {0,255,50}, "Tiges", 1)
+	movinLerp(plant, plantoids.counter, {0,255,0}, {0,255,50}, "Tiges", 2)
 
-	moving_dot(plant, "Tiges", 1, plantoids.counter, color)
-	moving_dot(plant, "Tiges", 2, plantoids.counter, color)
+
+	movinLerp(plant, plantoids.counter, {255,0,0}, {255,100,0}, "Petales", 1)
+	movinLerp(plant, plantoids.counter, {0,255,0}, {0,255,50}, "Petales", 2)
+
+	movinLerp(plant, plantoids.counter, {0,0,255}, {50,0,255}, "Petales", 4)
+	movinLerp(plant, plantoids.counter, {255,255,0}, {255,255,50}, "Petales", 3)
+
+
+	-- if Plantoid.counter
+
+	-- plant:setAllPixel({255,255,255}, "Tiges", 1)
+	-- plant:setAllPixel({255,255,255}, "Tiges", 2)
+    --
+	-- plant:setAllPixel({255,255,255}, "Petales", 1)
+	-- plant:setAllPixel({255,255,255}, "Petales", 2)
+	-- plant:setAllPixel({255,255,255}, "Petales", 3)
+	-- plant:setAllPixel({255,255,255}, "Petales", 4)
+
+
+	-- start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
+	-- start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)
 
 	plant:sendAll(true)
+
+
+	-- moving_dot(plant, "Tiges", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Tiges", 2, plantoids.counter, color)
+
 
 	-- local plant = plantoids.plants[3]
 	-- plant:setAllPixel({255,0,0},   "Petales", 1)
