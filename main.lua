@@ -14,6 +14,8 @@ function love.draw()
 	-- 	love.graphics.translate(-height/2, -width/2)
 	-- end
 
+	love.graphics.print(love.graphics.getWidth().."/"..love.graphics.getHeight(), 0,0)
+
 	local y = 10
 	if mode == 0 then
 		love.graphics.print(love.timer.getFPS(), 200, 5)
