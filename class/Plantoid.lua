@@ -25,8 +25,7 @@ function Plantoid:setPixel(index_led, color, part_name, part_number)
 	index_led = math.floor(index_led)
 
 	local part = self.parts[part_name][part_number]
-	if index_led >= 0 then
-		index_led = index_led%part.size
+	if index_led >= 0 and index_led < part.size then
 		if part.invert then
 			index_led = part.size - index_led-1
 		end
@@ -42,17 +41,17 @@ function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
 	color1[4] = color1[4] or 0
 	color2[4] = color2[4] or 0
 
-	local ir = (color2[1] - color1[1]) / size
-	local ig = (color2[2] - color1[2]) / size
-	local ib = (color2[3] - color1[3]) / size
-	local iw = (color2[4] - color1[4]) / size
+	local ir = (color2[1] - color1[1]) / (size-1)
+	local ig = (color2[2] - color1[2]) / (size-1)
+	local ib = (color2[3] - color1[3]) / (size-1)
+	local iw = (color2[4] - color1[4]) / (size-1)
 	for i=0, size-1 do
 		self:setPixel(i + off,
 			{
-				math.floor(color1[1]),
-				math.floor(color1[2]),
-				math.floor(color1[3]),
-				math.floor(color1[4])
+				math.floor(color1[1]+.5),
+				math.floor(color1[2]+.5),
+				math.floor(color1[3]+.5),
+				math.floor(color1[4]+.5)
 			},
 			part_name,
 			part_number
@@ -66,9 +65,6 @@ end
 
 function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_number)
 	local part = self.parts[part_name][part_number]
-	if part.invert then
-		bright1, bright2 = bright2, bright1
-	end
 
 	local ib = (bright2 - bright1) / size
 	bright1 = bright1 + ib
@@ -82,11 +78,12 @@ function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_num
 	end
 end
 
-
-
 function Plantoid:getPixel(index_led, part_name, part_number)
 	local part = self.parts[part_name][part_number]
-	if part.size > index_led then
+	if index_led >= 0 and index_led < part.size then
+		if part.invert then
+			index_led = part.size - index_led-1
+		end
 		return self.segments[part.remote].data[index_led + part.off + 1]
 	end
 end
@@ -100,9 +97,7 @@ end
 
 function Plantoid:sendLerp(off, color1, color2, size, part_name, part_number)
 	local part = self.parts[part_name][part_number]
-	if part.invert then
-		color1, color2 = color2, color1
-	end
+	self:setLerp(off, color1, color2, size, part_name, part_number)
 	self.segments[part.remote]:sendLerp(off + part.off, color1, color2, size or part.size)
 end
 

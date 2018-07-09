@@ -2,6 +2,7 @@
 
 	Plandoids:getSensorValue(adresse, value)
 
+	Plantoid:setPixel(index_led, color, part_name, part_number)
 	Plantoid:setAllPixel(color, part_name, part_number)
 	Plantoid:sendAll(update, part_name(opt), part_number(opt))
 	Plantoid:getPixel(index_led, part_name, part_number)
@@ -47,7 +48,7 @@ function test_horloge(plantoids)
 	moving_dot(plant, "Anneaux", 3, ctn*16, color)
 	moving_dot(plant, "Anneaux", 4, ctn*12, color)
 	moving_dot(plant, "Anneaux", 5, ctn*8, color)
-	moving_dot(plant, "Anneaux", 6, ctn*2, color)
+	plant:setAllPixel(color, "Anneaux", 6)
 
 	plant:sendAll(true, "Anneaux")
 end
@@ -58,17 +59,17 @@ function led_animation(plantoids)
 
 	test_horloge(plantoids)
 
-	-- local plant = plantoids.plants[5]
+	local plant = plantoids.plants[5]
 
 	-- plant:setAllPixel({153/2,0,204/2,0}, "Tiges", 1)
-	-- plant:setLerp(0, {255,0, 0}, {0, 255, 0}, 29, "Tiges", 1)
+	plant:setLerp(0, {255,0, 0}, {0, 255, 0}, 29, "Tiges", 1)
 
 	-- movinLerp(plant, plantoids.counter%29, "Tiges", 1)
 	-- start_breath(plant, plantoids.counter)
 
 	-- plant:setLerpBright(0, 1, 0, 29, "Tiges" , 1)
 
-	-- plant:sendAll(true)
+	plant:sendAll(true)
 
 
 
