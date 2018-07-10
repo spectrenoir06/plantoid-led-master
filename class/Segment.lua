@@ -159,7 +159,7 @@ function Segment:checkInfo()
 end
 
 function Segment:setEeprom(hostname)
-	local to_send = pack('bbhz', TYPE_SET_MODE, self.RGBW, self.size, hostname)
+	local to_send = pack('bbhs', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 end
 

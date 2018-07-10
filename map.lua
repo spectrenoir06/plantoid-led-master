@@ -3,7 +3,7 @@ return {
 		name = "Plantoid_test",
 		remotes =  {
 			Spots =  {
-				ip    =  "192.168.0.145",
+				ip    =  "192.168.11.109",
 				port  =  12345,
 				size =  93,
 				RGBW  =  true

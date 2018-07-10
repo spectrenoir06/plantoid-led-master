@@ -64,6 +64,9 @@ function Plantoids:initialize(replay_file)
 		end
 	end
 
+
+	self:setEeprom()
+
 	return self
 end
 
