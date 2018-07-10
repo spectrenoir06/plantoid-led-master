@@ -122,7 +122,7 @@ function Plantoids:update(dt, dont_send_led)
 				local osc_data  = osc.decode(data)
 				print("Super collider Data:")
 				print("address:", osc_addr)
-				for i=1,#osc_data do
+				for i=1,(#osc_data/2) do
 					print(osc_data[i*2], osc_data[(i*2)+1])
 				end
 			else
