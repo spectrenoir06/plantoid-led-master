@@ -220,4 +220,12 @@ function Plantoids:getSensorValue(addr, index)
 	end
 end
 
+function Plantoids:setEeprom()
+	for k,v in ipairs(self.plants) do
+		for l,w in pairs(v.segments) do
+			w:setEeprom(v.name.."_"..l)
+		end
+	end
+end
+
 return Plantoids

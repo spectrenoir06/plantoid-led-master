@@ -15,6 +15,7 @@ local TYPE_GET_INFO                = 5
 local TYPE_LED_TEST                = 6
 local TYPE_LED_RGBW_SET            = 7
 local TYPE_LED_LERP                = 8
+local TYPE_SET_MODE                = 9
 
 local MAX_UPDATE_SIZE = 1280 -- max 1280 after the driver explode == 320 RGBW LEDs or 426 RGB LEDs
 
@@ -155,6 +156,11 @@ function Segment:checkInfo()
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 	self.alive = self.alive - 1
 	if self.alive < 0 then self.alive = 0 end
+end
+
+function Segment:setEeprom(hostname)
+	local to_send = pack('bbhz', TYPE_SET_MODE, self.RGBW, self.size, hostname)
+	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 end
 
 return Segment
