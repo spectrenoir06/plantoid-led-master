@@ -131,12 +131,15 @@ end
 
 function Segment:sendRawData(cmd, off, size, data)
 	-- print("send",off,size,update)
-	local to_send = pack('bhh', cmd, off, size) .. (data or "")
-	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
+	if self.alive > 0 then
+		local to_send = pack('bhh', cmd, off, size) .. (data or "")
+		assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
+	end
 end
 
 function Segment:sendRawRGBData(off, size, update)
 	-- print("send",off,size,update)
+	if self.alive == 0 then return end
 	local cmd = self.RGBW and TYPE_LED_RAW_RGBW or TYPE_LED_RAW
 	local color = self.RGBW and "bbbb" or "bbb"
 	if update then
@@ -161,6 +164,10 @@ end
 function Segment:setEeprom(hostname)
 	local to_send = pack('bbhs', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
+end
+
+function Segment:updateEsp(bin_file)
+	os.execute("python /home/spectre/.arduino15/packages/esp8266/hardware/esp8266/2.4.1/tools/espota.py -i "..self.remote.ip.." -p 8266 --auth= -f "..bin_file.." -P 8266 -d")
 end
 
 return Segment

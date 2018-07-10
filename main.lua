@@ -68,7 +68,10 @@ function love.draw()
 end
 
 function love.update(dt)
-	plants:update(dt)
+	local finish = plants:update(dt)
+	if finish then
+		love.event.quit()
+	end
 end
 
 function love.quit()

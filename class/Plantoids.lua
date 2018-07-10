@@ -10,6 +10,10 @@ local animation = require("animation")
 require("lib.osc")
 require("lib.utils")
 
+local struct = require("lib.struct")
+local pack = struct.pack
+local upack = struct.unpack
+
 local Plantoids = class('Plantoids')
 
 local LED_FRAMERATE      = 15 -- Hz
@@ -22,6 +26,8 @@ local SERVER_OSC_PORT    = 8000              -- port to listen to sensors OSC da
 local SERVER_DATA_PORT   = 8001              -- port to listen to other data ( led info, cmd, ...)
 
 local UPDATE_SCREEN = true
+
+local CMD_UDP_ALIVE = 0
 
 function Plantoids:initialize(replay_file)
 	self.sensors = {}
@@ -67,7 +73,6 @@ function Plantoids:initialize(replay_file)
 		end
 	end
 
-
 	self:setEeprom()
 
 	return self
@@ -110,13 +115,14 @@ function Plantoids:update(dt, dont_send_led)
 						"f", sensor_value
 					}
 				}
+				UPDATE_SCREEN = true
 
 				assert(self.socket_osc:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 				self.replay_index = self.replay_index + 1
 			end
 		else
 			print("Replay finish")
-			-- break
+			return true
 		end
 	end
 
@@ -144,16 +150,26 @@ function Plantoids:update(dt, dont_send_led)
 
 			assert(self.socket_osc:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 		end
-		os.execute("clear")
-		print("Sensor:",inspect(self.sensors))
-		print("Music:",inspect(self.music))
 	end
+
+	if data or UPDATE_SCREEN then
+		-- os.execute("clear")
+		-- print("Sensor:",inspect(self.sensors))
+		-- print("Music:",inspect(self.music))
+		-- UPDATE_SCREEN = false
+	end
+
 	local data, ip, port = self.socket_data:receivefrom()
 	if data then
-		print("Received:", ip, port, data);
-		local seg = self:getSegmentFromIp(ip)
-		if seg then
-			seg.alive = 2
+		-- print("Received data from:", ip, port, #data);
+		local cmd = upack("b", data)
+
+		if cmd == CMD_UDP_ALIVE then
+			local seg = self:getSegmentFromIp(ip)
+			if seg then
+				seg.alive = 2
+				_, seg.dist_rgbw, seg.dist_size, seg.dist_vers, seg.dist_name = upack("bbhss", data)
+			end
 		end
 	end
 end
@@ -226,6 +242,23 @@ function Plantoids:setEeprom()
 		for l,w in pairs(v.segments) do
 			w:setEeprom(v.name.."_"..l)
 		end
+	end
+end
+
+function Plantoids:updateEsp(bin_file)
+	for k,v in ipairs(self.plants) do
+		for l,w in pairs(v.segments) do
+			if w.alive > 0 then
+				w.alive = 0
+				w:updateEsp(bin_file)
+			end
+		end
+	end
+end
+
+function Plantoids:runCMD(cmd)
+	if cmd == "update" then
+		self:updateEsp("bin/plantoid-led-driver.ino.bin")
 	end
 end
 
