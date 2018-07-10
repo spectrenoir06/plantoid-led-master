@@ -232,7 +232,7 @@ return {
 			All =  {
 				ip    =  "192.168.12.60",
 				port  =  12345,
-				size =  240,
+				size =  320,
 				RGBW  =  false
 			}
 		},

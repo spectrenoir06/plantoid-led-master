@@ -16,6 +16,9 @@
 
 ]]--
 
+function rgb(r,g,b)
+	return {r,g,b}
+end
 
 function courbe(value)
 	return ((math.cos((value/100)*math.pi*2)+1)/2)
@@ -75,16 +78,14 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[5]
 
-	-- plant:setAllPixel({255,255,0}, "Tiges", 2)
-	movinLerp(plant, plantoids.counter, {0,255,0}, {0,255,50}, "Tiges", 1)
-	movinLerp(plant, plantoids.counter, {0,255,0}, {0,255,50}, "Tiges", 2)
+	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
+	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
 
+	movinLerp(plant, plantoids.counter, rgb(255,0,0),   rgb(255,100,0),  "Petales", 1)
+	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Petales", 2)
 
-	movinLerp(plant, plantoids.counter, {255,0,0}, {255,100,0}, "Petales", 1)
-	movinLerp(plant, plantoids.counter, {0,255,0}, {0,255,50}, "Petales", 2)
-
-	movinLerp(plant, plantoids.counter, {0,0,255}, {50,0,255}, "Petales", 4)
-	movinLerp(plant, plantoids.counter, {255,255,0}, {255,255,50}, "Petales", 3)
+	movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(50,0,255),   "Petales", 4)
+	movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
 
 
 	-- if Plantoid.counter

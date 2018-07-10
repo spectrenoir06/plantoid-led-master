@@ -43,9 +43,7 @@ local floor = math.floor
 
 function Segment:setPixel(index, color)
 	-- print("setPixel",index, self.size)
-	if index < 0 or index > (self.size - 1) then
-		return false
-	else
+	if index >= 0 and index < self.size then
 		self.data[index+1][1] = color[1]
 		self.data[index+1][2] = color[2]
 		self.data[index+1][3] = color[3]
