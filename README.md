@@ -4,8 +4,9 @@
 ```
 lua 5.1
 
-luarocks install luasocket
-luarocks install luaposix
+luarocks5.1 install luasocket
+luarocks5.1 install luaposix
+luarocks5.1 install curse
 ```
 
 ### runs serveur and dump ( dump/log.dump )
