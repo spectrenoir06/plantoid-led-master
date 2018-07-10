@@ -125,8 +125,8 @@ function Plantoids:update(dt, dont_send_led)
 				local osc_data  = osc.decode(data)
 				print("Super collider Data:")
 				print("address:", osc_addr)
-				for i=1,(#osc_data/2) do
-					print(osc_data[i*2], osc_data[(i*2)+1])
+				for i=0,(#osc_data/2)-1 do
+					print(osc_data[i*2+1], osc_data[i*2+2])
 				end
 			else
 				local sensor_addr  = osc.get_addr_from_data(data)
@@ -140,13 +140,13 @@ function Plantoids:update(dt, dont_send_led)
 				self.sensors[sensor_addr][sensor_index + 1] = sensor_value
 
 				if self.dump then
-					self.dump_file:write((socket.gettime() - time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
+					self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
 				end
 
 				os.execute("clear")
 				print(inspect(self.sensors))
 
-				assert(self.udp:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+				assert(self.socket_osc:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 			end
 		end
 		local data, ip, port = self.socket_data:receivefrom()
