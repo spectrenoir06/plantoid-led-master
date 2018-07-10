@@ -145,8 +145,8 @@ function Plantoids:update(dt, dont_send_led)
 			assert(self.socket_osc:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 		end
 		os.execute("clear")
-		print(inspect(self.sensors))
-		print(inspect(self.music))
+		print("Sensor:",inspect(self.sensors))
+		print("Music:",inspect(self.music))
 	end
 	local data, ip, port = self.socket_data:receivefrom()
 	if data then
