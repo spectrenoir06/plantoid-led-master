@@ -21,8 +21,11 @@ local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collide
 local SERVER_OSC_PORT    = 8000              -- port to listen to sensors OSC data
 local SERVER_DATA_PORT   = 8001              -- port to listen to other data ( led info, cmd, ...)
 
+local UPDATE_SCREEN = true
+
 function Plantoids:initialize(replay_file)
 	self.sensors = {}
+	self.music = {}
 	self.plants  = {}
 
 	self.socket_osc = assert(socket.udp())
@@ -99,8 +102,6 @@ function Plantoids:update(dt, dont_send_led)
 					self.sensors[sensor_addr] = {}
 				end
 				self.sensors[sensor_addr][sensor_index + 1] = sensor_value
-				os.execute("clear")
-				print(inspect(self.sensors))
 
 				local to_send = {
 					sensor_addr,
@@ -117,45 +118,42 @@ function Plantoids:update(dt, dont_send_led)
 			print("Replay finish")
 			-- break
 		end
-	else
-		local data, ip, port = self.socket_osc:receivefrom() -- receive data from adc or super collider
-		if data then
-			if ip == "127.0.0.1" then
-				local osc_addr  = osc.get_addr_from_data(data)
-				local osc_data  = osc.decode(data)
-				print("Super collider Data:")
-				print("address:", osc_addr)
-				for i=0,(#osc_data/2)-1 do
-					print(osc_data[i*2+1], osc_data[i*2+2])
-				end
-			else
-				local sensor_addr  = osc.get_addr_from_data(data)
-				local sensor_data  = osc.decode(data)
-				local sensor_index = sensor_data[2]
-				local sensor_value = sensor_data[4]
+	end
 
-				if self.sensors[sensor_addr] == nil then
-					self.sensors[sensor_addr] = {}
-				end
-				self.sensors[sensor_addr][sensor_index + 1] = sensor_value
+	local data, ip, port = self.socket_osc:receivefrom() -- receive data from adc or super collider
+	if data then
+		if ip == "127.0.0.1" then
+			local osc_addr  = osc.get_addr_from_data(data)
+			local osc_data  = osc.decode(data)
+			-- print("SC Data: addr='"..osc_addr.."'\tdata:"..inspect(osc_data))
+			self.music[osc_addr] = osc_data
+		elseif not self.replay then
+			local sensor_addr  = osc.get_addr_from_data(data)
+			local sensor_data  = osc.decode(data)
+			local sensor_index = sensor_data[2]
+			local sensor_value = sensor_data[4]
 
-				if self.dump then
-					self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
-				end
-
-				os.execute("clear")
-				print(inspect(self.sensors))
-
-				assert(self.socket_osc:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+			if self.sensors[sensor_addr] == nil then
+				self.sensors[sensor_addr] = {}
 			end
+			self.sensors[sensor_addr][sensor_index + 1] = sensor_value
+
+			if self.dump then
+				self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
+			end
+
+			assert(self.socket_osc:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
 		end
-		local data, ip, port = self.socket_data:receivefrom()
-		if data then
-			print("Received:", ip, port, data);
-			local seg = self:getSegmentFromIp(ip)
-			if seg then
-				seg.alive = 2
-			end
+		os.execute("clear")
+		print(inspect(self.sensors))
+		print(inspect(self.music))
+	end
+	local data, ip, port = self.socket_data:receivefrom()
+	if data then
+		print("Received:", ip, port, data);
+		local seg = self:getSegmentFromIp(ip)
+		if seg then
+			seg.alive = 2
 		end
 	end
 end
