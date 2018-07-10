@@ -22,3 +22,9 @@ luarocks5.1 install curse
 ```
 love .
 ```
+
+### Press Enter to enter CMD mode
+
+## cmd
+- update
+- quit
