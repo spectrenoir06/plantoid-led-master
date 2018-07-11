@@ -82,11 +82,18 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
 	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
 
-	movinLerp(plant, plantoids.counter, rgb(255,0,0),   rgb(255,100,0),  "Petales", 1)
-	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Petales", 2)
+	plant:clear("Petales")
+	moving_dot(plant, "Petales", 1, plantoids.counter, color)
+	moving_dot(plant, "Petales", 2, plantoids.counter, color)
+	moving_dot(plant, "Petales", 3, plantoids.counter, color)
+	moving_dot(plant, "Petales", 4, plantoids.counter, color)
 
-	movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(50,0,255),   "Petales", 4)
-	movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
+
+	-- movinLerp(plant, plantoids.counter, rgb(255,0,0),   rgb(255,100,0),  "Petales", 1)
+	-- movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Petales", 2)
+
+	-- movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(50,0,255),   "Petales", 4)
+	-- movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
 
 	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
 	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)

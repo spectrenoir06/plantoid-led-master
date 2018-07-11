@@ -156,7 +156,6 @@ end
 
 function Segment:checkInfo()
 	local to_send = pack('b', TYPE_GET_INFO)
-	--assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 	self.alive = self.alive - 1
 	if self.alive < 0 then self.alive = 0 end
@@ -164,8 +163,6 @@ end
 
 function Segment:setEeprom(hostname)
 	local to_send = pack('bbhs', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
-	print(self.remote.ip)
-	--assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 
 end
