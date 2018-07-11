@@ -70,7 +70,8 @@ end
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
-	plantoids:printf("counter = %d",plantoids.counter)
+	local test_value = courbe(plantoids.counter)
+	plantoids:printf("counter = %d, test_value= %f",plantoids.counter, test_value)
 
 	local color = color_wheel(plantoids.counter)
 
@@ -103,6 +104,8 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	plant:setAllPixel({255,255,0}, "Petales", 4)
 	plant:setAllPixel({0,255,255}, "Petales", 5)
 	plant:setAllPixel({255,0,255}, "Petales", 6)
+
+	plant:setFade(0, test_value, nil, "Petales", 1)
 
 	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 1)
 	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 2)
