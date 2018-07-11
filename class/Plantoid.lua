@@ -73,6 +73,15 @@ function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
 	end
 end
 
+function Plantoid:setLerp2(off, color1, color2, size, part_name, part_number)
+	self:check(part_name, part_number)
+	local part = self.parts[part_name][part_number]
+	off = off or 0
+	size = size or part.size - off
+	self:setLerp(off,        color1, color2, math.floor(size/2+.5), part_name, part_number)
+	self:setLerp(off+size/2, color2, color1, math.floor(size/2+.5), part_name, part_number)
+end
+
 function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_number)
 	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]

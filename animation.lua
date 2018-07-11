@@ -113,17 +113,17 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	moving_dot(plant, "Supports", 3, plantoids.counter, color)
 	moving_dot(plant, "Supports", 4, plantoids.counter, color)
 
-	plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 1)
-	plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 1)
+	plant:setLerp(0,     rgb(255,0,0), rgb(0,0,255), 216/2, "Feuilles" , 1)
+	plant:setLerp(216/2, rgb(0,0,255), rgb(255,0,0), 216/2, "Feuilles" , 1)
 
-	plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 2)
-	plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 2)
+	plant:setLerp(0,     rgb(255,255,0), rgb(0,255,255), 162/2, "Feuilles" , 2)
+	plant:setLerp(162/2, rgb(0,255,255), rgb(255,255,0), 162/2, "Feuilles" , 2)
 
-	plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 3)
-	plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 3)
+	plant:setLerp(0,     rgb(255,0,0), rgb(0,0,255), 216/2, "Feuilles" , 3)
+	plant:setLerp(216/2, rgb(0,0,255), rgb(255,0,0), 216/2, "Feuilles" , 3)
 
-	plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 4)
-	plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 4)
+	plant:setLerp(0,     rgb(255,255,0), rgb(0,255,255), 162/2, "Feuilles" , 4)
+	plant:setLerp(162/2, rgb(0,255,255), rgb(255,255,0), 162/2, "Feuilles" , 4)
 
 	plant:sendAll(true)
 
