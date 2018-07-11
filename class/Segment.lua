@@ -167,7 +167,7 @@ function Segment:setEeprom(hostname)
 end
 
 function Segment:updateEsp(bin_file)
-	os.execute("python /home/spectre/.arduino15/packages/esp8266/hardware/esp8266/2.4.1/tools/espota.py -i "..self.remote.ip.." -p 8266 --auth= -f "..bin_file.." -P 8266 -d")
+	os.execute("python bin/espota.py -i "..self.remote.ip.." -p 8266 --auth= -f "..bin_file.." -P 8266 -d")
 end
 
 return Segment

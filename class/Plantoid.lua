@@ -100,6 +100,21 @@ function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_num
 	end
 end
 
+function Plantoid:setFade(off, bright, size, part_name, part_number)
+	self:check(part_name, part_number)
+	local part = self.parts[part_name][part_number]
+	size = size or part.size - off
+
+	for i=0, size-1 do
+		local color = self:getPixel(i + off, part_name, part_number)
+		if color then
+			color[1] = color[1] * bright
+			color[2] = color[2] * bright
+			color[3] = color[3] * bright
+		end
+	end
+end
+
 function Plantoid:getPixel(index_led, part_name, part_number)
 	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]
