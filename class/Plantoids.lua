@@ -34,6 +34,10 @@ function Plantoids:initialize(replay_file)
 	self.music = {}
 	self.plants  = {}
 
+	self.log = {}
+	self.log_index = 1
+	for i=1,20 do self.log[i] = "" end
+
 	self.socket_osc = assert(socket.udp())
 	self.socket_osc:setsockname("0.0.0.0", SERVER_OSC_PORT)
 	self.socket_osc:settimeout(0)
@@ -263,6 +267,15 @@ function Plantoids:runCMD(cmd)
 	elseif cmd == "sendinfo" then
 		self:setEeprom()
 	end
+end
+
+function Plantoids:printf(fmt, ...)
+	if not self.hide_print then
+		print(string.format(fmt, ...))
+	end
+	table.insert(self.log, string.format(fmt, ...))
+	table.remove(self.log, 1)
+	self.log_index = self.log_index + 1
 end
 
 return Plantoids

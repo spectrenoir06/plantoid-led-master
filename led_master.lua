@@ -5,18 +5,13 @@ local Plantoids = require("class.Plantoids")
 local curses    = require("curses")
 local inspect   = require("lib.inspect")
 
-
-
-local function printf (fmt, ...)
-	return print(string.format(fmt, ...))
-end
-
 local dt = 0.000001
 local time = socket.gettime()
 
 local replay_file = (arg[1] == "replay") and arg[2] or nil
 
 local plants = Plantoids:new(replay_file)
+plants.hide_print = true
 
 signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
@@ -44,7 +39,6 @@ function init_ncurse()
 	end
 	return scr
 end
-
 
 -- To display Lua errors, we must close curses to return to
 -- normal terminal mode, and then write the error to stdout.
@@ -105,7 +99,16 @@ function main()
 
 
 		local y, x = stdscr:getmaxyx()
-		stdscr:mvaddstr(y-2, 0, "'"..string.char(tonumber(last_key)).."'  "..last_key)
+		stdscr:attron(curses.A_BOLD)
+			stdscr:mvaddstr(y-23-1, 1, "Log:")
+		stdscr:attroff(curses.A_BOLD)
+		for k,v in ipairs(plants.log) do
+			stdscr:mvaddstr(y-23+k, 2, v)
+		end
+
+		stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
+
+		-- stdscr:mvaddstr(y-2, 0, "'"..string.char(tonumber(last_key)).."'  "..last_key)
 		stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
 
 		local key = stdscr:getch()  -- Nonblocking; returns nil if no key was pressed.
@@ -124,7 +127,7 @@ function main()
 		end
 
 		stdscr:refresh()
-		socket.sleep(0.001)
+		socket.sleep(0.01)
 	end
 end
 

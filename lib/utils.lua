@@ -11,3 +11,7 @@ function color_wheel(WheelPos)
 		return {WheelPos * 3, 255 - WheelPos * 3, 0}
 	end
 end
+
+function printf (fmt, ...)
+	return print(string.format(fmt, ...))
+end

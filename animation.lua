@@ -72,6 +72,8 @@ end
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
+	plantoids:printf(plantoids.counter)
+
 	local color = color_wheel(plantoids.counter)
 
 	test_horloge(plantoids, color)
