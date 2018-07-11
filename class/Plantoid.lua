@@ -33,7 +33,7 @@ function Plantoid:setPixel(index_led, color, part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	if index_led >= 0 and index_led < part.size then
 		if part.invert then
-			index_led = part.size - index_led
+			index_led = (part.size-1) - index_led
 		end
 		self.segments[part.remote]:setPixel(index_led + part.off, color)
 	end
@@ -96,7 +96,7 @@ function Plantoid:getPixel(index_led, part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	if index_led >= 0 and index_led < part.size then
 		if part.invert then
-			index_led = part.size - index_led
+			index_led = (part.size-1) - index_led
 		end
 		return self.segments[part.remote].data[index_led + part.off + 1]
 	end

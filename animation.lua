@@ -27,9 +27,7 @@ end
 function moving_dot(plant, part_name, part_number, index, color)
 	-- plant:clear(part_name, part_number)
 	local size = plant:getPartSize(part_name, part_number)
-
 	index = index%size
-
 	plant:setPixel(index, color, part_name, part_number)
 end
 
@@ -72,7 +70,7 @@ end
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
-	plantoids:printf(plantoids.counter)
+	plantoids:printf("counter = %d",plantoids.counter)
 
 	local color = color_wheel(plantoids.counter)
 
@@ -89,60 +87,45 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(50,0,255),   "Petales", 4)
 	movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
 
+	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
+	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)
 
-	-- if Plantoid.counter
-
-	-- plant:setAllPixel({255,255,255}, "Tiges", 1)
-	-- plant:setAllPixel({255,255,255}, "Tiges", 2)
-    --
-	-- plant:setAllPixel({255,255,255}, "Petales", 1)
-	-- plant:setAllPixel({255,255,255}, "Petales", 2)
-	-- plant:setAllPixel({255,255,255}, "Petales", 3)
-	-- plant:setAllPixel({255,255,255}, "Petales", 4)
-
-
-	-- start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
-	-- start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)
+	moving_dot(plant, "Tiges", 1, plantoids.counter, color)
+	moving_dot(plant, "Tiges", 2, plantoids.counter, color)
 
 	plant:sendAll(true)
 
+	local plant = plantoids.plants[2]
 
-	-- moving_dot(plant, "Tiges", 1, plantoids.counter, color)
-	-- moving_dot(plant, "Tiges", 2, plantoids.counter, color)
+	plant:setAllPixel({255,0,0},   "Petales", 1)
+	plant:setAllPixel({0,255,0},   "Petales", 2)
+	plant:setAllPixel({0,0,255},   "Petales", 3)
+	plant:setAllPixel({255,255,0}, "Petales", 4)
+	plant:setAllPixel({0,255,255}, "Petales", 5)
+	plant:setAllPixel({255,0,255}, "Petales", 6)
 
+	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 1)
+	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 2)
 
-	-- local plant = plantoids.plants[3]
-	-- plant:setAllPixel({255,0,0},   "Petales", 1)
-	-- plant:setAllPixel({0,255,0},   "Petales", 2)
-	-- plant:setAllPixel({0,0,255},   "Petales", 3)
-	-- plant:setAllPixel({255,255,0}, "Petales", 4)
-	-- plant:setAllPixel({0,255,255}, "Petales", 5)
-	-- plant:setAllPixel({255,0,255}, "Petales", 6)
+	plant:clear("Supports")
+	moving_dot(plant, "Supports", 1, plantoids.counter, color)
+	moving_dot(plant, "Supports", 2, plantoids.counter, color)
+	moving_dot(plant, "Supports", 3, plantoids.counter, color)
+	moving_dot(plant, "Supports", 4, plantoids.counter, color)
 
-	-- plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 1)
-	-- plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 2)
+	plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 1)
+	plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 1)
 
-	-- moving_dot(plant, "Supports", 1, plantoids.counter, color)
-	-- moving_dot(plant, "Supports", 2, plantoids.counter, color)
-	-- moving_dot(plant, "Supports", 3, plantoids.counter, color)
-	-- moving_dot(plant, "Supports", 4, plantoids.counter, color)
+	plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 2)
+	plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 2)
 
-	-- plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 1)
-	-- plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 1)
+	plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 3)
+	plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 3)
 
-	-- plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 2)
-	-- plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 2)
+	plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 4)
+	plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 4)
 
-	-- plant:setLerp(0,     {255,0,0}, {0,0,255}, 216/2, "Feuilles" , 3)
-	-- plant:setLerp(216/2, {0,0,255}, {255,0,0}, 216/2, "Feuilles" , 3)
-
-	-- plant:setLerp(0,     {255,255,0}, {0,255,255}, 162/2, "Feuilles" , 4)
-	-- plant:setLerp(162/2, {0,255,255}, {255,255,0}, 162/2, "Feuilles" , 4)
-
-	-- plant:setPixel(10, {0,0,255}, "Supports", 1) -- test invert
-	-- plant:setPixel(10, {0,0,255}, "Supports", 2) -- test invert
-
-	-- plant:sendAll(true)
+	plant:sendAll(true)
 
 end
 
