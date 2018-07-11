@@ -136,8 +136,9 @@ function Plantoids:update(dt, dont_send_led)
 		if ip == "127.0.0.1" then
 			local osc_addr  = osc.get_addr_from_data(data)
 			local osc_data  = osc.decode(data)
-			-- print("SC Data: addr='"..osc_addr.."'\tdata:"..inspect(osc_data))
+			self:printf("SC Data: addr='"..osc_addr.."'\tdata:"..inspect(osc_data))
 			self.music[osc_addr] = osc_data
+			self:receiveSuperCollider(osc_addr, osc_data)
 		elseif not self.replay then
 			local sensor_addr  = osc.get_addr_from_data(data)
 			local sensor_data  = osc.decode(data)
@@ -277,5 +278,16 @@ function Plantoids:printf(fmt, ...)
 	table.remove(self.log, 1)
 	self.log_index = self.log_index + 1
 end
+
+function Plantoids:receiveSuperCollider(addr, data)
+	if addr == "/music2light/ldrNote" then
+		self.tempo = not self.tempo
+		self.plants[4]:setAllPixel(self.tempo and {0,0,0} or {255,0,0}, "Anneaux", 4)
+		self.plants[4]:sendAll(true)
+		-- /music2light/patternNote'	data:{ "i", 0, "i", 1 }
+
+	end
+end
+
 
 return Plantoids

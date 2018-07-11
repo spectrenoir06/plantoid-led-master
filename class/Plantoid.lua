@@ -105,7 +105,7 @@ function Plantoid:setFade(off, bright, size, part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	size = size or part.size - off
 
-	for i=0, size-1 do
+	for i=off, size-1 do
 		local color = self:getPixel(i + off, part_name, part_number)
 		if color then
 			color[1] = color[1] * bright

@@ -98,13 +98,15 @@ function main()
 		stdscr:mvaddstr(y, 0, "Sensor:\n"..inspect(plants.sensors).."\n\nMusic:\n"..inspect(plants.music))
 
 
-	--	local y, x = stdscr:getmaxyx()
-	--	stdscr:attron(curses.A_BOLD)
-	--		stdscr:mvaddstr(y-23-1, 1, "Log:")
-	--	stdscr:attroff(curses.A_BOLD)
-	--	for k,v in ipairs(plants.log) do
-	--		stdscr:mvaddstr(y-23+k, 2, v)
-	--	end
+		local y, x = stdscr:getmaxyx()
+
+
+		stdscr:attron(curses.A_BOLD)
+			stdscr:mvaddstr(y-23-1, 1, "Log:")
+		stdscr:attroff(curses.A_BOLD)
+		for k,v in ipairs(plants.log) do
+			stdscr:mvaddstr(y-23+k, 2, v)
+		end
 
 		stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
 
@@ -127,7 +129,7 @@ function main()
 		end
 
 		stdscr:refresh()
-		socket.sleep(0.01)
+		socket.sleep(0.001)
 	end
 end
 
