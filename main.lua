@@ -85,7 +85,7 @@ end
 
 function love.keypressed( key, scancode, isrepeat )
 	print(key,scancode,isrepeat)
-	if key == "escape" then
+	if key == "escape" or key == "c" then
 		love.event.quit()
 	end
 end

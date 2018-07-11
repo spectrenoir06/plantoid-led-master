@@ -50,7 +50,6 @@ end
 -- normal terminal mode, and then write the error to stdout.
 local function err (err)
 	curses.endwin()
-	print("Caught an error:")
 	print(debug.traceback(err, 2))
 	os.exit(2)
 end

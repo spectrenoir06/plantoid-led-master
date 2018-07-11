@@ -55,9 +55,9 @@ function start_breath(plant, counter, off, size_max, part_name, part_number)
 end
 
 function test_horloge(plantoids, color)
-	local plant = plantoids.plants[1]
+	local plant = plantoids.plants[4]
 	local ctn = (plantoids.counter % 32)/32
-
+	plant:clear()
 	moving_dot(plant, "Anneaux", 1, ctn*32, color)
 	moving_dot(plant, "Anneaux", 2, ctn*24, color)
 	moving_dot(plant, "Anneaux", 3, ctn*16, color)
@@ -74,7 +74,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local color = color_wheel(plantoids.counter)
 
-	-- test_horloge(plantoids, color)
+	test_horloge(plantoids, color)
 
 	local plant = plantoids.plants[5]
 

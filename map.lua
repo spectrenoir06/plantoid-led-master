@@ -1,50 +1,5 @@
 return {
 	{
-		name = "Plantoid_test",
-		remotes =  {
-			Spots =  {
-				ip    =  "192.168.11.109",
-				port  =  12345,
-				size =  93,
-				RGBW  =  true
-			}
-		},
-		parts =  {
-			Anneaux =  {
-				{
-					remote =  "Spots",
-					off =  0,
-					size =  32
-				},
-				{
-					remote =  "Spots",
-					off =  32,
-					size =  24
-				},
-				{
-					remote =  "Spots",
-					off =  56,
-					size =  16
-				},
-				{
-					remote =  "Spots",
-					off =  72,
-					size =  12
-				},
-				{
-					remote =  "Spots",
-					off =  84,
-					size =  8
-				},
-				{
-					remote =  "Spots",
-					off =  92,
-					size =  1
-				}
-			}
-		}
-	},
-	{
 		name = "Plantoid_Petit",
 		remotes =  {
 			Petales =  {
@@ -224,6 +179,51 @@ return {
 			},
 		},
 		parts =  {
+		}
+	},
+	{
+		name = "Plantoid_test",
+		remotes =  {
+			Spots =  {
+				ip    =  "192.168.11.109",
+				port  =  12345,
+				size =  93,
+				RGBW  =  true
+			}
+		},
+		parts =  {
+			Anneaux =  {
+				{
+					remote =  "Spots",
+					off =  0,
+					size =  32
+				},
+				{
+					remote =  "Spots",
+					off =  32,
+					size =  24
+				},
+				{
+					remote =  "Spots",
+					off =  56,
+					size =  16
+				},
+				{
+					remote =  "Spots",
+					off =  72,
+					size =  12
+				},
+				{
+					remote =  "Spots",
+					off =  84,
+					size =  8
+				},
+				{
+					remote =  "Spots",
+					off =  92,
+					size =  1
+				}
+			}
 		}
 	},
 	{

@@ -3,6 +3,13 @@ local Segment = require('class.Segment')
 
 local Plantoid = class('Plantoid')
 
+function Plantoid:check(part_name, part_number)
+	assert(part_name, "Part_name can't be nill")
+	assert(part_number, "Part_number can't be nill")
+	assert(self.parts[part_name], "Invalid part_name '"..part_name.."' for plantoid: "..self.name)
+	assert(self.parts[part_name][part_number], "Invalid part_number "..part_number.." for plantoid "..self.name.." and part '"..part_name.."'")
+end
+
 function Plantoid:initialize(data, socket)
 	self.segments = {}
 	self.name = data.name
@@ -13,14 +20,13 @@ function Plantoid:initialize(data, socket)
 end
 
 function Plantoid:getPartSize(part_name, part_number)
+	self:check(part_name, part_number)
 	return self.parts[part_name][part_number].size
 end
 
 
 function Plantoid:setPixel(index_led, color, part_name, part_number)
-	-- assert(io.read("*number"), "invalid input")
-	assert(self.parts[part_name], "invalid part_name: '"..(part_name or "").."'")
-	assert(self.parts[part_name][part_number], "invalid part_number: '"..(part_name or "").."'")
+	self:check(part_name, part_number)
 	assert(color, "invalid color")
 	index_led = math.floor(index_led)
 
@@ -34,6 +40,7 @@ function Plantoid:setPixel(index_led, color, part_name, part_number)
 end
 
 function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
+	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	off = off or 0
 	size = size or part.size - off
@@ -67,6 +74,7 @@ function Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
 end
 
 function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_number)
+	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]
 
 	local ib = (bright2 - bright1) / size
@@ -84,6 +92,7 @@ function Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_num
 end
 
 function Plantoid:getPixel(index_led, part_name, part_number)
+	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	if index_led >= 0 and index_led < part.size then
 		if part.invert then
@@ -101,12 +110,14 @@ function Plantoid:setAllPixel(color, part_name, part_number)
 end
 
 function Plantoid:sendLerp(off, color1, color2, size, part_name, part_number)
+	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	self:setLerp(off, color1, color2, size, part_name, part_number)
 	self.segments[part.remote]:sendLerp(off + part.off, color1, color2, size or part.size)
 end
 
 function Plantoid:sendPixels(off, color, size, part_name, part_number)
+	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	self.segments[part.remote]:sendPixels(off + part.off, color, size or part.size)
 end
