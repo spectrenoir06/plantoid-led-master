@@ -78,7 +78,6 @@ end
 
 function receiveSensor(plantoids, addr, data)
 	plantoids:printf("Sensors      : %s, data=%s", addr, inspect(data))
-
 end
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
