@@ -32,7 +32,7 @@ function init_ncurse()
 	curses.echo(false)	-- not noecho !
 	curses.nl(false)	-- not nonl !
 	scr:clear()
-	curses.curs_set(0)  -- Hide the cursor.
+	-- curses.curs_set(0)  -- Hide the cursor.
 
 	curses.start_color()
 	curses.use_default_colors()
@@ -55,6 +55,8 @@ local function err (err)
 	os.exit(2)
 end
 
+last_key = 0
+
 function main()
 	local stdscr = init_ncurse()
 	local cmd = ""
@@ -70,14 +72,15 @@ function main()
 
 		stdscr:attron(curses.A_BOLD)
 		stdscr:attron(curses.A_UNDERLINE)
-		stdscr:mvaddstr(1, 1, "Plantoid LEDs Master:")
-
+			stdscr:mvaddstr(1, 1, "Plantoid LEDs Master:")
 		stdscr:attroff(curses.A_BOLD)
 		stdscr:attroff(curses.A_UNDERLINE)
 
 		local y = 3
 		for k,v in ipairs(plants.plants) do
-			stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
+			stdscr:attron(curses.A_BOLD)
+				stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
+			stdscr:attroff(curses.A_BOLD)
 			y = y + 1
 			for l,w in pairs(v.segments) do
 				stdscr:mvaddstr(y, 4, l..":")
@@ -101,31 +104,24 @@ function main()
 		end
 		stdscr:mvaddstr(y, 0, "Sensor:\n"..inspect(plants.sensors).."\n\nMusic:\n"..inspect(plants.music))
 
+
+		local y, x = stdscr:getmaxyx()
+		stdscr:mvaddstr(y-2, 0, "'"..string.char(tonumber(last_key)).."'  "..last_key)
+		stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
+
 		local key = stdscr:getch()  -- Nonblocking; returns nil if no key was pressed.
 
-		if key == tostring('q'):byte(1) or cmd == "quit" then  -- The q key quits.
-			curses.endwin()
-			plants:stop()
-			os.exit(0)
-		end
-
-		if key == 13 then
-			cmd = ""
-			stdscr:mvaddstr(0, 0, "Commande: ")
-			stdscr:refresh()
-			stdscr:nodelay(false)
-			curses.echo(true)
-			curses.curs_set(1)
-			while (42) do
-				local key = stdscr:getch()
-				if key == 13 then break end
-				cmd = cmd..string.char(key)
+		if key then
+			if key == 13 then
+				curses.endwin()
+				plants:runCMD(cmd)
+				cmd = ""
+			elseif key == 127 then
+				cmd = cmd:sub(1,#cmd-1)
+			else
+				cmd = cmd .. string.char(key)
 			end
-			stdscr:nodelay(true)
-			curses.echo(false)	-- not noecho !
-			curses.curs_set(0)  -- Hide the cursor.
-			curses.endwin()
-			plants:runCMD(cmd)
+			last_key = key
 		end
 
 		stdscr:refresh()

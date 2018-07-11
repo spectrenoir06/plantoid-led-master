@@ -260,6 +260,8 @@ end
 function Plantoids:runCMD(cmd)
 	if cmd == "update" then
 		self:updateEsp("bin/plantoid-led-driver.ino.bin")
+	elseif cmd == "sendinfo" then
+		self:setEeprom()
 	end
 end
 
