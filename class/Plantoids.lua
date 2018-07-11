@@ -36,7 +36,7 @@ function Plantoids:initialize(replay_file)
 
 	self.log = {}
 	self.log_index = 1
-	for i=1,20 do self.log[i] = "" end
+	for i=1,10 do self.log[i] = "" end
 
 	self.socket_osc = assert(socket.udp())
 	self.socket_osc:setsockname("0.0.0.0", SERVER_OSC_PORT)
@@ -120,9 +120,9 @@ function Plantoids:update(dt, dont_send_led)
 						"f", sensor_value
 					}
 				}
-				UPDATE_SCREEN = true
 
-				assert(self.socket_osc:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+				animation.receiveSensor(self, sensor_addr, to_send[2])
+				self.socket_osc:sendto(osc.encode(to_send), CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT)
 				self.replay_index = self.replay_index + 1
 			end
 		else
@@ -136,9 +136,9 @@ function Plantoids:update(dt, dont_send_led)
 		if ip == "127.0.0.1" then
 			local osc_addr  = osc.get_addr_from_data(data)
 			local osc_data  = osc.decode(data)
-			self:printf("SC Data: addr='"..osc_addr.."'\tdata:"..inspect(osc_data))
+			-- self:printf("SC Data: addr='"..osc_addr.."'\tdata:"..inspect(osc_data))
 			self.music[osc_addr] = osc_data
-			self:receiveSuperCollider(osc_addr, osc_data)
+			animation.receiveSuperCollider(self, osc_addr, osc_data)
 		elseif not self.replay then
 			local sensor_addr  = osc.get_addr_from_data(data)
 			local sensor_data  = osc.decode(data)
@@ -153,23 +153,15 @@ function Plantoids:update(dt, dont_send_led)
 			if self.dump then
 				self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor_addr..";"..sensor_index..";"..sensor_value.."\n")
 			end
-
-			assert(self.socket_osc:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT))
+			animation.receiveSensor(self, sensor_addr, sensor_data)
+			self.socket_osc:sendto(data, CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT)
 		end
-	end
-
-	if data or UPDATE_SCREEN then
-		-- os.execute("clear")
-		-- print("Sensor:",inspect(self.sensors))
-		-- print("Music:",inspect(self.music))
-		-- UPDATE_SCREEN = false
 	end
 
 	local data, ip, port = self.socket_data:receivefrom()
 	if data then
 		-- print("Received data from:", ip, port, #data);
 		local cmd = upack("b", data)
-
 		if cmd == CMD_UDP_ALIVE then
 			local seg = self:getSegmentFromIp(ip)
 			if seg then
@@ -201,7 +193,7 @@ end
 ------------------- LED Controle ------------------------
 
 function Plantoids:update_led()
-	animation(self)
+	animation.led_animation(self)
 end
 
 ---------------------------------------------------------------
@@ -278,16 +270,5 @@ function Plantoids:printf(fmt, ...)
 	table.remove(self.log, 1)
 	self.log_index = self.log_index + 1
 end
-
-function Plantoids:receiveSuperCollider(addr, data)
-	if addr == "/music2light/ldrNote" then
-		self.tempo = not self.tempo
-		self.plants[4]:setAllPixel(self.tempo and {0,0,0} or {255,0,0}, "Anneaux", 4)
-		self.plants[4]:sendAll(true)
-		-- /music2light/patternNote'	data:{ "i", 0, "i", 1 }
-
-	end
-end
-
 
 return Plantoids

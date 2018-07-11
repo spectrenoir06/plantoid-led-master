@@ -16,6 +16,11 @@ plants.hide_print = true
 signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
 	plants:stop()
+	if plants.dump then
+		if #plants.sensors == 0 then
+			plants.dump_file:write(os.time(os.date("!*t")).."\n")
+		end
+	end
 	curses.endwin()
 	os.exit(128 + signum)
 end)
@@ -95,20 +100,27 @@ function main()
 			end
 			y = y + 1
 		end
-		stdscr:mvaddstr(y, 0, "Sensor:\n"..inspect(plants.sensors).."\n\nMusic:\n"..inspect(plants.music))
-
-
-		local y, x = stdscr:getmaxyx()
-
 
 		stdscr:attron(curses.A_BOLD)
-			stdscr:mvaddstr(y-23-1, 1, "Log:")
+			stdscr:mvaddstr(y, 1, "Log:")
+			y = y + 2
 		stdscr:attroff(curses.A_BOLD)
 		for k,v in ipairs(plants.log) do
-			stdscr:mvaddstr(y-23+k, 2, v)
+			stdscr:mvaddstr(y, 2, v)
+			y = y + 1
 		end
+		y = y + 1
 
-		stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
+		stdscr:attron(curses.A_BOLD)
+			stdscr:mvaddstr(y, 1, "Sensors:")
+			y = y + 2
+		stdscr:attroff(curses.A_BOLD)
+
+		stdscr:mvaddstr(y, 0, inspect(plants.sensors))
+
+		-- stdscr:mvaddstr(y, 2, inspect(plants.sensors))
+
+		local y, x = stdscr:getmaxyx()
 
 		-- stdscr:mvaddstr(y-2, 0, "'"..string.char(tonumber(last_key)).."'  "..last_key)
 		stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
@@ -123,7 +135,12 @@ function main()
 			elseif key == 127 then
 				cmd = cmd:sub(1,#cmd-1)
 			else
-				cmd = cmd .. string.char(key)
+				if key >= 48 and key <= 57
+				or key >= 65 and key <= 90
+				or key >= 97 and key <= 122 then
+					error(key,key)
+					cmd = cmd .. string.char(key)
+				end
 			end
 			last_key = key
 		end

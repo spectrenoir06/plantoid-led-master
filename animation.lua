@@ -1,3 +1,5 @@
+local inspect = require "lib.inspect"
+
 --[[
 
 	Plandoids:getSensorValue(adresse, value)
@@ -55,79 +57,91 @@ end
 function test_horloge(plantoids, color)
 	local plant = plantoids.plants[4]
 	local ctn = (plantoids.counter % 32)/32
-	plant:clear()
+
+	plant:setFade(0, 0.8, nil, "Anneaux", 1)
+	plant:setFade(0, 0.6, nil, "Anneaux", 2)
+	plant:setFade(0, 0.7, nil, "Anneaux", 3)
+	plant:setFade(0, 0.5, nil, "Anneaux", 4)
+	plant:setFade(0, 0.4, nil, "Anneaux", 5)
+
 	moving_dot(plant, "Anneaux", 1, ctn*32, color)
 	moving_dot(plant, "Anneaux", 2, ctn*24, color)
 	moving_dot(plant, "Anneaux", 3, ctn*16, color)
 	moving_dot(plant, "Anneaux", 4, ctn*12, color)
 	moving_dot(plant, "Anneaux", 5, ctn*8, color)
 	plant:setAllPixel(color, "Anneaux", 6)
-
-	plant:sendAll(true, "Anneaux")
 end
 
+function receiveSuperCollider(plantoids, addr, data)
+	plantoids:printf("SuperCollider: %s, data=%s", addr, inspect(data))
+end
 
+function receiveSensor(plantoids, addr, data)
+	plantoids:printf("Sensors      : %s, data=%s", addr, inspect(data))
+
+end
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
-	local test_value = courbe(plantoids.counter)
-	-- plantoids:printf("counter = %d, test_value= %f",plantoids.counter, test_value)
+	-- plantoids:printf("counter = %d, test_value= %f",plantoids.counter, test_value) -- to print console
 
 	local color = color_wheel(plantoids.counter)
 
+-----------------------------------------------------------
 
-	-- test_horloge(plantoids, color)
-	local plant = plantoids.plants[5]
+	local plant = plantoids.plants[4] -- arduino spot
+	test_horloge(plantoids, color)
+	plant:sendAll(true)
 
+-----------------------------------------------------------
+
+	local plant = plantoids.plants[5] -- plantoid
 	local value = plantoids:getSensorValue("/plantoid/1/1/analog", 0)
 
 	if value then
-		plant:clear()
+		plant:clear("Tiges", 1)
 		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 1)
-		-- plantoids:printf("value = %d", value / 2000 * 38)
-		plant:sendAll(true)
+	else
+		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
+		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
+
+		start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
+		start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)
+
+		plant:setFade(0, 0.6, nil, "Tiges", 1)
+		moving_dot(plant, "Tiges", 1, plantoids.counter, color)
+
+		plant:setFade(0, 0.6, nil, "Tiges", 2)
+		moving_dot(plant, "Tiges", 2, plantoids.counter, color)
 	end
 
+	movinLerp(plant, plantoids.counter, rgb(255,0,0),   rgb(255,100,0),  "Petales", 1)
+	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Petales", 2)
 
-	-- movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
-	-- movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
-    --
-	-- start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
-	-- start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)
-
-	-- moving_dot(plant, "Tiges", 1, plantoids.counter, color)
-	-- moving_dot(plant, "Tiges", 2, plantoids.counter, color)
-
-	plant:clear("Petales")
-	moving_dot(plant, "Petales", 1, plantoids.counter, color)
-	moving_dot(plant, "Petales", 2, plantoids.counter/2, color)
-	moving_dot(plant, "Petales", 3, plantoids.counter, color)
-	moving_dot(plant, "Petales", 4, plantoids.counter/2, color)
-
-
-	-- movinLerp(plant, plantoids.counter, rgb(255,0,0),   rgb(255,100,0),  "Petales", 1)
-	-- movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Petales", 2)
-    --
-	-- movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(50,0,255),   "Petales", 4)
-	-- movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
+	movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(50,0,255),   "Petales", 4)
+	movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
 
 	plant:sendAll(true)
 
+-----------------------------------------------------------
+
 	local plant = plantoids.plants[2]
 
-	plant:setAllPixel({255,0,0},   "Petales", 1)
-	plant:setAllPixel({0,255,0},   "Petales", 2)
-	plant:setAllPixel({0,0,255},   "Petales", 3)
-	plant:setAllPixel({255,255,0}, "Petales", 4)
-	plant:setAllPixel({0,255,255}, "Petales", 5)
-	plant:setAllPixel({255,0,255}, "Petales", 6)
+	plant:setAllPixel(rgb(255,0,0),   "Petales", 1)
+	plant:setAllPixel(rgb(0,255,0),   "Petales", 2)
+	plant:setAllPixel(rgb(0,0,255),   "Petales", 3)
+	plant:setAllPixel(rgb(255,255,0), "Petales", 4)
+	plant:setAllPixel(rgb(0,255,255), "Petales", 5)
+	plant:setAllPixel(rgb(255,0,255), "Petales", 6)
 
-	plant:setFade(0, test_value, nil, "Petales", 1)
+	plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
+	plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
 
-	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 1)
-	plant:setLerp(0, {255,0,0}, {0,0,255}, nil, "Tiges" , 2)
+	plant:setFade(0, 0.6, nil, "Supports", 1)
+	plant:setFade(0, 0.6, nil, "Supports", 2)
+	plant:setFade(0, 0.6, nil, "Supports", 3)
+	plant:setFade(0, 0.6, nil, "Supports", 4)
 
-	plant:clear("Supports")
 	moving_dot(plant, "Supports", 1, plantoids.counter, color)
 	moving_dot(plant, "Supports", 2, plantoids.counter, color)
 	moving_dot(plant, "Supports", 3, plantoids.counter, color)
@@ -146,9 +160,10 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	plant:setLerp(162/2, rgb(0,255,255), rgb(255,255,0), 162/2, "Feuilles" , 4)
 
 	plant:sendAll(true)
-
 end
 
-
-
-return led_animation
+return {
+	led_animation = led_animation,
+	receiveSuperCollider = receiveSuperCollider,
+	receiveSensor = receiveSensor
+}
