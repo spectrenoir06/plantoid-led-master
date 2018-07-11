@@ -88,12 +88,12 @@ function main()
 					cc = curses.color_pair(3)
 				end
 				stdscr:attron(cc)
-					stdscr:mvaddstr(y, 26, w.remote.ip)
+					stdscr:mvaddstr(y, 23, w.remote.ip)
 				stdscr:attroff(cc)
 				if w.alive > 0 then
-					stdscr:mvaddstr(y, 45, "V"..(w.dist_vers or "?"))
-					stdscr:mvaddstr(y, 55, w.dist_size or "?")
-					stdscr:mvaddstr(y, 65, w.dist_name or "?")
+					stdscr:mvaddstr(y, 40, "V"..(w.dist_vers or "?"))
+					stdscr:mvaddstr(y, 47, w.dist_size or "?")
+					stdscr:mvaddstr(y, 52, w.dist_name or "?")
 				end
 				y = y + 1
 			end

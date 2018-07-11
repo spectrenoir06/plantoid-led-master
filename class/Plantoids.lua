@@ -65,9 +65,10 @@ function Plantoids:initialize(replay_file)
 		self.replay_len = #self.replay_dump
 	else
 		self.replay = false
-		print("start dump:", "log.dump")
-		self.dump_file = io.open("dump/log.dump", "w")
+		local name = os.date("%Y:%m:%d-%H:%M:%S")
+		self.dump_file = io.open("dump/log-"..name..".dump", "w")
 		if self.dump_file then
+			print("start dump:", name)
 			self.dump_file:write(os.time(os.date("!*t")).."\n")
 			self.dump = true
 		end
