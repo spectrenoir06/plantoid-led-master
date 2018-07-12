@@ -204,6 +204,7 @@ function Plantoids:stop()
 			print("dump empty remove")
 			os.remove(self.dump_name)
 		end
+		self.dump_file:close()
 	end
 	for k,plant in ipairs(self.plants) do
 		plant:off()
