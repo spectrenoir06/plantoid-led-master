@@ -69,10 +69,10 @@ function Plantoids:initialize(replay_file)
 		self.replay_len = #self.replay_dump
 	else
 		self.replay = false
-		local name = os.date("%Y:%m:%d-%H:%M:%S")
-		self.dump_file = io.open("dump/log-"..name..".dump", "w")
+		self.dump_name = "dump/log-"..os.date("%Y:%m:%d-%H:%M:%S")..".dump"
+		self.dump_file = io.open(self.dump_name, "w")
 		if self.dump_file then
-			print("start dump:", name)
+			print("start dump:", self.dump_name)
 			self.dump_file:write(os.time(os.date("!*t")).."\n")
 			self.dump = true
 		end
@@ -199,6 +199,12 @@ end
 ---------------------------------------------------------------
 
 function Plantoids:stop()
+	if self.dump then
+		if #self.sensors == 0 then
+			print("dump empty remove")
+			os.remove(self.dump_name)
+		end
+	end
 	for k,plant in ipairs(self.plants) do
 		plant:off()
 	end

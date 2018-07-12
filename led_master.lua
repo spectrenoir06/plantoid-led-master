@@ -8,6 +8,9 @@ local inspect   = require("lib.inspect")
 local dt = 0.000001
 local time = socket.gettime()
 
+local UI_counter = 0
+local UI_framerate = 15
+
 local replay_file = (arg[1] == "replay") and arg[2] or nil
 
 local plants = Plantoids:new(replay_file)
@@ -66,86 +69,91 @@ function main()
 
 		finish = plants:update(dt)
 
-		stdscr:erase() -- use erase() not clear() to remove flickering
+		UI_counter = UI_counter + dt
 
-		stdscr:attron(curses.A_BOLD)
-		stdscr:attron(curses.A_UNDERLINE)
-			stdscr:mvaddstr(1, 1, "Plantoid LEDs Master:")
-		stdscr:attroff(curses.A_BOLD)
-		stdscr:attroff(curses.A_UNDERLINE)
+		if UI_counter > (1 / UI_framerate) then
+			UI_counter = 0
 
-		local y = 3
-		for k,v in ipairs(plants.plants) do
+			stdscr:erase() -- use erase() not clear() to remove flickering
+
 			stdscr:attron(curses.A_BOLD)
-				stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
+			stdscr:attron(curses.A_UNDERLINE)
+				stdscr:mvaddstr(1, 1, "Plantoid LEDs Master:")
 			stdscr:attroff(curses.A_BOLD)
-			y = y + 1
-			for l,w in pairs(v.segments) do
-				stdscr:mvaddstr(y, 4, l..":")
-				local cc
-				if w.alive == 0 then
-					cc = curses.color_pair(2)
-				else
-					cc = curses.color_pair(3)
-				end
-				stdscr:attron(cc)
-					stdscr:mvaddstr(y, 23, w.remote.ip)
-				stdscr:attroff(cc)
-				if w.alive > 0 then
-					stdscr:mvaddstr(y, 40, "V"..(w.dist_vers or "?"))
-					stdscr:mvaddstr(y, 47, w.dist_size or "?")
-					stdscr:mvaddstr(y, 52, w.dist_name or "?")
+			stdscr:attroff(curses.A_UNDERLINE)
+
+			local y = 3
+			for k,v in ipairs(plants.plants) do
+				stdscr:attron(curses.A_BOLD)
+					stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
+				stdscr:attroff(curses.A_BOLD)
+				y = y + 1
+				for l,w in pairs(v.segments) do
+					stdscr:mvaddstr(y, 4, l..":")
+					local cc
+					if w.alive == 0 then
+						cc = curses.color_pair(2)
+					else
+						cc = curses.color_pair(3)
+					end
+					stdscr:attron(cc)
+						stdscr:mvaddstr(y, 23, w.remote.ip)
+					stdscr:attroff(cc)
+					if w.alive > 0 then
+						stdscr:mvaddstr(y, 40, "V"..(w.dist_vers or "?"))
+						stdscr:mvaddstr(y, 47, w.dist_size or "?")
+						stdscr:mvaddstr(y, 52, w.dist_name or "?")
+					end
+					y = y + 1
 				end
 				y = y + 1
 			end
-			y = y + 1
-		end
 
-		stdscr:attron(curses.A_BOLD)
-			stdscr:mvaddstr(y, 1, "Log:")
-			y = y + 2
-		stdscr:attroff(curses.A_BOLD)
-		for k,v in ipairs(plants.log) do
-			stdscr:mvaddstr(y, 2, v)
-			y = y + 1
-		end
-		y = y + 1
-
-		stdscr:attron(curses.A_BOLD)
-			stdscr:mvaddstr(y, 1, "Sensors:")
-			y = y + 2
-		stdscr:attroff(curses.A_BOLD)
-
-		stdscr:mvaddstr(y, 0, inspect(plants.sensors))
-
-		-- stdscr:mvaddstr(y, 2, inspect(plants.sensors))
-
-		local y, x = stdscr:getmaxyx()
-
-		-- stdscr:mvaddstr(y-2, 0, "'"..string.char(tonumber(last_key)).."'  "..last_key)
-		stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
-
-		local key = stdscr:getch()  -- Nonblocking; returns nil if no key was pressed.
-
-		if key then
-			if key == 13 then
-				curses.endwin()
-				plants:runCMD(cmd)
-				cmd = ""
-			elseif key == 127 then
-				cmd = cmd:sub(1,#cmd-1)
-			else
-				if key >= 48 and key <= 57
-				or key >= 65 and key <= 90
-				or key >= 97 and key <= 122 then
-					error(key,key)
-					cmd = cmd .. string.char(key)
-				end
+			stdscr:attron(curses.A_BOLD)
+				stdscr:mvaddstr(y, 1, "Log:")
+				y = y + 2
+			stdscr:attroff(curses.A_BOLD)
+			for k,v in ipairs(plants.log) do
+				stdscr:mvaddstr(y, 2, v)
+				y = y + 1
 			end
-			last_key = key
+			y = y + 1
+
+			stdscr:attron(curses.A_BOLD)
+				stdscr:mvaddstr(y, 1, "Sensors:")
+				y = y + 2
+			stdscr:attroff(curses.A_BOLD)
+
+			stdscr:mvaddstr(y, 0, inspect(plants.sensors))
+
+			-- stdscr:mvaddstr(y, 2, inspect(plants.sensors))
+
+			local y, x = stdscr:getmaxyx()
+
+			-- stdscr:mvaddstr(y-2, 0, "'"..string.char(tonumber(last_key)).."'  "..last_key)
+			stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
+
+			local key = stdscr:getch()  -- Nonblocking; returns nil if no key was pressed.
+
+			if key then
+				if key == 13 then
+					curses.endwin()
+					plants:runCMD(cmd)
+					cmd = ""
+				elseif key == 127 then
+					cmd = cmd:sub(1,#cmd-1)
+				else
+					if key >= 48 and key <= 57
+					or key >= 65 and key <= 90
+					or key >= 97 and key <= 122 then
+						cmd = cmd .. string.char(key)
+					end
+				end
+				last_key = key
+			end
+			stdscr:refresh()
 		end
 
-		stdscr:refresh()
 		socket.sleep(0.001)
 	end
 end

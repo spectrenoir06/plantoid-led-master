@@ -44,6 +44,10 @@ function movinLerp(plant, index, color1, color2, part_name, part_number)
 	plant:setLerp(index-size, color1, color2, math.floor(size/2+.5), part_name, part_number)
 end
 
+function comete(plant, part_name, part_number, index, color, fade)
+	plant:setFade(0, fade or 0.5, nil, part_name, part_number)
+	moving_dot(plant, part_name, part_number, index, color)
+end
 
 function start_breath(plant, counter, off, size_max, part_name, part_number)
 	local value = math.floor(courbe(counter) * (size_max))
@@ -51,25 +55,20 @@ function start_breath(plant, counter, off, size_max, part_name, part_number)
 	for i=value, size_max do
 		plant:setPixel(i+off ,{0,0,0,0}, part_name, part_number)
 	end
-
 end
 
 function test_horloge(plantoids, color)
 	local plant = plantoids.plants[4]
 	local ctn = (plantoids.counter % 32)/32
 
-	plant:setFade(0, 0.8, nil, "Anneaux", 1)
-	plant:setFade(0, 0.6, nil, "Anneaux", 2)
-	plant:setFade(0, 0.7, nil, "Anneaux", 3)
-	plant:setFade(0, 0.5, nil, "Anneaux", 4)
-	plant:setFade(0, 0.4, nil, "Anneaux", 5)
-
-	moving_dot(plant, "Anneaux", 1, ctn*32, color)
-	moving_dot(plant, "Anneaux", 2, ctn*24, color)
-	moving_dot(plant, "Anneaux", 3, ctn*16, color)
-	moving_dot(plant, "Anneaux", 4, ctn*12, color)
-	moving_dot(plant, "Anneaux", 5, ctn*8, color)
+	comete(plant, "Anneaux", 1, ctn*32, color, 0.8)
+	comete(plant, "Anneaux", 2, ctn*24, color, 0.7)
+	comete(plant, "Anneaux", 3, ctn*16, color, 0.6)
+	comete(plant, "Anneaux", 4, ctn*12, color, 0.5)
+	comete(plant, "Anneaux", 5, ctn*8, color, 0.4)
 	plant:setAllPixel(color, "Anneaux", 6)
+
+	plant:sendAll(true)
 end
 
 function receiveSuperCollider(plantoids, addr, data)
@@ -88,18 +87,18 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 -----------------------------------------------------------
 
-	local plant = plantoids.plants[4] -- arduino spot
 	test_horloge(plantoids, color)
-	plant:sendAll(true)
 
 -----------------------------------------------------------
 
 	local plant = plantoids.plants[5] -- plantoid
+
 	local value = plantoids:getSensorValue("/plantoid/1/1/analog", 0)
 
 	if value then
 		plant:clear("Tiges", 1)
 		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 1)
+		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 2)
 	else
 		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
 		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)

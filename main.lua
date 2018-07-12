@@ -18,7 +18,7 @@ function love.draw()
 
 	local y = 10
 	if mode == 0 then
-		-- love.graphics.print(love.timer.getFPS(), 200, 5)
+		love.graphics.print(love.timer.getFPS(), 200, 5)
 		for k,v in ipairs(plants.plants) do
 			love.graphics.print("["..k.."]  "..v.name, 10, y)
 			y = y + 20
