@@ -164,7 +164,6 @@ end
 function Segment:setEeprom(hostname)
 	local to_send = pack('bbhs', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
-
 end
 
 function Segment:updateEsp(bin_file)

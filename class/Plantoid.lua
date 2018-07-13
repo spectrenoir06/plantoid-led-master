@@ -1,5 +1,7 @@
 local class    = require('lib.middleclass')
-local Segment = require('class.Segment')
+local Segment  = require('class.Segment')
+local Sensor   = require('class.Sensor')
+local inspect  = require('lib.inspect')
 
 local Plantoid = class('Plantoid')
 
@@ -10,11 +12,15 @@ function Plantoid:check(part_name, part_number)
 	assert(self.parts[part_name][part_number], "Invalid part_number "..part_number.." for plantoid "..self.name.." and part '"..part_name.."'")
 end
 
-function Plantoid:initialize(data, socket)
+function Plantoid:initialize(data, socket, plantoid_number)
 	self.segments = {}
+	self.sensors  = {}
 	self.name = data.name
 	for k,v in pairs(data.remotes) do
 		self.segments[k] = Segment:new(v, socket)
+	end
+	for k,v in ipairs(data.sensors) do
+		self.sensors[k] = Sensor:new(v, socket, plantoid_number, k)
 	end
 	self.parts = data.parts
 end
@@ -207,6 +213,10 @@ function Plantoid:off()
 	for k,v in pairs(self.segments) do
 		v:off()
 	end
+end
+
+function Plantoid:updateSensor(data, boitier_number)
+	self.sensors[boitier_number]:updateSensor(data)
 end
 
 return Plantoid

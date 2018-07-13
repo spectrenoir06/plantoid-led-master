@@ -71,12 +71,15 @@ function test_horloge(plantoids, color)
 	plant:sendAll(true)
 end
 
-function receiveSuperCollider(plantoids, addr, data)
-	plantoids:printf("SuperCollider: %s, data=%s", addr, inspect(data))
+function receiveOSC(plantoids, addr, data)
+	plantoids:printf("OSC Receive: %s, data: %s", addr, inspect(data))
 end
 
-function receiveSensor(plantoids, addr, data)
-	plantoids:printf("Sensors      : %s, data=%s", addr, inspect(data))
+function receiveSensor(plantoids, sensor)
+	local plantoid_number = sensor.plantoid_number
+	local boitier_number  = sensor.boitier_number
+
+	plantoids:printf("Receive sensor: plant: %d  boitier: %d  adc0: %d", plantoid_number, boitier_number, sensor.data.adc[1])
 end
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
@@ -162,6 +165,6 @@ end
 
 return {
 	led_animation = led_animation,
-	receiveSuperCollider = receiveSuperCollider,
+	receiveOSC    = receiveOSC,
 	receiveSensor = receiveSensor
 }

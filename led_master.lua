@@ -9,7 +9,7 @@ local dt = 0.000001
 local time = socket.gettime()
 
 local UI_counter = 0
-local UI_framerate = 15
+local UI_framerate = 30
 
 local replay_file = (arg[1] == "replay") and arg[2] or nil
 
@@ -20,11 +20,15 @@ signal.signal(signal.SIGINT, function(signum)
 	io.write("\n")
 	plants:stop()
 	if plants.dump then
-		if #plants.sensors == 0 then
-			plants.dump_file:write(os.time(os.date("!*t")).."\n")
-		end
+		-- if #plants.sensors == 0 then
+		-- 	plants.dump_file:write(os.time(os.date("!*t")).."\n")
+		-- end
 	end
 	curses.endwin()
+	for k,v in ipairs(plants.log) do
+		print(v)
+	end
+
 	os.exit(128 + signum)
 end)
 
@@ -52,6 +56,9 @@ end
 -- normal terminal mode, and then write the error to stdout.
 local function err (err)
 	curses.endwin()
+	for k,v in ipairs(plants.log) do
+		print(v)
+	end
 	print(debug.traceback(err, 2))
 	os.exit(2)
 end
@@ -88,8 +95,12 @@ function main()
 					stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
 				stdscr:attroff(curses.A_BOLD)
 				y = y + 1
+				stdscr:attron(curses.A_BOLD)
+					stdscr:mvaddstr(y, 4, "Leds Remote:")
+				stdscr:attroff(curses.A_BOLD)
+				y = y + 1
 				for l,w in pairs(v.segments) do
-					stdscr:mvaddstr(y, 4, l..":")
+					stdscr:mvaddstr(y, 8, l..":")
 					local cc
 					if w.alive == 0 then
 						cc = curses.color_pair(2)
@@ -97,12 +108,36 @@ function main()
 						cc = curses.color_pair(3)
 					end
 					stdscr:attron(cc)
-						stdscr:mvaddstr(y, 23, w.remote.ip)
+						stdscr:mvaddstr(y, 27, w.remote.ip)
 					stdscr:attroff(cc)
 					if w.alive > 0 then
-						stdscr:mvaddstr(y, 40, "V"..(w.dist_vers or "?"))
-						stdscr:mvaddstr(y, 47, w.dist_size or "?")
-						stdscr:mvaddstr(y, 52, w.dist_name or "?")
+						stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
+						stdscr:mvaddstr(y, 51, w.dist_size or "?")
+						stdscr:mvaddstr(y, 56, w.dist_name or "?")
+					end
+					y = y + 1
+				end
+				stdscr:attron(curses.A_BOLD)
+					stdscr:mvaddstr(y, 4, "Sensors Remote:")
+				stdscr:attroff(curses.A_BOLD)
+				y = y + 1
+				for l,w in ipairs(v.sensors) do
+					stdscr:mvaddstr(y, 8, "["..l.."]")
+					local cc
+					if w.alive == 0 then
+						cc = curses.color_pair(2)
+					else
+						cc = curses.color_pair(3)
+					end
+					stdscr:attron(cc)
+						stdscr:mvaddstr(y, 27, w.remote.ip)
+					stdscr:attroff(cc)
+					if w.alive > 0 then
+						stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
+						stdscr:mvaddstr(y, 56, w.dist_name or "?")
+						stdscr:mvaddstr(y, 75, w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4])
+						y = y + 1
+						stdscr:mvaddstr(y, 10, w:toString())
 					end
 					y = y + 1
 				end
@@ -112,31 +147,28 @@ function main()
 			stdscr:attron(curses.A_BOLD)
 				stdscr:mvaddstr(y, 1, "Log:")
 				y = y + 2
+
+			local ey, ex = stdscr:getmaxyx()
+			local size = (ey - 3) - y
+			-- print(size)
+
 			stdscr:attroff(curses.A_BOLD)
-			for k,v in ipairs(plants.log) do
-				stdscr:mvaddstr(y, 2, v)
+			-- for k,v in ipairs(plants.log) do
+			for i = #plants.log - size, #plants.log do
+				stdscr:mvaddstr(y, 2, plants.log[i])
 				y = y + 1
 			end
 			y = y + 1
 
-			stdscr:attron(curses.A_BOLD)
-				stdscr:mvaddstr(y, 1, "Sensors:")
-				y = y + 2
-			stdscr:attroff(curses.A_BOLD)
-
-			stdscr:mvaddstr(y, 0, inspect(plants.sensors))
-
-			-- stdscr:mvaddstr(y, 2, inspect(plants.sensors))
-
 			local y, x = stdscr:getmaxyx()
 
-			-- stdscr:mvaddstr(y-2, 0, "'"..string.char(tonumber(last_key)).."'  "..last_key)
 			stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
 
 			local key = stdscr:getch()  -- Nonblocking; returns nil if no key was pressed.
 
 			if key then
 				if key == 13 then
+					plants:printf(cmd)
 					curses.endwin()
 					plants:runCMD(cmd)
 					cmd = ""

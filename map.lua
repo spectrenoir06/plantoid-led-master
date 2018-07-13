@@ -24,6 +24,12 @@ return {
 				size  =  500
 			},
 		},
+		sensors = {
+			{
+				ip    =  "192.168.0.36",
+				port  =  12345,
+			},
+		},
 		parts =  {
 		}
 	},
@@ -52,6 +58,7 @@ return {
 				size  =  500
 			},
 		},
+		sensors = {},
 		parts =  {
 			Petales =  {
 				{
@@ -178,8 +185,8 @@ return {
 				size  =  500
 			},
 		},
-		parts =  {
-		}
+		sensors = {},
+		parts =  {}
 	},
 	{
 		name = "Plantoid_test",
@@ -190,6 +197,12 @@ return {
 				size =  93,
 				RGBW  =  true
 			}
+		},
+		sensors = {
+			{
+				ip    =  "192.168.0.35",
+				port  =  12345,
+			},
 		},
 		parts =  {
 			Anneaux =  {
@@ -236,6 +249,7 @@ return {
 				RGBW  =  false
 			}
 		},
+		sensors = {},
 		parts =  {
 			Tiges =  {
 				{
