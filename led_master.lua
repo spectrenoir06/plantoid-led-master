@@ -96,7 +96,7 @@ function main()
 				stdscr:attroff(curses.A_BOLD)
 				y = y + 1
 				stdscr:attron(curses.A_BOLD)
-					stdscr:mvaddstr(y, 4, "Leds Remote:")
+					stdscr:mvaddstr(y, 4, "Leds:")
 				stdscr:attroff(curses.A_BOLD)
 				y = y + 1
 				for l,w in pairs(v.segments) do
@@ -118,7 +118,7 @@ function main()
 					y = y + 1
 				end
 				stdscr:attron(curses.A_BOLD)
-					stdscr:mvaddstr(y, 4, "Sensors Remote:")
+					stdscr:mvaddstr(y, 4, "Sensors:")
 				stdscr:attroff(curses.A_BOLD)
 				y = y + 1
 				for l,w in ipairs(v.sensors) do
@@ -164,26 +164,27 @@ function main()
 
 			stdscr:mvaddstr(y-1, 0, "Commande: "..cmd)
 
-			local key = stdscr:getch()  -- Nonblocking; returns nil if no key was pressed.
-
-			if key then
-				if key == 13 then
-					plants:printf(cmd)
-					curses.endwin()
-					plants:runCMD(cmd)
-					cmd = ""
-				elseif key == 127 then
-					cmd = cmd:sub(1,#cmd-1)
-				else
-					if key >= 48 and key <= 57
-					or key >= 65 and key <= 90
-					or key >= 97 and key <= 122 then
-						cmd = cmd .. string.char(key)
-					end
-				end
-				last_key = key
-			end
 			stdscr:refresh()
+		end
+
+		local key = stdscr:getch()  -- Nonblocking; returns nil if no key was pressed.
+		if key then
+			UI_counter = 100
+			if key == 13 then
+				plants:printf(cmd)
+				curses.endwin()
+				plants:runCMD(cmd)
+				cmd = ""
+			elseif key == 127 then
+				cmd = cmd:sub(1,#cmd-1)
+			else
+				if key >= 48 and key <= 57
+				or key >= 65 and key <= 90
+				or key >= 97 and key <= 122 then
+					cmd = cmd .. string.char(key)
+				end
+			end
+			last_key = key
 		end
 
 		socket.sleep(0.001)

@@ -97,8 +97,9 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	local value = plantoids.plants[4].sensors[1].data.adc[1] -- read sensor of plant 4 boitier 1 adc 0
 
 	if value then
-		plantoids:printf(value)
+		-- plantoids:printf(value)
 		plant:clear("Tiges", 1)
+		plant:clear("Tiges")
 		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 1)
 		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 2)
 	else
