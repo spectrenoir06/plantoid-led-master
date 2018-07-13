@@ -30,7 +30,6 @@ local CMD_UDP_SENSOR = 1
 local CMD_UDP_OSC   = 47
 
 function Plantoids:initialize(replay_file)
-	-- self.sensors = {}
 	self.osc     = {}
 	self.plants  = {}
 

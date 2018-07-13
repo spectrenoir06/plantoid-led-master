@@ -2,8 +2,6 @@ local inspect = require "lib.inspect"
 
 --[[
 
-	Plandoids:getSensorValue(adresse, value)
-
 	Plantoid:setPixel(index_led, color, part_name, part_number)
 	Plantoid:setAllPixel(color, part_name, part_number)
 	Plantoid:sendAll(update, part_name(opt), part_number(opt))
@@ -96,9 +94,10 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[5] -- plantoid
 
-	local value = plantoids:getSensorValue("/plantoid/1/1/analog", 0)
+	local value = plantoids.plants[4].sensors[1].data.adc[1] -- read sensor of plant 4 boitier 1 adc 0
 
 	if value then
+		plantoids:printf(value)
 		plant:clear("Tiges", 1)
 		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 1)
 		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 2)
