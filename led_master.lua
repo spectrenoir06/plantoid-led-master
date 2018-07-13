@@ -136,8 +136,8 @@ function main()
 						stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
 						stdscr:mvaddstr(y, 56, w.dist_name or "?")
 						stdscr:mvaddstr(y, 75, w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4])
-						y = y + 1
-						stdscr:mvaddstr(y, 10, w:toString())
+						-- y = y + 1
+						-- stdscr:mvaddstr(y, 10, w:toString())
 					end
 					y = y + 1
 				end

@@ -26,7 +26,7 @@ return {
 		},
 		sensors = {
 			{
-				ip    =  "192.168.0.36",
+				ip    =  "192.168.12.55",
 				port  =  12345,
 			},
 		},
@@ -37,7 +37,7 @@ return {
 		name =  "Plantoid_Moyen",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.12.68",
+				ip    =  "192.168.12.60",
 				port  =  12345,
 				size  =  432
 			},
@@ -58,7 +58,12 @@ return {
 				size  =  500
 			},
 		},
-		sensors = {},
+		sensors = {
+			{
+				ip    =  "192.168.12.65",
+				port  =  12345,
+			},
+		},
 		parts =  {
 			Petales =  {
 				{
@@ -185,7 +190,16 @@ return {
 				size  =  500
 			},
 		},
-		sensors = {},
+		sensors = {
+			{
+				ip    =  "192.168.12.75",
+				port  =  12345,
+			},
+			{
+				ip    =  "192.168.12.76",
+				port  =  12345,
+			},
+		},
 		parts =  {}
 	},
 	{

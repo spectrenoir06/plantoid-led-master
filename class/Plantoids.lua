@@ -262,7 +262,7 @@ function Plantoids:setEeprom()
 	end
 end
 
-function Plantoids:updateEsp(bin_file)
+function Plantoids:updateLed(bin_file)
 	for k,v in ipairs(self.plants) do
 		for l,w in pairs(v.segments) do
 			if w.alive > 0 then
@@ -273,10 +273,26 @@ function Plantoids:updateEsp(bin_file)
 	end
 end
 
+function Plantoids:updateSensor(bin_file)
+	for k,v in ipairs(self.plants) do
+		for l,w in ipairs(v.sensors) do
+			if w.alive > 0 then
+				w.alive = 0
+				w:updateEsp(bin_file)
+			end
+		end
+	end
+end
+
 function Plantoids:runCMD(cmd)
-	if cmd == "update" then
-		self:updateEsp("bin/plantoid-led-driver.ino.bin")
-	elseif cmd == "sendinfo" then
+	if cmd == "updateled" then
+		self:updateLed("bin/plantoid-led-driver.ino.bin")
+	elseif cmd == "updatesensor" then
+		self:updateSensor("bin/plantoid-sensor-driver.ino.bin")
+	elseif cmd == "update" then
+		self:updateLed("bin/plantoid-led-driver.ino.bin")
+		self:updateSensor("bin/plantoid-sensor-driver.ino.bin")
+	elseif cmd == "seteeprom" then
 		self:setEeprom()
 	end
 end
