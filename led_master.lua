@@ -164,7 +164,44 @@ function main()
 				end
 
 			elseif mode == 1 then
+				local y = 1
+				for k,v in ipairs(plants.plants) do
+					stdscr:attron(curses.A_BOLD)
+						stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
+					stdscr:attroff(curses.A_BOLD)
+					y = y + 1
 
+					for l,w in ipairs(v.sensors) do
+						stdscr:mvaddstr(y, 4, "Temp:    "..w.data.temp); y=y+1
+						stdscr:mvaddstr(y, 4, "Hum:     "..w.data.hum); y=y+1
+						stdscr:mvaddstr(y, 4, "Sonar 1: "..w.data.sonar[1]); y=y+1
+						stdscr:mvaddstr(y, 4, "Sonar 2: "..w.data.sonar[2]); y=y+2
+
+						for i=1,8 do
+							stdscr:mvaddstr(y, 4 + (i-1) * 12,   "ADC"..i..": "..w.data.adc[i]);
+						end
+
+						-- stdscr:mvaddstr(y, 8, "["..l.."]")
+						-- local cc
+						-- if w.alive == 0 then
+						-- 	cc = curses.color_pair(2)
+						-- else
+						-- 	cc = curses.color_pair(3)
+						-- end
+						-- stdscr:attron(cc)
+						-- 	stdscr:mvaddstr(y, 27, w.remote.ip)
+						-- stdscr:attroff(cc)
+						-- if w.alive > 0 then
+						-- 	stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
+						-- 	stdscr:mvaddstr(y, 56, w.dist_name or "?")
+						-- 	stdscr:mvaddstr(y, 75, w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4])
+						-- end
+						-- y = y + 1
+						-- stdscr:mvaddstr(y, 10, w:toString())
+						y = y + 2
+					end
+					-- y = y + 1
+				end
 			elseif mode == 2 then
 				stdscr:attron(curses.A_BOLD)
 					stdscr:mvaddstr(1, 1, "Log:")
