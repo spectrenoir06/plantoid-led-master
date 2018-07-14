@@ -29,7 +29,7 @@ love .
 - updatesensor
 - seteeprom
 
-## different mode
+## different mode ( press key to change )
 	- 1 main page
 	- 2 Sensors
 	- 3 Logs
