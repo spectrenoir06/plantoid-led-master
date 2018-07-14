@@ -116,8 +116,9 @@ function main()
 						stdscr:attroff(cc)
 						if w.alive > 0 then
 							stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
-							stdscr:mvaddstr(y, 51, w.dist_size or "?")
-							stdscr:mvaddstr(y, 56, w.dist_name or "?")
+							stdscr:mvaddstr(y, 56, w.dist_size or "?")
+							stdscr:mvaddstr(y, 65, w.dist_rgbw and "RGBW" or "RGB")
+							stdscr:mvaddstr(y, 75, w.dist_name or "?")
 						end
 						y = y + 1
 					end
@@ -126,7 +127,7 @@ function main()
 					stdscr:attroff(curses.A_BOLD)
 					y = y + 1
 					for l,w in ipairs(v.sensors) do
-						stdscr:mvaddstr(y, 8, "["..l.."]")
+						stdscr:mvaddstr(y, 8, "["..l.."]:")
 						local cc
 						if w.alive == 0 then
 							cc = curses.color_pair(2)
@@ -141,8 +142,8 @@ function main()
 							stdscr:mvaddstr(y, 56, w.dist_name or "?")
 							stdscr:mvaddstr(y, 75, w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4])
 						end
-						y = y + 1
-						stdscr:mvaddstr(y, 10, w:toString())
+						-- y = y + 1
+						-- stdscr:mvaddstr(y, 10, w:toString())
 						y = y + 1
 					end
 					y = y + 1
@@ -157,7 +158,6 @@ function main()
 				local size = (ey - 3) - y
 				-- print(size)
 
-				-- for k,v in ipairs(plants.log) do
 				for i = #plants.log - size, #plants.log do
 					stdscr:mvaddstr(y, 2, plants.log[i])
 					y = y + 1
@@ -180,27 +180,8 @@ function main()
 						for i=1,8 do
 							stdscr:mvaddstr(y, 4 + (i-1) * 12,   "ADC"..i..": "..w.data.adc[i]);
 						end
-
-						-- stdscr:mvaddstr(y, 8, "["..l.."]")
-						-- local cc
-						-- if w.alive == 0 then
-						-- 	cc = curses.color_pair(2)
-						-- else
-						-- 	cc = curses.color_pair(3)
-						-- end
-						-- stdscr:attron(cc)
-						-- 	stdscr:mvaddstr(y, 27, w.remote.ip)
-						-- stdscr:attroff(cc)
-						-- if w.alive > 0 then
-						-- 	stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
-						-- 	stdscr:mvaddstr(y, 56, w.dist_name or "?")
-						-- 	stdscr:mvaddstr(y, 75, w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4])
-						-- end
-						-- y = y + 1
-						-- stdscr:mvaddstr(y, 10, w:toString())
 						y = y + 2
 					end
-					-- y = y + 1
 				end
 			elseif mode == 2 then
 				stdscr:attron(curses.A_BOLD)

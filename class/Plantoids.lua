@@ -22,7 +22,7 @@ local CHECK_REMOTES      = 3 -- secondes
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
 
-local CLIENT_SENSOR_SEND = {192,168,12,2}
+local CLIENT_SENSOR_SEND = {192,168,0,33}
 
 local SERVER_PORT   = 8000
 local UPDATE_SCREEN = true
@@ -315,12 +315,13 @@ function Plantoids:runCMD(cmd)
 		self:updateSensor("bin/plantoid-sensor-driver.ino.bin")
 	elseif cmd == "seteeprom" then
 		self:setEeprom()
-	else
-		self:printf("CMD no found:")
+	elseif cmd == "help" then
 		self:printf("    update        # Update all driver")
 		self:printf("    updateled     # Update all led driver")
 		self:printf("    updatesensor  # Update all sensor driver")
 		self:printf("    seteeprom     # Send config to driver")
+	else
+		self:printf("CMD no found:")
 	end
 end
 

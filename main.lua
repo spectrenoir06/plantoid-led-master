@@ -22,17 +22,42 @@ function love.draw()
 		for k,v in ipairs(plants.plants) do
 			love.graphics.print("["..k.."]  "..v.name, 10, y)
 			y = y + 20
+			love.graphics.print("LEDs:", 30, y)
+			y = y + 20
 			for l,w in pairs(v.segments) do
-				love.graphics.print(l..":", 30, y)
+				love.graphics.print(l..":", 50, y)
 				if w.alive == 0 then
 					love.graphics.setColor(1, 0, 0, 1)
 				else
 					love.graphics.setColor(0, 1, 0, 1)
 				end
-				love.graphics.print(w.remote.ip, 150, y)
+				love.graphics.print(w.remote.ip, 170, y)
 				love.graphics.setColor(1, 1, 1, 1)
-				-- love.graphics.print("size: "..w.size, 270, y)
-				-- love.graphics.print("Alive: "..w.alive, 30, y)
+				if w.alive > 0 then
+					love.graphics.print("V"..(w.dist_vers or "?"), 300, y)
+					love.graphics.print(w.dist_size or "?", 370, y)
+					love.graphics.print(w.dist_name or "?", 500, y)
+				end
+				y = y + 20
+			end
+			love.graphics.print("Sensors:", 30, y)
+			y = y + 20
+			for l,w in ipairs(v.sensors) do
+				love.graphics.print("["..l.."]:", 50, y)
+				if w.alive == 0 then
+					love.graphics.setColor(1, 0, 0, 1)
+				else
+					love.graphics.setColor(0, 1, 0, 1)
+				end
+				love.graphics.print(w.remote.ip, 170, y)
+				love.graphics.setColor(1, 1, 1, 1)
+				if w.alive > 0 then
+					love.graphics.print("V"..(w.dist_vers or "?"), 300 , y)
+					love.graphics.print(w.dist_name or "?", 370, y)
+					love.graphics.print(w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4], 500, y)
+				end
+				-- y = y + 20
+				-- love.graphics.print((y, 10, w:toString())
 				y = y + 20
 			end
 			y = y + 20
