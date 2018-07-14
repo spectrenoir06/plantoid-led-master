@@ -4,11 +4,12 @@ local inspect = require "lib.inspect"
 
 	Plantoid:setPixel(index_led, color, part_name, part_number)
 	Plantoid:setAllPixel(color, part_name, part_number)
-	Plantoid:sendAll(update, part_name(opt), part_number(opt))
 	Plantoid:getPixel(index_led, part_name, part_number)
+	Plantoid:setFade(off, bright, size, part_name, part_number)
+	Plantoid:sendAll(update, part_name(opt), part_number(opt))
 
-	Plantoid:setLerp(off, color1, color2, size, part_name, part_number)
-	Plantoid:setLerpBright(off, bright1, bright2, size, part_name, part_number)
+	Plantoid:setLerp(off, color1, color2, size(opt), part_name, part_number)
+	Plantoid:setLerpBright(off, bright1, bright2, size(opt), part_name, part_number)
 
 	Plantoid:show(part_name, part_number)
 	Plantoid:clear(part_name, part_number)

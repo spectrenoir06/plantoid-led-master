@@ -22,6 +22,8 @@ local CHECK_REMOTES      = 3 -- secondes
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
 
+local CLIENT_SENSOR_SEND = {192,168,12,2}
+
 local SERVER_PORT   = 8000
 local UPDATE_SCREEN = true
 
@@ -57,7 +59,7 @@ function Plantoids:initialize(replay_file)
 	end
 
 	if replay_file then
-		print("Start replay:", replay_file)
+		self:printf("Start replay: %s", replay_file)
 		self.replay_dump = self:load_dump(replay_file)
 		self.replay = true
 		self.replay_len = #self.replay_dump
@@ -66,7 +68,7 @@ function Plantoids:initialize(replay_file)
 		self.dump_name = "dump/log-"..os.date("%Y:%m:%d-%H:%M:%S")..".dump"
 		self.dump_file = io.open(self.dump_name, "w")
 		if self.dump_file then
-			print("start dump:", self.dump_name)
+			self:printf("start dump: %s", self.dump_name)
 			self.dump_file:write(os.time(os.date("!*t")).."\n")
 			self.dump = true
 		end
@@ -105,7 +107,7 @@ function Plantoids:update(dt, dont_send_led)
 				self.replay_index = self.replay_index + 1
 			end
 		else
-			print("Replay finish")
+			self:printf("Replay finish")
 			return true
 		end
 	end
@@ -276,7 +278,7 @@ function Plantoids:setEeprom()
 			w:setEeprom(v.name.."_"..l)
 		end
 		for l,w in ipairs(v.sensors) do
-			w:setEeprom(v.name.."_"..l)
+			w:setEeprom(v.name.."_"..l, CLIENT_SENSOR_SEND)
 		end
 	end
 end
@@ -313,6 +315,12 @@ function Plantoids:runCMD(cmd)
 		self:updateSensor("bin/plantoid-sensor-driver.ino.bin")
 	elseif cmd == "seteeprom" then
 		self:setEeprom()
+	else
+		self:printf("CMD no found:")
+		self:printf("    update        # Update all driver")
+		self:printf("    updateled     # Update all led driver")
+		self:printf("    updatesensor  # Update all sensor driver")
+		self:printf("    seteeprom     # Send config to driver")
 	end
 end
 

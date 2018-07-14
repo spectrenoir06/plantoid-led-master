@@ -27,4 +27,6 @@ love .
 
 ## cmd
 - update
-- quit
+- updateled
+- updatesensor
+- seteeprom

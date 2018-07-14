@@ -73,8 +73,7 @@ function Sensor:checkInfo()
 	if self.alive < 0 then self.alive = 0 end
 end
 
-function Sensor:setEeprom(hostname)
-	local ip = {192,168,0,33}
+function Sensor:setEeprom(hostname, ip)
 	local to_send = pack('BBBBBBBs', TYPE_SET_MODE, ip[1], ip[2], ip[3], ip[4], self.plantoid_number, self.boitier_number, hostname)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 end
