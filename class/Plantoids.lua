@@ -141,10 +141,24 @@ function Plantoids:update(dt, dont_send_led)
 				self:printf("Data from unknow sensor ( %d, %d )", plant, nb)
 			end
 		elseif cmd == CMD_UDP_OSC then
-				local osc_addr  = osc.get_addr_from_data(data)
-				local osc_data  = osc.decode(data)
-				self.osc[osc_addr] = osc_data
-				animation.receiveOSC(self, osc_addr, osc_data)
+			local osc_addr  = osc.get_addr_from_data(data)
+			local osc_data  = osc.decode(data)
+			self.osc[osc_addr] = osc_data
+			animation.receiveOSC(self, osc_addr, osc_data)
+			if osc_addr:match("([^/]+)/") == "plantoid" then -- old osc sensor
+				local name, plantoid_number, boitier_number, sensor_name = osc_addr:match("([^/]+)/([^/]+)/([^/]+)/([^/]+)")
+				if self.plants[tonumber(plantoid_number)] and self.plants[tonumber(plantoid_number)].sensors[tonumber(boitier_number)] then
+					local sensor = self.plants[tonumber(plantoid_number)].sensors[tonumber(boitier_number)]
+					sensor:updateSensorOld(sensor_name, osc_data)
+					animation.receiveSensor(self, sensor)
+					if self.dump then
+						self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor:serialize().."\n")
+					end
+					sensor:sendToSC(CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT)
+				else
+					self:printf("Data from unknow sensor ( %s, %s )", plantoid_number, plantoid_number)
+				end
+			end
 		else
 			self:printf("Unknow UDP packet Type %d, %s", cmd, data)
 		end

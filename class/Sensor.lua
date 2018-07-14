@@ -54,6 +54,18 @@ function Sensor:updateSensor(data)
 	-- print(inspect(self.data))
 end
 
+function Sensor:updateSensorOld(sensor_name, osc_data)
+	if sensor_name == "temp" or sensor_name == "hum" then
+		self.data[sensor_name] = tonumber(osc_data[4])
+	elseif sensor_name == "sonar" then
+		self.data[sensor_name][osc_data[2]+1] = tonumber(osc_data[4])
+	elseif sensor_name == "analog" then
+		self.data["adc"][osc_data[2]+1] = tonumber(osc_data[4])
+	end
+	-- print(inspect(self.data))
+end
+
+
 function Sensor:checkInfo()
 	local to_send = pack('B', TYPE_GET_INFO)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
@@ -107,7 +119,7 @@ function Sensor:sendToSC(ip, port)
 	self:sendOSC("sonar", 0, self.data.sonar[1], ip, port);
 	self:sendOSC("sonar", 1, self.data.sonar[2], ip, port);
 	for i=1,8 do
-		self:sendOSC("adc", i-1, self.data.adc[i], ip, port);
+		self:sendOSC("analog", i-1, self.data.adc[i], ip, port);
 	end
 end
 
