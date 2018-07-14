@@ -94,7 +94,9 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[5] -- plantoid
 
-	local value = plantoids.plants[4].sensors[1].data.adc[1] -- read sensor of plant 4 boitier 1 adc 0
+	local osc_value = plantoids.osc["/music2light/ldrNote"]
+
+	local value = plantoids.plants[4].sensors[1].data.sonar[1] -- read sensor of plant 4 boitier 1 adc 0
 
 	if value then
 		-- plantoids:printf(value)
