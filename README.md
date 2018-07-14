@@ -41,6 +41,8 @@ love .
 3. write the ESP8266 IP on map.lua
 4. start `./led_master.lua`
 
+##
+
 1. download and flash https://github.com/spectrenoir06/plantoid-sensor-driver on the ESP8266
 2. read the ESP8266 IP on the serial console of arduino IDE
 3. write the ESP8266 IP on map.lua
