@@ -69,14 +69,13 @@ function test_horloge(plantoids, color)
 	plant:sendAll(true)
 end
 
-function receiveOSC(plantoids, addr, data)
+function receiveOSC(plantoids, addr, data) -- call when receive osc data
 	plantoids:printf("OSC Receive: %s, data: %s", addr, inspect(data))
 end
 
-function receiveSensor(plantoids, sensor)
+function receiveSensor(plantoids, sensor) -- call when receive sensor data
 	local plantoid_number = sensor.plantoid_number
 	local boitier_number  = sensor.boitier_number
-
 	plantoids:printf("Receive sensor: plant: %d  boitier: %d  adc0: %d", plantoid_number, boitier_number, sensor.data.adc[1])
 end
 
@@ -94,15 +93,15 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[5] -- plantoid
 
-	local osc_value = plantoids.osc["/music2light/ldrNote"]
+	local osc_value = plantoids.osc["/music2light/ldrNote"] -- read save osc adresse data
 
 	local value = plantoids.plants[4].sensors[1].data.sonar[1] -- read sensor of plant 4 boitier 1 adc 0
 
 	if value then
 		-- plantoids:printf(value)
 		plant:clear("Tiges")
-		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 1024 * 38, "Tiges", 1)
-		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 1024 * 38, "Tiges", 2)
+		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 1)
+		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 2)
 	else
 		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
 		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
