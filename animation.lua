@@ -98,10 +98,9 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	if value then
 		-- plantoids:printf(value)
-		plant:clear("Tiges", 1)
 		plant:clear("Tiges")
-		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 1)
-		plant:setLerp(0, {255,0,0}, {0,0,0}, value / 1024 * 38, "Tiges", 2)
+		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 1024 * 38, "Tiges", 1)
+		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 1024 * 38, "Tiges", 2)
 	else
 		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
 		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)

@@ -129,18 +129,24 @@ function Plantoids:update(dt, dont_send_led)
 			data = data:sub(2)
 			local plant,
 			nb = upack("BB", data)
-			self.plants[plant]:updateSensor(data, nb)
-			animation.receiveSensor(self, self.plants[plant].sensors[nb])
-
-			if self.dump then
-				self.dump_file:write((socket.gettime() - self.time_start)..";"..self.plants[plant].sensors[nb]:serialize().."\n")
+			if self.plants[plant] and self.plants[plant].sensors[nb] then
+				local sensor = self.plants[plant].sensors[nb]
+				sensor:updateSensor(data)
+				animation.receiveSensor(self, sensor)
+				if self.dump then
+					self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor:serialize().."\n")
+				end
+				sensor:sendToSC(CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT)
+			else
+				self:printf("Data from unknow sensor ( %d, %d )", plant, nb)
 			end
-			self.plants[plant].sensors[nb]:sendToSC(CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT)
 		elseif cmd == CMD_UDP_OSC then
 				local osc_addr  = osc.get_addr_from_data(data)
 				local osc_data  = osc.decode(data)
 				self.osc[osc_addr] = osc_data
 				animation.receiveOSC(self, osc_addr, osc_data)
+		else
+			self:printf("Unknow UDP packet Type %d, %s", cmd, data)
 		end
 	end
 end

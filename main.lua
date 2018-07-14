@@ -31,7 +31,7 @@ function love.draw()
 				end
 				love.graphics.print(w.remote.ip, 150, y)
 				love.graphics.setColor(1, 1, 1, 1)
-				love.graphics.print("size: "..w.size, 270, y)
+				-- love.graphics.print("size: "..w.size, 270, y)
 				-- love.graphics.print("Alive: "..w.alive, 30, y)
 				y = y + 20
 			end
