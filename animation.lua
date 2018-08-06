@@ -60,11 +60,11 @@ function test_horloge(plantoids, color)
 	local plant = plantoids.plants[4]
 	local ctn = (plantoids.counter % 32)/32
 
-	comete(plant, "Anneaux", 1, ctn*32, color, 0.8)
-	comete(plant, "Anneaux", 2, ctn*24, color, 0.7)
-	comete(plant, "Anneaux", 3, ctn*16, color, 0.6)
-	comete(plant, "Anneaux", 4, ctn*12, color, 0.5)
-	comete(plant, "Anneaux", 5, ctn*8, color, 0.4)
+	comete(plant, "Anneaux", 1, ctn*32, color, 0.5)
+	comete(plant, "Anneaux", 2, ctn*24, color, 0.4)
+	comete(plant, "Anneaux", 3, ctn*16, color, 0.3)
+	comete(plant, "Anneaux", 4, ctn*12, color, 0.2)
+	comete(plant, "Anneaux", 5, ctn*8, color, 0.1)
 	plant:setAllPixel(color, "Anneaux", 6)
 
 	plant:sendAll(true)

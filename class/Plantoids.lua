@@ -16,7 +16,7 @@ local upack = struct.unpack
 
 local Plantoids = class('Plantoids')
 
-local LED_FRAMERATE      = 15 -- Hz
+local LED_FRAMERATE      = 20 -- Hz
 local CHECK_REMOTES      = 3 -- secondes
 
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
@@ -29,7 +29,10 @@ local UPDATE_SCREEN = true
 
 local CMD_UDP_ALIVE  = 0
 local CMD_UDP_SENSOR = 1
-local CMD_UDP_OSC   = 47
+local CMD_UDP_ODROID = 2
+local CMD_UDP_INFO_0 = 3
+local CMD_UDP_INFO_1 = 4
+local CMD_UDP_OSC   = 47 -- '/''
 
 function Plantoids:initialize(replay_file)
 	self.osc     = {}
@@ -161,6 +164,9 @@ function Plantoids:update(dt, dont_send_led)
 					self:printf("Data from unknow sensor ( %s, %s )", plantoid_number, plantoid_number)
 				end
 			end
+		elseif cmd == CMD_UDP_ODROID then
+			self:printf("ODROID UDP packet Type %d, %s", cmd, data)
+			self:sendInfo(ip, port)
 		else
 			self:printf("Unknow UDP packet Type %d, %s", cmd, data)
 		end
@@ -258,6 +264,33 @@ function Plantoids:checkInfo()
 		for l,w in ipairs(v.sensors) do
 			w:checkInfo()
 		end
+	end
+end
+
+function Plantoids:sendInfo(ip, port)
+	-- local k,v = 4, self.plants[4]
+	for k,v in ipairs(self.plants) do
+		local to_send = ""
+		to_send = to_send .. pack("BB", CMD_UDP_INFO_0, k)
+		local nb = 0
+		for l,w in pairs(v.segments) do nb = nb + 1 end
+		-- self:printf("%s, %d, %d\n", v.name, nb, #v.sensors)
+		to_send = to_send .. pack("sBB", v.name, nb, #v.sensors)
+		for l,w in pairs(v.segments) do
+			-- self:printf("%s, %d, %s\n", l, w.alive, w.remote.ip)
+			to_send = to_send .. pack("sBs", l, w.alive, w.remote.ip)
+			if w.alive > 0 then
+				-- self:printf("%f, %d, %s\n", w.dist_vers, w.dist_size, w.dist_name)
+				to_send = to_send .. pack("sHs", "1.0", w.dist_size, w.dist_name)
+			end
+		end
+		for l,w in ipairs(v.sensors) do
+			to_send = to_send .. pack("BBs", l, w.alive, w.remote.ip)
+			if w.alive > 0 then
+				-- to_send = to_send .. pack("fsBBB", w.dist_vers, w.dist_name, w.dist_iptosend[1], w.dist_iptosend[2], w.dist_iptosend[3], w.dist_iptosend[4])
+			end
+		end
+		self.socket:sendto(to_send, ip, port)
 	end
 end
 

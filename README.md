@@ -30,9 +30,10 @@ love .
 - seteeprom
 
 ## different mode ( press key to change )
-	1. main page
-	2. Sensors
-	3. Logs
+
+1. main page
+2. Sensors
+3. Logs
 
 ##
 

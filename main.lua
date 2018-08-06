@@ -36,6 +36,7 @@ function love.draw()
 				if w.alive > 0 then
 					love.graphics.print("V"..(w.dist_vers or "?"), 300, y)
 					love.graphics.print(w.dist_size or "?", 370, y)
+					love.graphics.print(w.dist_size or "?", 370, y)
 					love.graphics.print(w.dist_name or "?", 500, y)
 				end
 				y = y + 20
