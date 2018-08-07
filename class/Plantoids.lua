@@ -32,6 +32,8 @@ local CMD_UDP_SENSOR = 1
 local CMD_UDP_ODROID = 2
 local CMD_UDP_INFO_0 = 3
 local CMD_UDP_INFO_1 = 4
+local CMD_SET_LED    = 11;
+
 local CMD_UDP_OSC   = 47 -- '/''
 
 function Plantoids:initialize(replay_file)
