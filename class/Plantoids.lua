@@ -22,7 +22,7 @@ local CHECK_REMOTES      = 3 -- secondes
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
 
-local CLIENT_SENSOR_SEND = {192,168,0,33}
+local CLIENT_SENSOR_SEND = {192,168,12,119}
 
 local SERVER_PORT   = 8000
 local UPDATE_SCREEN = true

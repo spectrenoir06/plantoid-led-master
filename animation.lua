@@ -77,7 +77,7 @@ end
 function receiveSensor(plantoids, sensor) -- call when receive sensor data
 	local plantoid_number = sensor.plantoid_number
 	local boitier_number  = sensor.boitier_number
-	plantoids:printf("Receive sensor: plant: %d  boitier: %d  adc0: %d", plantoid_number, boitier_number, sensor.data.adc[1])
+	plantoids:printf("Receive sensor: plant: %d  boitier: %d  temp: %d", plantoid_number, boitier_number, sensor.data.temp)
 end
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
