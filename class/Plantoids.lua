@@ -132,20 +132,24 @@ function Plantoids:update(dt, dont_send_led)
 				sensor.alive = 2
 				sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack("BBBBss", data)
 			end
-		elseif cmd == CMD_UDP_SENSOR and not self.replay then
-			data = data:sub(2)
-			local plant,
-			nb = upack("BB", data)
-			if self.plants[plant] and self.plants[plant].sensors[nb] then
-				local sensor = self.plants[plant].sensors[nb]
-				sensor:updateSensor(data)
-				animation.receiveSensor(self, sensor)
-				if self.dump then
-					self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor:serialize().."\n")
+		elseif cmd == CMD_UDP_SENSOR then
+			if not self.replay then
+				data = data:sub(2)
+				local plant,
+				nb = upack("BB", data)
+				if self.plants[plant] and self.plants[plant].sensors[nb] then
+					local sensor = self.plants[plant].sensors[nb]
+					sensor:updateSensor(data)
+					animation.receiveSensor(self, sensor)
+					if self.dump then
+						self.dump_file:write((socket.gettime() - self.time_start)..";"..sensor:serialize().."\n")
+					end
+					sensor:sendToSC(CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT)
+				else
+					self:printf("Data from unknow sensor ( %d, %d )", plant, nb)
 				end
-				sensor:sendToSC(CLIENT_MUSIC_IP, CLIENT_MUSIC_PORT)
 			else
-				self:printf("Data from unknow sensor ( %d, %d )", plant, nb)
+				
 			end
 		elseif cmd == CMD_UDP_OSC then
 			local osc_addr  = osc.get_addr_from_data(data)
