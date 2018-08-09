@@ -3,30 +3,30 @@ return {
 		name = "Plantoid_Petit",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.12.50",
+				ip    =  "192.168.10.148",
 				port  =  12345,
 				size  =  288
 			},
 			Spots =  {
-				ip    =  "192.168.12.51",
+				ip    =  "192.168.10.234",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  93
 			},
 			Feuilles =  {
-				ip    =  "192.168.12.52",
+				ip    =  "192.168.10.157",
 				port  =  12345,
 				size  =  756
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.12.53",
+				ip    =  "192.168.10.103",
 				port  =  12345,
 				size  =  500
 			},
 		},
 		sensors = {
 			{
-				ip    =  "192.168.12.209",
+				ip    =  "192.168.10.209",
 				port  =  12345,
 			},
 		},
@@ -37,30 +37,30 @@ return {
 		name =  "Plantoid_Moyen",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.12.60",
+				ip    =  "192.168.10.149",
 				port  =  12345,
 				size  =  432
 			},
 			Spots =  {
-				ip    =  "192.168.12.61",
+				ip    =  "192.168.10.150",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  93
 			},
 			Feuilles =  {
-				ip    =  "192.168.12.62",
+				ip    =  "192.168.10.123",
 				port  =  12345,
 				size  =  756
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.12.63",
+				ip    =  "192.168.10.124",
 				port  =  12345,
 				size  =  500
 			},
 		},
 		sensors = {
 			{
-				ip    =  "192.168.12.127",
+				ip    =  "192.168.10.127",
 				port  =  12345,
 			},
 		},
@@ -169,34 +169,34 @@ return {
 		name = "Plantoid_Grand",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.12.70",
+				ip    =  "192.168.10.131",
 				port  =  12345,
 				size  =  288
 			},
 			Spots =  {
-				ip    =  "192.168.12.71",
+				ip    =  "192.168.10.242",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  93
 			},
 			Feuilles =  {
-				ip    =  "192.168.12.72",
+				ip    =  "192.168.10.172",
 				port  =  12345,
 				size  =  756
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.12.73",
+				ip    =  "192.168.10.233",
 				port  =  12345,
 				size  =  500
 			},
 		},
 		sensors = {
 			{
-				ip    =  "192.168.12.108",
+				ip    =  "192.168.10.108",
 				port  =  12345,
 			},
 			{
-				ip    =  "192.168.12.197",
+				ip    =  "192.168.10.197",
 				port  =  12345,
 			},
 		},
