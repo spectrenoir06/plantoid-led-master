@@ -74,7 +74,7 @@ function Sensor:checkInfo()
 end
 
 function Sensor:setEeprom(hostname, ip)
-	local to_send = pack('BBBBBBBs', TYPE_SET_MODE, ip[1], ip[2], ip[3], ip[4], self.plantoid_number, self.boitier_number, hostname)
+	local to_send = pack('BBBs', TYPE_SET_MODE, self.plantoid_number, self.boitier_number, hostname)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 end
 
