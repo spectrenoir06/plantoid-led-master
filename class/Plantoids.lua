@@ -149,7 +149,7 @@ function Plantoids:update(dt, dont_send_led)
 					self:printf("Data from unknow sensor ( %d, %d )", plant, nb)
 				end
 			else
-				
+
 			end
 		elseif cmd == CMD_UDP_OSC then
 			local osc_addr  = osc.get_addr_from_data(data)
@@ -182,13 +182,17 @@ end
 function Plantoids:load_dump(name)
 	local file = io.open(name, "r")
 	local lines = {}
-	local lst_time = 0
+	local line_nb = 1
+	local gmatch = string.gmatch
 
 	local timestamp = file:read()
+	print("load")
+	local data = file:read("*a")
+	print("parse")
 
-	while true do
-		local line = file:read()
-		if line == nil then break end
+
+	for line in gmatch(data, "[^\r\n]+") do
+		-- print("'"..line.."'")
 		local time,
 		plant,
 		nb,
@@ -204,7 +208,7 @@ function Plantoids:load_dump(name)
 		adc_5,
 		adc_6,
 		adc_7 = line:match("([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+)")
-		table.insert(lines, {
+		lines[line_nb] = {
 			tonumber(time),
 			tonumber(plant),
 			tonumber(nb),
@@ -214,7 +218,8 @@ function Plantoids:load_dump(name)
 				sonar = {sonar_1, sonar_2},
 				adc = {adc_0, adc_1, adc_2, adc_3, adc_4, adc_5, adc_6, adc_7}
 			}
-		})
+		}
+		line_nb = line_nb + 1
 	end
 	file:close()
 	return lines
