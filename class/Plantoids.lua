@@ -65,9 +65,23 @@ function Plantoids:initialize(replay_file)
 
 	if replay_file then
 		self:printf("Start replay: %s", replay_file)
-		self.replay_dump = self:load_dump(replay_file)
+		-- self.replay_dump = self:load_dump(replay_file)
+
+		local file = io.open(replay_file, "r")
+		local timestamp = file:read()
+		local raw_data = file:read("*a")
+		file:close()
+
+		local i = 1
+		self.replay_raw_dump = {}
+		for line in raw_data:gmatch("[^\r\n]+") do
+			self.replay_raw_dump[i] = line
+			i = i + 1
+		end
+		self:load_dump(1, 10)
+
 		self.replay = true
-		self.replay_len = #self.replay_dump
+		self.replay_len = #self.replay_raw_dump
 	else
 		self.replay = false
 		self.dump_name = "dump/log-"..os.date("%Y:%m:%d-%H:%M:%S")..".dump"
@@ -103,6 +117,10 @@ function Plantoids:update(dt, dont_send_led)
 	if self.replay then
 		if self.replay_index < self.replay_len then
 			local replay_data = self.replay_dump[self.replay_index]
+			if not replay_data then
+				self:load_dump(self.replay_index, 10)
+				replay_data = self.replay_dump[self.replay_index]
+			end
 			if replay_data[1] <= socket.gettime() - self.time_start then
 				local sensor = self.plants[replay_data[2]].sensors[replay_data[3]]
 				sensor.data = replay_data[4]
@@ -179,20 +197,12 @@ function Plantoids:update(dt, dont_send_led)
 	end
 end
 
-function Plantoids:load_dump(name)
-	local file = io.open(name, "r")
-	local lines = {}
+function Plantoids:load_dump(start, nb)
 	local line_nb = 1
 	local gmatch = string.gmatch
 
-	local timestamp = file:read()
-	print("load")
-	local data = file:read("*a")
-	print("parse")
 
-
-	for line in gmatch(data, "[^\r\n]+") do
-		-- print("'"..line.."'")
+	for i=start, start + nb do
 		local time,
 		plant,
 		nb,
@@ -207,8 +217,9 @@ function Plantoids:load_dump(name)
 		adc_4,
 		adc_5,
 		adc_6,
-		adc_7 = line:match("([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+)")
-		lines[line_nb] = {
+		adc_7 = self.replay_raw_dump[i]:match("([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+);([^,]+)")
+
+		self.replay_dump[i] = {
 			tonumber(time),
 			tonumber(plant),
 			tonumber(nb),
@@ -219,10 +230,7 @@ function Plantoids:load_dump(name)
 				adc = {adc_0, adc_1, adc_2, adc_3, adc_4, adc_5, adc_6, adc_7}
 			}
 		}
-		line_nb = line_nb + 1
 	end
-	file:close()
-	return lines
 end
 
 ------------------- LED Controle ------------------------

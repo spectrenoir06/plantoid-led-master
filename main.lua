@@ -63,9 +63,58 @@ function love.draw()
 			end
 			y = y + 20
 		end
+	elseif mode == 1 then
+		love.graphics.print(love.timer.getFPS(), 200, 5)
+		for k,v in ipairs(plants.plants) do
+			love.graphics.print("["..k.."]  "..v.name, 10, y)
+			y = y + 20
+			for l,w in ipairs(v.sensors) do
+				love.graphics.print("["..l.."]:", 50, y)
+				if w.alive == 0 then
+					love.graphics.setColor(1, 0, 0, 1)
+				else
+					love.graphics.setColor(0, 1, 0, 1)
+				end
+				love.graphics.print(w.remote.ip, 170, y)
+				love.graphics.setColor(1, 1, 1, 1)
+				if w.alive > 0 then
+					love.graphics.print("V"..(w.dist_vers or "?"), 300 , y)
+					love.graphics.print(w.dist_name or "?", 370, y)
+					love.graphics.print(w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4], 500, y)
+				end
+				y = y + 20
+				love.graphics.print("Temp: "..w.data.temp.." °C;  Hum: "..w.data.temp.." %", 170, y)
+				y = y + 20
+				love.graphics.setColor(1, 1, 1, 1)
+
+				love.graphics.rectangle("line", 170, y, 300, 16)
+				love.graphics.setColor(1, 1, 0, 1)
+				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[1] / 3000 * 300), 16-2)
+				love.graphics.setColor(1, 1, 1, 1)
+				y = y + 20
+
+				love.graphics.rectangle("line", 170, y, 300, 16)
+				love.graphics.setColor(1, 1, 0, 1)
+				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[2] / 3000 * 300), 16-2)
+				love.graphics.setColor(1, 1, 1, 1)
+				y = y + 20
+
+				for i=0,3 do
+					for j=0,1 do
+						love.graphics.rectangle("line", 170 + (j*150), y, 150, 16)
+						love.graphics.setColor(1, 1, 0, 1)
+						love.graphics.rectangle("fill", 170+1+(j*150), y+1, (w.data.adc[i*2 + j + 1] / 1024 * 150), 16-2)
+						love.graphics.setColor(1, 1, 1, 1)
+					end
+					y = y + 20
+				end
+
+			end
+			y = y + 20
+		end
 	else
-		local v = plants.plants[mode]
-		love.graphics.print("["..mode.."]  "..v.name, 10, y)
+		local v = plants.plants[mode-1]
+		love.graphics.print("["..(mode-1).."]  "..v.name, 10, y)
 		y = y + 20
 		for l,w in pairs(v.parts) do
 			love.graphics.print(l..":", 30, y)
@@ -106,7 +155,7 @@ end
 
 function love.mousepressed( x, y, button, istouch )
 	print(x,y,button,istouch)
-	mode = (mode + 1)%(#plants.plants+1)
+	mode = (mode + 1)%(#plants.plants+2)
 end
 
 function love.keypressed( key, scancode, isrepeat )
