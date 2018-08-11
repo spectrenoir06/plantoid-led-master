@@ -8,18 +8,18 @@ return {
 				size  =  288
 			},
 			Spots =  {
-				ip    =  "192.168.10.234",
+				ip    =  "192.168.10.233",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  93
 			},
 			Feuilles =  {
-				ip    =  "192.168.10.157",
+				ip    =  "192.168.10.123",
 				port  =  12345,
 				size  =  756
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.10.103",
+				ip    =  "192.168.10.131",
 				port  =  12345,
 				size  =  500
 			},
@@ -31,6 +31,13 @@ return {
 			},
 		},
 		parts =  {
+			test =  {
+				{
+					remote =  "Tige_et_support",
+					off =  0,
+					size =  300
+				},
+			}
 		}
 	},
 	{
@@ -48,7 +55,7 @@ return {
 				size  =  93
 			},
 			Feuilles =  {
-				ip    =  "192.168.10.123",
+				ip    =  "192.168.10.157",
 				port  =  12345,
 				size  =  756
 			},
@@ -169,7 +176,7 @@ return {
 		name = "Plantoid_Grand",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.10.131",
+				ip    =  "192.168.10.103",
 				port  =  12345,
 				size  =  288
 			},
@@ -185,7 +192,7 @@ return {
 				size  =  756
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.10.233",
+				ip    =  "192.168.10.234",
 				port  =  12345,
 				size  =  500
 			},

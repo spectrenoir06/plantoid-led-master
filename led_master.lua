@@ -117,7 +117,7 @@ function main()
 						if w.alive > 0 then
 							stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
 							stdscr:mvaddstr(y, 56, w.dist_size or "?")
-							stdscr:mvaddstr(y, 65, w.dist_rgbw and "RGBW" or "RGB")
+							stdscr:mvaddstr(y, 65, w.RGBW and "RGBW" or "RGB")
 							stdscr:mvaddstr(y, 75, w.dist_name or "?")
 						end
 						y = y + 1

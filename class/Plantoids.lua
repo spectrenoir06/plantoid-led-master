@@ -16,7 +16,7 @@ local upack = struct.unpack
 
 local Plantoids = class('Plantoids')
 
-local LED_FRAMERATE      = 20 -- Hz
+local LED_FRAMERATE      = 15 -- Hz
 local CHECK_REMOTES      = 3 -- secondes
 
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
