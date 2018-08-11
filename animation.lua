@@ -88,7 +88,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 -----------------------------------------------------------
 
-	test_horloge(plantoids, color)
+	-- test_horloge(plantoids, color)
 
 -----------------------------------------------------------
 
@@ -176,7 +176,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plant:sendAll(true)
 
 	for k,v in ipairs(plantoids.plants) do
-		v:sendAll(true)
+		-- v:sendAll(true)
 	end
 end
 
