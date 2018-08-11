@@ -165,12 +165,19 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[1]
 
-	-- plant:setAllPixel(rgb(100,100,100),   "test", 1)
-		plant:setFade(0, 0.6, nil, "test", 1)
-		moving_dot(plant, "test", 1, plantoids.counter%103, color)
-	-- plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), 103, "test" , 1)
-	plant:sendAll(true)
+	plant:setAllPixel(rgb(50,0,0),   "Spots", 1)
+		-- plant:setFade(0, 0.6, nil, "test", 1)
+		-- moving_dot(plant, "test", 1, plantoids.counter%103, color)
+        --
+		-- plant:setFade(0, 0.6, nil, "test2", 1)
+		-- moving_dot(plant, "test2", 1, plantoids.counter%103, color)
 
+	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), 241, "Spot" , 1)
+	-- plant:sendAll(true)
+
+	for k,v in ipairs(plantoids.plants) do
+		v:sendAll(true)
+	end
 end
 
 return {

@@ -11,7 +11,7 @@ return {
 				ip    =  "192.168.10.233",
 				port  =  12345,
 				RGBW  =  true,
-				size  =  93
+				size  =  241
 			},
 			Feuilles =  {
 				ip    =  "192.168.10.123",
@@ -37,6 +37,20 @@ return {
 					off =  0,
 					size =  300
 				},
+			},
+			test2 =  {
+				{
+					remote =  "Feuilles",
+					off =  0,
+					size =  300
+				},
+			},
+			Spots =  {
+				{
+					remote =  "Spots",
+					off =  0,
+					size =  241
+				},
 			}
 		}
 	},
@@ -44,7 +58,7 @@ return {
 		name =  "Plantoid_Moyen",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.10.149",
+				ip    =  "192.168.10.160",
 				port  =  12345,
 				size  =  432
 			},

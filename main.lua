@@ -87,23 +87,23 @@ function love.draw()
 				y = y + 20
 				love.graphics.setColor(1, 1, 1, 1)
 
-				love.graphics.rectangle("line", 170, y, 300, 16)
+				love.graphics.rectangle("line", 170, y, 350, 12)
 				love.graphics.setColor(1, 1, 0, 1)
-				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[1] / 3000 * 300), 16-2)
+				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[1] / 2000 * 350), 12-2)
 				love.graphics.setColor(1, 1, 1, 1)
 				y = y + 20
 
-				love.graphics.rectangle("line", 170, y, 300, 16)
+				love.graphics.rectangle("line", 170, y, 350, 12)
 				love.graphics.setColor(1, 1, 0, 1)
-				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[2] / 3000 * 300), 16-2)
+				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[2] / 2000 * 350), 12-2)
 				love.graphics.setColor(1, 1, 1, 1)
-				y = y + 20
+				y = y + 25
 
 				for i=0,3 do
 					for j=0,1 do
-						love.graphics.rectangle("line", 170 + (j*150), y, 150, 16)
+						love.graphics.rectangle("line", 170 + (j*200), y, 150, 12)
 						love.graphics.setColor(1, 1, 0, 1)
-						love.graphics.rectangle("fill", 170+1+(j*150), y+1, (w.data.adc[i*2 + j + 1] / 1024 * 150), 16-2)
+						love.graphics.rectangle("fill", 170+1+(j*200), y+1, (w.data.adc[i*2 + j + 1] / 1024 * 150), 12-2)
 						love.graphics.setColor(1, 1, 1, 1)
 					end
 					y = y + 20
