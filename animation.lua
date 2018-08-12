@@ -71,13 +71,13 @@ function test_horloge(plantoids, color)
 end
 
 function receiveOSC(plantoids, addr, data) -- call when receive osc data
-	plantoids:printf("OSC Receive: %s, data: %s", addr, inspect(data))
+	-- plantoids:printf("OSC Receive: %s, data: %s", addr, inspect(data))
 end
 
 function receiveSensor(plantoids, sensor) -- call when receive sensor data
 	local plantoid_number = sensor.plantoid_number
 	local boitier_number  = sensor.boitier_number
-	plantoids:printf("Receive sensor: plant: %d  boitier: %d  temp: %d", plantoid_number, boitier_number, sensor.data.temp)
+	-- plantoids:printf("Receive sensor: plant: %d  boitier: %d  temp: %d", plantoid_number, boitier_number, sensor.data.temp)
 end
 
 local test = 0
@@ -166,6 +166,10 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
     --
 	-- plant:sendAll(true)
 
+	local plant = plantoids.plants[2]
+	plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Spots" , 1)
+
+
 	local plant = plantoids.plants[1]
 		-- plant:setFade(0, 0.6, nil, "test", 1)
  		-- plant:setFade(0, 0.6, nil, "Feuilles", 1)
@@ -176,24 +180,41 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- local plant = plantoids.plants[3]
 	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Spots" , 1)
 	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Feuilles" , 1)
-	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Petales" , 1)
+
+	-- plant:setFade(0, 0.80, nil, "Petales", 1)
 	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Tige_et_support" , 1)
 
 	test = test + 1
 
-	if test == 25 then
-		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Feuilles", 1)
-		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Spots", 1)
-		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Tige_et_support", 1)
-		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Petales", 1)
-		-- on = not on
-		-- test = 0
+	if test == 20 then
+		plant:clear("Petales")
+		plant:setAllPixel(rgb(0,0,255),   "Petales", 1)
+
+		-- plantoids:printf("%d\n", test)
+		test = 0
+	else
+		for i=1,50 do
+			plant:setPixel(math.random(0, 500), rgb(0,0,0), "Petales", 1)
+		end
+		plant:setFade(0, 0.50, nil, "Petales", 1)
+
+		for i=1,499 do
+			local pixel = plant:getPixel(i+1, "Petales", 1)
+			if pixel then
+				plant:setPixel(i, pixel, "Petales", 1)
+			end
+		end
+
 	end
 
+	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Feuilles", 1)
+	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Spots", 1)
+	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Tige_et_support", 1)
+	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Petales", 1)
 
 	-- movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(0,255,0),   "Petales", 1)
 
-	plant:sendAll(true)
+	plant:sendAll(true, "Petales")
 	-- for k,v in ipairs(plantoids.plants) do
 	-- end
 end

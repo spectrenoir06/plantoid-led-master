@@ -73,7 +73,7 @@ return {
 				ip    =  "192.168.10.150",
 				port  =  12345,
 				RGBW  =  true,
-				size  =  93
+				size  =  241
 			},
 			Feuilles =  {
 				ip    =  "192.168.10.157",
@@ -129,7 +129,7 @@ return {
 				{
 					remote =  "Spots",
 					off =  0,
-					size =  93
+					size =  241
 				}
 			},
 			Feuilles =  {
