@@ -80,6 +80,9 @@ function receiveSensor(plantoids, sensor) -- call when receive sensor data
 	plantoids:printf("Receive sensor: plant: %d  boitier: %d  temp: %d", plantoid_number, boitier_number, sensor.data.temp)
 end
 
+local test = 0
+local on = true
+
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	-- plantoids:printf("counter = %d, test_value= %f",plantoids.counter, test_value) -- to print console
@@ -164,20 +167,35 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plant:sendAll(true)
 
 	local plant = plantoids.plants[1]
-
-	plant:setAllPixel(rgb(50,0,0),   "Spots", 1)
 		-- plant:setFade(0, 0.6, nil, "test", 1)
-		-- moving_dot(plant, "test", 1, plantoids.counter%103, color)
-        --
-		-- plant:setFade(0, 0.6, nil, "test2", 1)
+ 		-- plant:setFade(0, 0.6, nil, "Feuilles", 1)
 		-- moving_dot(plant, "test2", 1, plantoids.counter%103, color)
 
-	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), 241, "Spot" , 1)
 	-- plant:sendAll(true)
 
-	for k,v in ipairs(plantoids.plants) do
-		-- v:sendAll(true)
+	-- local plant = plantoids.plants[3]
+	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Spots" , 1)
+	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Feuilles" , 1)
+	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Petales" , 1)
+	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Tige_et_support" , 1)
+
+	test = test + 1
+
+	if test == 25 then
+		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Feuilles", 1)
+		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Spots", 1)
+		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Tige_et_support", 1)
+		-- plant:setAllPixel(on and color or rgb(0,0,0),   "Petales", 1)
+		-- on = not on
+		-- test = 0
 	end
+
+
+	-- movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(0,255,0),   "Petales", 1)
+
+	plant:sendAll(true)
+	-- for k,v in ipairs(plantoids.plants) do
+	-- end
 end
 
 return {

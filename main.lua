@@ -102,7 +102,11 @@ function love.draw()
 				for i=0,3 do
 					for j=0,1 do
 						love.graphics.rectangle("line", 170 + (j*200), y, 150, 12)
-						love.graphics.setColor(1, 1, 0, 1)
+						if (l == 2 and (i*2 + j) == 3) then
+							love.graphics.setColor(0, 0, 1, 1)
+						else
+							love.graphics.setColor(1, 1, 0, 1)
+						end
 						love.graphics.rectangle("fill", 170+1+(j*200), y+1, (w.data.adc[i*2 + j + 1] / 1024 * 150), 12-2)
 						love.graphics.setColor(1, 1, 1, 1)
 					end
