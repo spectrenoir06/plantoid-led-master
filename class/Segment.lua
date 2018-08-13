@@ -1,8 +1,16 @@
 local class = require 'lib.middleclass'
 
-local struct = require("lib.struct")
-local pack = struct.pack
-local upack = struct.unpack
+local unpack = nil
+local pack   = nil
+
+if love then
+	pack  = function(format, ...) return love.data.pack("string", format, ...) end
+	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+else
+	local lpack = require("pack")
+	pack = string.pack
+	upack = string.unpack
+end
 
 local Segment = class('Segment')
 
@@ -104,7 +112,7 @@ function Segment:sendAll(update)
 		max_update = math.floor(MAX_UPDATE_SIZE / 4)
 	end
 	local nb_update = math.ceil(self.size / max_update)
-	-- print("nb_update", nb_update)
+	-- print("nb_update", nb_update, self.size, max_update)
 	for i=0, nb_update-2 do
 		self:sendRawRGBData(i * max_update, max_update, false)
 	end
@@ -131,10 +139,9 @@ end
 
 function Segment:sendRawData(cmd, off, size, data)
 	-- print("send",off,size,update)
-	if self.alive > 0 then
-		local to_send = pack('bhh', cmd, off, size) .. (data or "")
-		assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
-	end
+	if self.alive == 0 then return end
+	local to_send = pack('bhh', cmd, off, size) .. (data or "")
+	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 end
 
 function Segment:sendRawRGBData(off, size, update)
@@ -151,7 +158,7 @@ function Segment:sendRawRGBData(off, size, update)
 		-- print("",self.data[j][1], self.data[j][2], self.data[j][3], self.data[j][4] or 0)
 		to_send = to_send .. pack(color, self.data[j+1][1], self.data[j+1][2], self.data[j+1][3], self.data[j+1][4] or 0)
 	end
-	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
+	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 end
 
 function Segment:checkInfo()
@@ -162,7 +169,7 @@ function Segment:checkInfo()
 end
 
 function Segment:setEeprom(hostname)
-	local to_send = pack('bbhs', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
+	local to_send = pack('bbhz', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 end
 

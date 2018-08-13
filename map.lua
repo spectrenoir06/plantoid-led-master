@@ -5,7 +5,7 @@ return {
 			Petales =  {
 				ip    =  "192.168.10.148",
 				port  =  12345,
-				size  =  500
+				size  =  426
 			},
 			Spots =  {
 				ip    =  "192.168.10.233",
@@ -16,12 +16,12 @@ return {
 			Feuilles =  {
 				ip    =  "192.168.10.123",
 				port  =  12345,
-				size  =  500
+				size  =  426
 			},
 			Tige_et_support =  {
 				ip    =  "192.168.10.131",
 				port  =  12345,
-				size  =  500
+				size  =  426
 			},
 		},
 		sensors = {
@@ -35,14 +35,14 @@ return {
 				{
 					remote =  "Tige_et_support",
 					off =  0,
-					size =  500
+					size =  426
 				},
 			},
 			Feuilles =  {
 				{
 					remote =  "Feuilles",
 					off =  0,
-					size =  500
+					size =  426
 				},
 			},
 			Spots =  {
@@ -56,7 +56,7 @@ return {
 				{
 					remote =  "Petales",
 					off =  0,
-					size =  500
+					size =  426
 				},
 			}
 		}
@@ -67,7 +67,7 @@ return {
 			Petales =  {
 				ip    =  "192.168.10.149",
 				port  =  12345,
-				size  =  432
+				size  =  426
 			},
 			Spots =  {
 				ip    =  "192.168.10.150",
@@ -78,12 +78,12 @@ return {
 			Feuilles =  {
 				ip    =  "192.168.10.157",
 				port  =  12345,
-				size  =  756
+				size  =  426
 			},
 			Tige_et_support =  {
 				ip    =  "192.168.10.124",
 				port  =  12345,
-				size  =  500
+				size  =  426
 			},
 		},
 		sensors = {

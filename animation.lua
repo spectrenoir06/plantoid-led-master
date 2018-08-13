@@ -1,4 +1,5 @@
 local inspect = require "lib.inspect"
+local socket = require "socket"
 
 --[[
 
@@ -84,6 +85,8 @@ local test = 0
 local on = true
 
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
+
+	local time = socket.gettime()
 
 	-- plantoids:printf("counter = %d, test_value= %f",plantoids.counter, test_value) -- to print console
 
@@ -214,9 +217,10 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	-- movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(0,255,0),   "Petales", 1)
 
-	plant:sendAll(true, "Petales")
-	-- for k,v in ipairs(plantoids.plants) do
-	-- end
+	for k,v in ipairs(plantoids.plants) do
+		v:sendAll(true)
+	end
+	plantoids:printf("Time %f;  fps: %f", socket.gettime() - time, 1/(socket.gettime() - time))
 end
 
 return {

@@ -10,9 +10,17 @@ local animation = require("animation")
 require("lib.osc")
 require("lib.utils")
 
-local struct = require("lib.struct")
-local pack = struct.pack
-local upack = struct.unpack
+local unpack = nil
+local pack   = nil
+
+if love then
+	pack  = function(format, ...) return love.data.pack("string", format, ...) end
+	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+else
+	local lpack = require("pack")
+	pack = string.pack
+	upack = string.unpack
+end
 
 local Plantoids = class('Plantoids')
 
@@ -99,7 +107,6 @@ function Plantoids:initialize(replay_file)
 end
 
 function Plantoids:update(dt, dont_send_led)
-
 	self.timer_led   = self.timer_led + dt
 	self.timer_check = self.timer_check + dt
 
@@ -137,7 +144,7 @@ function Plantoids:update(dt, dont_send_led)
 
 	local data, ip, port = self.socket:receivefrom()
 	if data then
-		local cmd = upack("B", data)
+		local cmd = upack(data, "b")
 		-- self:printf("Received data from: %s %d  cmd: %d size: %d", ip, port, cmd, #data);
 		if cmd == CMD_UDP_ALIVE then
 			data = data:sub(2)
@@ -203,6 +210,7 @@ function Plantoids:load_dump(start, nb)
 
 
 	for i=start, start + nb do
+		if not self.replay_raw_dump[i] then return end
 		local time,
 		plant,
 		nb,
@@ -290,21 +298,21 @@ function Plantoids:sendInfo(ip, port)
 	-- local k,v = 4, self.plants[4]
 	for k,v in ipairs(self.plants) do
 		local to_send = ""
-		to_send = to_send .. pack("BB", CMD_UDP_INFO_0, k)
+		to_send = to_send .. pack("bb", CMD_UDP_INFO_0, k)
 		local nb = 0
 		for l,w in pairs(v.segments) do nb = nb + 1 end
 		-- self:printf("%s, %d, %d\n", v.name, nb, #v.sensors)
-		to_send = to_send .. pack("sBB", v.name, nb, #v.sensors)
+		to_send = to_send .. pack("zbb", v.name, nb, #v.sensors)
 		for l,w in pairs(v.segments) do
 			-- self:printf("%s, %d, %s\n", l, w.alive, w.remote.ip)
-			to_send = to_send .. pack("sBs", l, w.alive, w.remote.ip)
+			to_send = to_send .. pack("zbz", l, w.alive, w.remote.ip)
 			if w.alive > 0 then
 				-- self:printf("%f, %d, %s\n", w.dist_vers, w.dist_size, w.dist_name)
-				to_send = to_send .. pack("sHs", "1.0", w.dist_size, w.dist_name)
+				to_send = to_send .. pack("zHz", "1.0", w.dist_size, w.dist_name)
 			end
 		end
 		for l,w in ipairs(v.sensors) do
-			to_send = to_send .. pack("BBs", l, w.alive, w.remote.ip)
+			to_send = to_send .. pack("bbz", l, w.alive, w.remote.ip)
 			if w.alive > 0 then
 				-- to_send = to_send .. pack("fsBBB", w.dist_vers, w.dist_name, w.dist_iptosend[1], w.dist_iptosend[2], w.dist_iptosend[3], w.dist_iptosend[4])
 			end

@@ -2,9 +2,18 @@ local class = require 'lib.middleclass'
 
 
 local inspect  = require('lib.inspect')
-local struct = require("lib.struct")
-local pack = struct.pack
-local upack = struct.unpack
+
+local unpack = nil
+local pack   = nil
+
+if love then
+	pack  = function(format, ...) return love.data.pack("string", format, ...) end
+	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+else
+	local lpack = require("pack")
+	pack = string.pack
+	upack = string.unpack
+end
 
 local Sensor = class('Sensor')
 
@@ -43,7 +52,7 @@ function Sensor:updateSensor(data)
 	adc_4,
 	adc_5,
 	adc_6,
-	adc_7 = upack("BBBhhHHHHHHHHHH", data)
+	adc_7 = upack("bbbhhHHHHHHHHHH", data)
 
 	self.data = {
 		temp = temp,
@@ -67,14 +76,14 @@ end
 
 
 function Sensor:checkInfo()
-	local to_send = pack('B', TYPE_GET_INFO)
+	local to_send = pack('b', TYPE_GET_INFO)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 	self.alive = self.alive - 1
 	if self.alive < 0 then self.alive = 0 end
 end
 
 function Sensor:setEeprom(hostname, ip)
-	local to_send = pack('BBBs', TYPE_SET_MODE, self.plantoid_number, self.boitier_number, hostname)
+	local to_send = pack('bbbz', TYPE_SET_MODE, self.plantoid_number, self.boitier_number, hostname)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 end
 

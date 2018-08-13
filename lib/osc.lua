@@ -20,13 +20,19 @@ local base = _G
 local string = require("string")
 local table = require("table")
 -- local socket = require("socket") -- only needed in client / server
--- local lpack = require("pack")
--- local pack = string.pack
--- local upack = string.unpack
 
-local struct = require("lib.struct")
-local pack = struct.pack
-local upack = struct.unpack
+local unpack = nil
+local pack   = nil
+
+if love then
+	pack  = function(format, ...) return love.data.pack("string", format, ...) end
+	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+else
+	local lpack = require("pack")
+	pack = string.pack
+	upack = string.unpack
+end
+
 
 --------------------------------
 -- Module declaration

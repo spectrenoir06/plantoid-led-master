@@ -5,6 +5,7 @@ function love.load(arg)
 	width, height = love.graphics.getWidth(), love.graphics.getHeight()
 	mode = 0
 	local r,g,b = 0,0,0
+	love.graphics.setLineWidth(1)
 end
 
 function love.draw()
@@ -18,7 +19,7 @@ function love.draw()
 
 	local y = 10
 	if mode == 0 then
-		love.graphics.print(love.timer.getFPS(), 200, 5)
+		-- love.graphics.print(love.timer.getFPS(), 200, 5)
 		for k,v in ipairs(plants.plants) do
 			love.graphics.print("["..k.."]  "..v.name, 10, y)
 			y = y + 20
@@ -64,7 +65,7 @@ function love.draw()
 			y = y + 20
 		end
 	elseif mode == 1 then
-		love.graphics.print(love.timer.getFPS(), 200, 5)
+		-- love.graphics.print(love.timer.getFPS(), 200, 5)
 		for k,v in ipairs(plants.plants) do
 			love.graphics.print("["..k.."]  "..v.name, 10, y)
 			y = y + 20
@@ -75,7 +76,7 @@ function love.draw()
 				else
 					love.graphics.setColor(0, 1, 0, 1)
 				end
-				love.graphics.print(w.remote.ip, 170, y)
+				love.graphics.print(w.remote.ip, 100, y)
 				love.graphics.setColor(1, 1, 1, 1)
 				if w.alive > 0 then
 					love.graphics.print("V"..(w.dist_vers or "?"), 300 , y)
@@ -83,31 +84,34 @@ function love.draw()
 					love.graphics.print(w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4], 500, y)
 				end
 				y = y + 20
-				love.graphics.print("Temp: "..w.data.temp.." °C;  Hum: "..w.data.temp.." %", 170, y)
-				y = y + 20
+				love.graphics.print("Temp: "..w.data.temp.." °C;  Hum: "..w.data.temp.." %", 70, y)
+				y = y + 25
 				love.graphics.setColor(1, 1, 1, 1)
 
-				love.graphics.rectangle("line", 170, y, 350, 12)
+				love.graphics.print("Sonar 1:", 70, y)
+				love.graphics.rectangle("line", 70+60, y, 370, 12)
 				love.graphics.setColor(1, 1, 0, 1)
-				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[1] / 2000 * 350), 12-2)
+				love.graphics.rectangle("fill", 70+60+1, y+1, (w.data.sonar[1] / 2000 * 370), 12-2)
 				love.graphics.setColor(1, 1, 1, 1)
 				y = y + 20
 
-				love.graphics.rectangle("line", 170, y, 350, 12)
+				love.graphics.print("Sonar 2:", 70, y)
+				love.graphics.rectangle("line", 70+60, y, 370, 12)
 				love.graphics.setColor(1, 1, 0, 1)
-				love.graphics.rectangle("fill", 170+1, y+1, (w.data.sonar[2] / 2000 * 350), 12-2)
+				love.graphics.rectangle("fill", 70+60+1, y+1, (w.data.sonar[2] / 2000 * 370), 12-2)
 				love.graphics.setColor(1, 1, 1, 1)
 				y = y + 25
 
 				for i=0,3 do
 					for j=0,1 do
-						love.graphics.rectangle("line", 170 + (j*200), y, 150, 12)
+						love.graphics.print("ADC "..i*2 + j..":", 70+1+(j*220), y)
+						love.graphics.rectangle("line", 70+(j*220)+60, y, 150, 12)
 						if (l == 2 and (i*2 + j) == 3) then
 							love.graphics.setColor(0, 0, 1, 1)
 						else
 							love.graphics.setColor(1, 1, 0, 1)
 						end
-						love.graphics.rectangle("fill", 170+1+(j*200), y+1, (w.data.adc[i*2 + j + 1] / 1024 * 150), 12-2)
+						love.graphics.rectangle("fill", 70+1+(j*220)+60, y+1, (w.data.adc[i*2 + j + 1] / 1024 * 148), 12-2)
 						love.graphics.setColor(1, 1, 1, 1)
 					end
 					y = y + 20
@@ -126,17 +130,19 @@ function love.draw()
 			for m,x in ipairs(w) do
 				love.graphics.print(x.size, 50, y)
 				local rect_size = 10
-				if (x.size * 10) > 300 then
-					rect_size = 300 / x.size
+				if (x.size * 10) > 500 then
+					rect_size = 500 / x.size
 				end
-				love.graphics.rectangle("line", 80, y, rect_size*x.size, 10)
+				love.graphics.rectangle("line", 80, y, rect_size*x.size, 14)
 				for i=0, x.size-1 do
 					local color = v:getPixel(i, l, m)
 					-- print(i,l,m, color[1])
 					if color then
 						love.graphics.setColor(color[1]/255, color[2]/255, color[3]/255)
-						love.graphics.rectangle("fill", 80+i*rect_size, y, rect_size, 10)
+					else
+						love.graphics.setColor(0,0,0,1)
 					end
+					love.graphics.rectangle("fill", 80+i*rect_size, y, rect_size, 14)
 					love.graphics.setColor(255,255,255,255)
 					-- love.graphics.rectangle("line", 80+i*rect_size, y, rect_size, 10)
 				end
