@@ -67,7 +67,7 @@ return {
 			Petales =  {
 				ip    =  "192.168.10.149",
 				port  =  12345,
-				size  =  426
+				size  =  432
 			},
 			Spots =  {
 				ip    =  "192.168.10.150",
@@ -205,7 +205,7 @@ return {
 				ip    =  "192.168.10.242",
 				port  =  12345,
 				RGBW  =  true,
-				size  =  500
+				size  =  241
 			},
 			Feuilles =  {
 				ip    =  "192.168.10.172",
@@ -229,66 +229,157 @@ return {
 			},
 		},
 		parts =  {
+			Petales =  {
+				{
+					remote =  "Petales",
+					off =  0,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  72,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  144,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  216,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  288,
+					size =  72
+				},
+				{
+					remote =  "Petales",
+					off =  360,
+					size =  72
+				},
+			},
 			Spots =  {
 				{
 					remote =  "Spots",
 					off =  0,
-					size =  500
+					size =  241
+				}
+			},
+			Feuilles =  {
+				{
+					remote =  "Feuilles",
+					off =  0,
+					size =  216
 				},
+				{
+					remote =  "Feuilles",
+					off =  216,
+					size =  162
+				},
+				{
+					remote =  "Feuilles",
+					off =  378,
+					size =  216
+				},
+				{
+					remote =  "Feuilles",
+					off =  594,
+					size =  162
+				},
+			},
+			Tiges =  {
+				{
+					remote =  "Tige_et_support",
+					off =  114,
+					size =  52
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  166,
+					size =  52,
+					invert =  true
+				}
+			},
+			Supports =  {
+				{
+					remote =  "Tige_et_support",
+					off =  0,
+					size =  58
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  58,
+					size =  56,
+					invert =  true
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  218,
+					size =  53
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  271,
+					size =  53,
+					invert =  true
+				}
 			}
 		}
 	},
-	-- {
-	-- 	name = "Plantoid_test",
-	-- 	remotes =  {
-	-- 		Spots =  {
-	-- 			ip    =  "192.168.12.109",
-	-- 			port  =  12345,
-	-- 			size =  93,
-	-- 			RGBW  =  true
-	-- 		}
-	-- 	},
-	-- 	sensors = {
-	-- 		{
-	-- 			ip    =  "192.168.31.109",
-	-- 			port  =  12345,
-	-- 		},
-	-- 	},
-	-- 	parts =  {
-	-- 		Anneaux =  {
-	-- 			{
-	-- 				remote =  "Spots",
-	-- 				off =  0,
-	-- 				size =  32
-	-- 			},
-	-- 			{
-	-- 				remote =  "Spots",
-	-- 				off =  32,
-	-- 				size =  24
-	-- 			},
-	-- 			{
-	-- 				remote =  "Spots",
-	-- 				off =  56,
-	-- 				size =  16
-	-- 			},
-	-- 			{
-	-- 				remote =  "Spots",
-	-- 				off =  72,
-	-- 				size =  12
-	-- 			},
-	-- 			{
-	-- 				remote =  "Spots",
-	-- 				off =  84,
-	-- 				size =  8
-	-- 			},
-	-- 			{
-	-- 				remote =  "Spots",
-	-- 				off =  92,
-	-- 				size =  1
-	-- 			}
-	-- 		}
-	-- 	}
-	-- },
+	{
+		name = "Plantoid_test",
+		remotes =  {
+			Spots =  {
+				ip    =  "192.168.10.109",
+				port  =  12345,
+				size =  93,
+				RGBW  =  true
+			}
+		},
+		sensors = {
+			{
+				ip    =  "192.168.31.109",
+				port  =  12345,
+			},
+		},
+		parts =  {
+			Anneaux =  {
+				{
+					remote =  "Spots",
+					off =  0,
+					size =  32
+				},
+				{
+					remote =  "Spots",
+					off =  32,
+					size =  24
+				},
+				{
+					remote =  "Spots",
+					off =  56,
+					size =  16
+				},
+				{
+					remote =  "Spots",
+					off =  72,
+					size =  12
+				},
+				{
+					remote =  "Spots",
+					off =  84,
+					size =  8
+				},
+				{
+					remote =  "Spots",
+					off =  92,
+					size =  1
+				}
+			}
+		}
+	},
 	-- {
 	-- 	name = "Plantoid_test2",
 	-- 	remotes =  {

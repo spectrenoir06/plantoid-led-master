@@ -5,10 +5,15 @@ local inspect  = require('lib.inspect')
 
 local unpack = nil
 local pack   = nil
+local gsub = string.gsub
 
 if love then
-	pack  = function(format, ...) return love.data.pack("string", format, ...) end
-	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+	pack  = function(format, ...)
+		format = gsub(format, "b", "B")
+		format = gsub(format, "c", "b")
+		return love.data.pack("string", format, ...)
+	end
+	upack = function(datastring, format) return 0, love.data.unpack(format, datastring) end
 else
 	local lpack = require("pack")
 	pack = string.pack
@@ -19,6 +24,7 @@ local Sensor = class('Sensor')
 
 local TYPE_GET_INFO = 5
 local TYPE_SET_MODE = 9
+local SET_LED       = 11
 
 function Sensor:initialize(remote, socket, plantoid_number, boitier_number)
 	self.remote = remote
@@ -38,7 +44,7 @@ end
 local floor = math.floor
 
 function Sensor:updateSensor(data)
-	local plant,
+	local _, plant,
 	nb,
 	_,
 	temp,
@@ -52,7 +58,7 @@ function Sensor:updateSensor(data)
 	adc_4,
 	adc_5,
 	adc_6,
-	adc_7 = upack("bbbhhHHHHHHHHHH", data)
+	adc_7 = upack(data, "bbbhhHHHHHHHHHH")
 
 	self.data = {
 		temp = temp,

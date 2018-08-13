@@ -39,10 +39,9 @@ function love.draw()
 				love.graphics.print(w.remote.ip, 150, y)
 				love.graphics.setColor(1, 1, 1, 1)
 				if w.alive > 0 then
-					love.graphics.print("V"..(w.dist_vers or "?"), 300, y)
-					love.graphics.print(w.dist_size or "?", 370, y)
-					love.graphics.print(w.dist_size or "?", 370, y)
-					love.graphics.print(w.dist_name or "?", 500, y)
+					love.graphics.print("V"..(w.dist_vers or "?"), 260, y)
+					love.graphics.print(w.dist_size or "?", 305, y)
+					-- love.graphics.print(w.dist_name or "?", 305, y)
 				end
 				y = y + 20
 			end
@@ -58,9 +57,9 @@ function love.draw()
 				love.graphics.print(w.remote.ip, 150, y)
 				love.graphics.setColor(1, 1, 1, 1)
 				if w.alive > 0 then
-					love.graphics.print("V"..(w.dist_vers or "?"), 300 , y)
-					love.graphics.print(w.dist_name or "?", 370, y)
-					love.graphics.print(w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4], 500, y)
+					love.graphics.print("V"..(w.dist_vers or "?"), 260 , y)
+					love.graphics.print(w.dist_name or "?", 305, y)
+					-- love.graphics.print(w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4], 500, y)
 				end
 				-- y = y + 20
 				-- love.graphics.print((y, 10, w:toString())
@@ -92,14 +91,14 @@ function love.draw()
 				y = y + 25
 				love.graphics.setColor(1, 1, 1, 1)
 
-				love.graphics.print("Sonar 1:", 15, y)
+				love.graphics.print("Sonar 0:", 15, y)
 				love.graphics.rectangle("line", 15+60, y, 330, 12)
 				love.graphics.setColor(1, 1, 0, 1)
 				love.graphics.rectangle("fill", 15+60+1, y+1, (w.data.sonar[1] / 2000 * 330), 12-2)
 				love.graphics.setColor(1, 1, 1, 1)
 				y = y + 20
 
-				love.graphics.print("Sonar 2:", 15, y)
+				love.graphics.print("Sonar 1:", 15, y)
 				love.graphics.rectangle("line", 15+60, y, 330, 12)
 				love.graphics.setColor(1, 1, 0, 1)
 				love.graphics.rectangle("fill", 15+60+1, y+1, (w.data.sonar[2] / 2000 * 330), 12-2)
@@ -115,7 +114,7 @@ function love.draw()
 						else
 							love.graphics.setColor(1, 1, 0, 1)
 						end
-						love.graphics.rectangle("fill", 15+1+(j*200)+60, y+1, (w.data.adc[i*2 + j + 1] / 1024 * 12), 12-2)
+						love.graphics.rectangle("fill", 15+1+(j*200)+60, y+1, (w.data.adc[i*2 + j + 1] / 1024 * 128), 12-2)
 						love.graphics.setColor(1, 1, 1, 1)
 					end
 					y = y + 20
@@ -129,6 +128,31 @@ function love.draw()
 		love.graphics.print("["..(mode-1).."]  "..v.name, 5, y)
 		y = y + 20
 		for l,w in pairs(v.parts) do
+			love.graphics.print(l..":", 15, y)
+			y = y + 20
+			for m,x in ipairs(w) do
+				love.graphics.print(x.size, 25, y)
+				local rect_size = 10
+				if (x.size * 10) > 340 then
+					rect_size = 340 / x.size
+				end
+				love.graphics.rectangle("line", 60, y, rect_size*x.size, 14)
+				for i=0, x.size-1 do
+					local color = v:getPixel(i, l, m)
+					-- print(i,l,m, color[1])
+					if color then
+						love.graphics.setColor(color[1]/255, color[2]/255, color[3]/255)
+					else
+						love.graphics.setColor(0,0,0,1)
+					end
+					love.graphics.rectangle("fill", 60+i*rect_size, y, rect_size, 14)
+					love.graphics.setColor(255,255,255,255)
+					-- love.graphics.rectangle("line", 60+i*rect_size, y, rect_size, 10)
+				end
+				y = y + 20
+			end
+		end
+		for l,w in ipairs(v.segments) do
 			love.graphics.print(l..":", 15, y)
 			y = y + 20
 			for m,x in ipairs(w) do

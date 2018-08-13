@@ -2,10 +2,15 @@ local class = require 'lib.middleclass'
 
 local unpack = nil
 local pack   = nil
+local gsub = string.gsub
 
 if love then
-	pack  = function(format, ...) return love.data.pack("string", format, ...) end
-	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+	pack  = function(format, ...)
+		format = gsub(format, "b", "B")
+		format = gsub(format, "c", "b")
+		return love.data.pack("string", format, ...)
+	end
+	upack = function(datastring, format) return 0, love.data.unpack(format, datastring) end
 else
 	local lpack = require("pack")
 	pack = string.pack
@@ -24,6 +29,7 @@ local TYPE_LED_TEST                = 6
 local TYPE_LED_RGBW_SET            = 7
 local TYPE_LED_LERP                = 8
 local TYPE_SET_MODE                = 9
+local TYPE_SET_LED                 = 11
 
 local MAX_UPDATE_SIZE = 1280 -- max 1280 after the driver explode == 320 RGBW LEDs or 426 RGB LEDs
 
@@ -140,7 +146,7 @@ end
 function Segment:sendRawData(cmd, off, size, data)
 	-- print("send",off,size,update)
 	if self.alive == 0 then return end
-	local to_send = pack('bhh', cmd, off, size) .. (data or "")
+	local to_send = pack('bHH', cmd, off, size) .. (data or "")
 	assert(self.socket:sendto(to_send, self.remote.ip, self.remote.port))
 end
 
@@ -152,7 +158,7 @@ function Segment:sendRawRGBData(off, size, update)
 	if update then
 		cmd = cmd + 1
 	end
-	local to_send = pack('bhh', cmd, off, size)
+	local to_send = pack('bHH', cmd, off, size)
 	for j=off, (off + size)-1 do
 		-- print(j,off,size)
 		-- print("",self.data[j][1], self.data[j][2], self.data[j][3], self.data[j][4] or 0)
@@ -169,7 +175,7 @@ function Segment:checkInfo()
 end
 
 function Segment:setEeprom(hostname)
-	local to_send = pack('bbhz', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
+	local to_send = pack('bbHz', TYPE_SET_MODE, self.RGBW and 1 or 0, self.size, hostname)
 	self.socket:sendto(to_send, self.remote.ip, self.remote.port)
 end
 

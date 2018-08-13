@@ -12,10 +12,15 @@ require("lib.utils")
 
 local unpack = nil
 local pack   = nil
+local gsub = string.gsub
 
 if love then
-	pack  = function(format, ...) return love.data.pack("string", format, ...) end
-	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+	pack  = function(format, ...)
+		format = gsub(format, "b", "B")
+		format = gsub(format, "c", "b")
+		return love.data.pack("string", format, ...)
+	end
+	upack = function(datastring, format) return 0, love.data.unpack(format, datastring) end
 else
 	local lpack = require("pack")
 	pack = string.pack
@@ -144,24 +149,23 @@ function Plantoids:update(dt, dont_send_led)
 
 	local data, ip, port = self.socket:receivefrom()
 	if data then
-		local cmd = upack(data, "b")
-		-- self:printf("Received data from: %s %d  cmd: %d size: %d", ip, port, cmd, #data);
+		local _, cmd = upack(data, "b")
+		-- self:printf("Received data from: %s %d  cmd: %d size: %d, %02X", ip, port, cmd, #data, string.byte(data));
 		if cmd == CMD_UDP_ALIVE then
 			data = data:sub(2)
 			local seg = self:getSegmentFromIp(ip)
 			if seg then
 				seg.alive = 2
-				seg.dist_rgbw, seg.dist_size, seg.dist_vers, seg.dist_name = upack("BHss", data)
+				_, seg.dist_rgbw, seg.dist_size, seg.dist_vers, seg.dist_name = upack(data, "bHzz")
 			else
 				local sensor = self:getSensorFromIp(ip)
 				sensor.alive = 2
-				sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack("BBBBss", data)
+				_, sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack(data, "bbbbzz")
 			end
 		elseif cmd == CMD_UDP_SENSOR then
 			if not self.replay then
 				data = data:sub(2)
-				local plant,
-				nb = upack("BB", data)
+				local _, plant, nb = upack(data, "bb")
 				if self.plants[plant] and self.plants[plant].sensors[nb] then
 					local sensor = self.plants[plant].sensors[nb]
 					sensor:updateSensor(data)

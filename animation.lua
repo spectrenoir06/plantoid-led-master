@@ -98,50 +98,51 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 -----------------------------------------------------------
 
-	-- local plant = plantoids.plants[5] -- plantoid
+	local plant = plantoids.plants[2] -- plantoid
 
 	-- local osc_value = plantoids.osc["/music2light/ldrNote"] -- read save osc adresse data
 
-	-- local value = plantoids.plants[4].sensors[1].data.sonar[1] -- read sensor of plant 4 boitier 1 adc 0
+	local value = plantoids.plants[1].sensors[1].data.sonar[1] -- read sensor of plant 4 boitier 1 adc 0
 
-	-- if value then
-	-- 	-- plantoids:printf(value)
-	-- 	plant:clear("Tiges")
-	-- 	plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 1)
-	-- 	plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 2)
-	-- else
-	-- 	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
-	-- 	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
-    --
+	if value then
+		-- plantoids:printf(value)
+		plant:clear("Tiges")
+		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 1)
+		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 2)
+	else
+		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
+		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
+	end
+
 	-- 	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
 	-- 	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)
-    --
+
 	-- 	plant:setFade(0, 0.6, nil, "Tiges", 1)
 	-- 	moving_dot(plant, "Tiges", 1, plantoids.counter, color)
-    --
+
 	-- 	plant:setFade(0, 0.6, nil, "Tiges", 2)
 	-- 	moving_dot(plant, "Tiges", 2, plantoids.counter, color)
 	-- end
-    --
+
 	-- movinLerp(plant, plantoids.counter, rgb(255,0,0),   rgb(255,100,0),  "Petales", 1)
 	-- movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Petales", 2)
-    --
+
 	-- movinLerp(plant, plantoids.counter, rgb(0,0,255),   rgb(50,0,255),   "Petales", 4)
 	-- movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
-    --
+
 	-- plant:sendAll(true)
 
 -----------------------------------------------------------
 
-	-- local plant = plantoids.plants[2]
-    --
-	-- plant:setAllPixel(rgb(255,0,0),   "Petales", 1)
-	-- plant:setAllPixel(rgb(0,255,0),   "Petales", 2)
-	-- plant:setAllPixel(rgb(0,0,255),   "Petales", 3)
-	-- plant:setAllPixel(rgb(255,255,0), "Petales", 4)
-	-- plant:setAllPixel(rgb(0,255,255), "Petales", 5)
-	-- plant:setAllPixel(rgb(255,0,255), "Petales", 6)
-    --
+	local plant = plantoids.plants[2]
+
+	plant:setAllPixel(rgb(255,0,0),   "Petales", 1)
+	plant:setAllPixel(rgb(0,255,0),   "Petales", 2)
+	plant:setAllPixel(rgb(0,0,255),   "Petales", 3)
+	plant:setAllPixel(rgb(255,255,0), "Petales", 4)
+	plant:setAllPixel(rgb(0,255,255), "Petales", 5)
+	plant:setAllPixel(rgb(255,0,255), "Petales", 6)
+
 	-- plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
 	-- plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
     --
@@ -166,11 +167,10 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
     --
 	-- plant:setLerp(0,     rgb(255,255,0), rgb(0,255,255), 162/2, "Feuilles" , 4)
 	-- plant:setLerp(162/2, rgb(0,255,255), rgb(255,255,0), 162/2, "Feuilles" , 4)
-    --
-	-- plant:sendAll(true)
 
-	local plant = plantoids.plants[2]
-	plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Spots" , 1)
+
+	-- local plant = plantoids.plants[2]
+	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Spots" , 1)
 
 
 	local plant = plantoids.plants[1]
