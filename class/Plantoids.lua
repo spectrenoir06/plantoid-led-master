@@ -159,8 +159,12 @@ function Plantoids:update(dt, dont_send_led)
 				_, seg.dist_rgbw, seg.dist_size, seg.dist_vers, seg.dist_name = upack(data, "bHzz")
 			else
 				local sensor = self:getSensorFromIp(ip)
-				sensor.alive = 2
-				_, sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack(data, "bbbbzz")
+				if not sensor then
+					self:printf("Sensors Error %s", ip)
+				else
+					sensor.alive = 2
+					_, sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack(data, "bbbbzz")
+				end
 			end
 		elseif cmd == CMD_UDP_SENSOR then
 			if not self.replay then

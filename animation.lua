@@ -151,7 +151,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[2]
 
-	plant:setAllPixel(rgb(255,0,0),   "Petales", 1)
+	plant:setAllPixel(color,   "Petales", 1)
 	plant:setAllPixel(rgb(0,255,0),   "Petales", 2)
 	plant:setAllPixel(rgb(0,0,255),   "Petales", 3)
 	plant:setAllPixel(rgb(255,255,0), "Petales", 4)
