@@ -23,10 +23,15 @@ local table = require("table")
 
 local unpack = nil
 local pack   = nil
+local gsub = string.gsub
 
 if love then
-	pack  = function(format, ...) return love.data.pack("string", format, ...) end
-	upack = function(datastring, format) return love.data.unpack(format, datastring) end
+	pack  = function(format, ...)
+		format = gsub(format, "b", "B")
+		format = gsub(format, "c", "b")
+		return love.data.pack("string", format, ...)
+	end
+	upack = function(datastring, format) return 0, love.data.unpack(format, datastring) end
 else
 	local lpack = require("pack")
 	pack = string.pack
