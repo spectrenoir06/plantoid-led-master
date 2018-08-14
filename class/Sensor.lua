@@ -3,7 +3,7 @@ local class = require 'lib.middleclass'
 
 local inspect  = require('lib.inspect')
 
-local unpack = nil
+local upack = nil
 local pack   = nil
 local gsub = string.gsub
 

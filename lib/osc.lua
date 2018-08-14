@@ -21,7 +21,7 @@ local string = require("string")
 local table = require("table")
 -- local socket = require("socket") -- only needed in client / server
 
-local unpack = nil
+local upack = nil
 local pack   = nil
 local gsub = string.gsub
 

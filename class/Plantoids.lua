@@ -10,7 +10,7 @@ local animation = require("animation")
 require("lib.osc")
 require("lib.utils")
 
-local unpack = nil
+local upack = nil
 local pack   = nil
 local gsub = string.gsub
 

@@ -1,6 +1,6 @@
 local class = require 'lib.middleclass'
 
-local unpack = nil
+local upack = nil
 local pack   = nil
 local gsub = string.gsub
 
