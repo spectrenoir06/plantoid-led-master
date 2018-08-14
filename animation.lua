@@ -134,16 +134,16 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[1]
 
-	plant:setAllPixel(color,  "Tige_et_support", 1)
-	plant:setAllPixel(color,  "Spots", 1)
-	plant:setAllPixel(color,  "Feuilles", 1)
-	plant:setAllPixel(color, "Petales", 1)
+	-- plant:setAllPixel(color,  "Tige_et_support", 1)
+	-- plant:setAllPixel(color,  "Spots", 1)
+	-- plant:setAllPixel(color,  "Feuilles", 1)
+	-- plant:setAllPixel(color, "Petales", 1)
 
-	-- plant:clear()
-	-- moving_dot(plant, "Tige_et_support", 1, plantoids.counter, color)
-	-- moving_dot(plant, "Feuilles", 1, plantoids.counter, color)
-	-- moving_dot(plant, "Petales", 1, plantoids.counter, color)
-	-- moving_dot(plant, "Spots", 1, plantoids.counter, color)
+	plant:clear()
+	moving_dot(plant, "Tige_et_support", 1, plantoids.counter, color)
+	moving_dot(plant, "Feuilles", 1, plantoids.counter, color)
+	moving_dot(plant, "Petales", 1, plantoids.counter, color)
+	moving_dot(plant, "Spots", 1, plantoids.counter, color)
 
 
 
