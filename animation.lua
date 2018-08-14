@@ -98,21 +98,21 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 -----------------------------------------------------------
 
-	local plant = plantoids.plants[2] -- plantoid
-
-	-- local osc_value = plantoids.osc["/music2light/ldrNote"] -- read save osc adresse data
-
-	local value = plantoids.plants[1].sensors[1].data.sonar[1] -- read sensor of plant 4 boitier 1 adc 0
-
-	if value then
-		-- plantoids:printf(value)
-		plant:clear("Tiges")
-		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 1)
-		plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 2)
-	else
-		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
-		movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
-	end
+	-- local plant = plantoids.plants[2] -- plantoid
+    --
+	-- -- local osc_value = plantoids.osc["/music2light/ldrNote"] -- read save osc adresse data
+    --
+	-- local value = plantoids.plants[1].sensors[1].data.sonar[1] -- read sensor of plant 4 boitier 1 adc 0
+    --
+	-- if value then
+	-- 	-- plantoids:printf(value)
+	-- 	plant:clear("Tiges")
+	-- 	plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 1)
+	-- 	plant:setLerp(0, rgb(255,0,0), rgb(0,0,0),value / 2000 * 38, "Tiges", 2)
+	-- else
+	-- 	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 1)
+	-- 	movinLerp(plant, plantoids.counter, rgb(0,255,0),   rgb(0,255,50),   "Tiges", 2)
+	-- end
 
 	-- 	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 1)
 	-- 	start_breath(plant, plantoids.counter*2, 10, 35, "Tiges", 2)
@@ -131,6 +131,21 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- movinLerp(plant, plantoids.counter, rgb(255,255,0), rgb(255,255,50), "Petales", 3)
 
 	-- plant:sendAll(true)
+
+	local plant = plantoids.plants[1]
+
+	plant:setAllPixel(color,  "Tige_et_support", 1)
+	plant:setAllPixel(color,  "Spots", 1)
+	plant:setAllPixel(color,  "Feuilles", 1)
+	plant:setAllPixel(color, "Petales", 1)
+
+	-- plant:clear()
+	-- moving_dot(plant, "Tige_et_support", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Feuilles", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Petales", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Spots", 1, plantoids.counter, color)
+
+
 
 -----------------------------------------------------------
 
@@ -173,7 +188,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Spots" , 1)
 
 
-	local plant = plantoids.plants[1]
+	-- local plant = plantoids.plants[1]
 		-- plant:setFade(0, 0.6, nil, "test", 1)
  		-- plant:setFade(0, 0.6, nil, "Feuilles", 1)
 		-- moving_dot(plant, "test2", 1, plantoids.counter%103, color)
@@ -187,28 +202,28 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plant:setFade(0, 0.80, nil, "Petales", 1)
 	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Tige_et_support" , 1)
 
-	test = test + 1
-
-	if test == 20 then
-		plant:clear("Petales")
-		plant:setAllPixel(rgb(0,0,255),   "Petales", 1)
-
-		-- plantoids:printf("%d\n", test)
-		test = 0
-	else
-		for i=1,50 do
-			plant:setPixel(math.random(0, 500), rgb(0,0,0), "Petales", 1)
-		end
-		plant:setFade(0, 0.50, nil, "Petales", 1)
-
-		for i=1,499 do
-			local pixel = plant:getPixel(i+1, "Petales", 1)
-			if pixel then
-				plant:setPixel(i, pixel, "Petales", 1)
-			end
-		end
-
-	end
+	-- test = test + 1
+    --
+	-- if test == 20 then
+	-- 	plant:clear("Petales")
+	-- 	plant:setAllPixel(rgb(0,0,255),   "Petales", 1)
+    --
+	-- 	-- plantoids:printf("%d\n", test)
+	-- 	test = 0
+	-- else
+	-- 	for i=1,50 do
+	-- 		plant:setPixel(math.random(0, 500), rgb(0,0,0), "Petales", 1)
+	-- 	end
+	-- 	plant:setFade(0, 0.50, nil, "Petales", 1)
+    --
+	-- 	for i=1,499 do
+	-- 		local pixel = plant:getPixel(i+1, "Petales", 1)
+	-- 		if pixel then
+	-- 			plant:setPixel(i, pixel, "Petales", 1)
+	-- 		end
+	-- 	end
+    --
+	-- end
 
 	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Feuilles", 1)
 	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Spots", 1)
