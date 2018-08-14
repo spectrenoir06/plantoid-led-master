@@ -58,8 +58,8 @@ function love.draw()
 				love.graphics.setColor(1, 1, 1, 1)
 				if w.alive > 0 then
 					love.graphics.print("V"..(w.dist_vers or "?"), 260 , y)
-					love.graphics.print(w.dist_name or "?", 305, y)
-					-- love.graphics.print(w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4], 500, y)
+					-- love.graphics.print(w.dist_name or "?", 305, y)
+					-- love.graphics.print(w.dist_iptosend[1].."."..w.dist_iptosend[2].."."..w.dist_iptosend[3].."."..w.dist_iptosend[4], 305, y)
 				end
 				-- y = y + 20
 				-- love.graphics.print((y, 10, w:toString())
@@ -152,18 +152,19 @@ function love.draw()
 				y = y + 20
 			end
 		end
-		for l,w in ipairs(v.segments) do
+		y = y + 50
+		for l,w in pairs(v.segments) do
 			love.graphics.print(l..":", 15, y)
 			y = y + 20
-			for m,x in ipairs(w) do
-				love.graphics.print(x.size, 25, y)
+			-- for m,x in ipairs(w) do
+				love.graphics.print(w.size, 25, y)
 				local rect_size = 10
-				if (x.size * 10) > 340 then
-					rect_size = 340 / x.size
+				if (w.size * 10) > 340 then
+					rect_size = 340 / w.size
 				end
-				love.graphics.rectangle("line", 60, y, rect_size*x.size, 14)
-				for i=0, x.size-1 do
-					local color = v:getPixel(i, l, m)
+				love.graphics.rectangle("line", 60, y, rect_size*w.size, 14)
+				for i=0, w.size-1 do
+					local color = w.data[i+1]
 					-- print(i,l,m, color[1])
 					if color then
 						love.graphics.setColor(color[1]/255, color[2]/255, color[3]/255)
@@ -175,7 +176,7 @@ function love.draw()
 					-- love.graphics.rectangle("line", 60+i*rect_size, y, rect_size, 10)
 				end
 				y = y + 20
-			end
+			-- end
 		end
 	end
 end

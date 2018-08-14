@@ -94,7 +94,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 -----------------------------------------------------------
 
-	-- test_horloge(plantoids, color)
+	test_horloge(plantoids, color)
 
 -----------------------------------------------------------
 
