@@ -254,7 +254,7 @@ function decode_bundle(data)
 		return nil
 	end
 	table.insert(msg, "#bundle")
-	sec, frac = upack(">I>I", string.sub(tmp_data, 1, 8))
+	_, sec, frac = upack(">I>I", string.sub(tmp_data, 1, 8))
 	-- note this is an awful way of decoding to a bin string and
 	-- then decoding the frac again TODO: make this nicer
 	frac = numberstring(frac, 2)
@@ -281,12 +281,12 @@ function decode_frac(bin)
 end
 
 function decode_float(bin)
-	local res = upack(">f", bin)
+	local _, res = upack(">f", bin)
 	return res
 end
 
 function decode_int(bin)
-	local res = upack( ">I", bin)
+	local _, res = upack( ">I", bin)
 	return res
 end
 
