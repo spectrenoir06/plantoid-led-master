@@ -3,25 +3,25 @@ return {
 		name = "Plantoid_Petit",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.10.148",
+				ip    =  "192.168.10.50",
 				port  =  12345,
 				size  =  426
 			},
-			Spots =  {
-				ip    =  "192.168.10.233",
-				port  =  12345,
-				RGBW  =  true,
-				size  =  241
-			},
 			Feuilles =  {
-				ip    =  "192.168.10.123",
+				ip    =  "192.168.10.51",
 				port  =  12345,
 				size  =  426
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.10.131",
+				ip    =  "192.168.10.52",
 				port  =  12345,
 				size  =  426
+			},
+			Spots =  {
+				ip    =  "192.168.10.53",
+				port  =  12345,
+				RGBW  =  true,
+				size  =  241
 			},
 		},
 		sensors = {
@@ -65,25 +65,25 @@ return {
 		name =  "Plantoid_Moyen",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.10.149",
+				ip    =  "192.168.10.60",
 				port  =  12345,
-				size  =  432
+				size  =  1000
+			},
+			Feuilles =  {
+				ip    =  "192.168.10.61",
+				port  =  12345,
+				size  =  1000
+			},
+			Tige_et_support =  {
+				ip    =  "192.168.10.62",
+				port  =  12345,
+				size  =  1000
 			},
 			Spots =  {
-				ip    =  "192.168.10.150",
+				ip    =  "192.168.10.63",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  241
-			},
-			Feuilles =  {
-				ip    =  "192.168.10.157",
-				port  =  12345,
-				size  =  426
-			},
-			Tige_et_support =  {
-				ip    =  "192.168.10.124",
-				port  =  12345,
-				size  =  426
 			},
 		},
 		sensors = {
@@ -197,25 +197,25 @@ return {
 		name = "Plantoid_Grand",
 		remotes =  {
 			Petales =  {
-				ip    =  "192.168.10.103",
+				ip    =  "192.168.10.70",
 				port  =  12345,
 				size  =  288
 			},
-			Spots =  {
-				ip    =  "192.168.10.242",
-				port  =  12345,
-				RGBW  =  true,
-				size  =  241
-			},
 			Feuilles =  {
-				ip    =  "192.168.10.172",
+				ip    =  "192.168.10.71",
 				port  =  12345,
 				size  =  756
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.10.158",
+				ip    =  "192.168.10.72",
 				port  =  12345,
 				size  =  500
+			},
+			Spots =  {
+				ip    =  "192.168.10.73",
+				port  =  12345,
+				RGBW  =  true,
+				size  =  241
 			},
 		},
 		sensors = {

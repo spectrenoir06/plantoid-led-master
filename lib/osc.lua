@@ -281,12 +281,12 @@ function decode_frac(bin)
 end
 
 function decode_float(bin)
-	local _, res = upack(">f", bin)
+	local _, res = upack( bin, ">f")
 	return res
 end
 
 function decode_int(bin)
-	local _, res = upack( ">I", bin)
+	local _, res = upack(bin, ">I")
 	return res
 end
 

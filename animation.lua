@@ -72,7 +72,7 @@ function test_horloge(plantoids, color)
 end
 
 function receiveOSC(plantoids, addr, data) -- call when receive osc data
-	-- plantoids:printf("OSC Receive: %s, data: %s", addr, inspect(data))
+	plantoids:printf("OSC Receive: %s, data: %s", addr, inspect(data))
 end
 
 function receiveSensor(plantoids, sensor) -- call when receive sensor data
@@ -139,11 +139,11 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plant:setAllPixel(color,  "Feuilles", 1)
 	-- plant:setAllPixel(color, "Petales", 1)
 
-	plant:clear()
-	moving_dot(plant, "Tige_et_support", 1, plantoids.counter, color)
-	moving_dot(plant, "Feuilles", 1, plantoids.counter, color)
-	moving_dot(plant, "Petales", 1, plantoids.counter, color)
-	moving_dot(plant, "Spots", 1, plantoids.counter, color)
+	-- plant:clear()
+	-- moving_dot(plant, "Tige_et_support", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Feuilles", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Petales", 1, plantoids.counter, color)
+	-- moving_dot(plant, "Spots", 1, plantoids.counter, color)
 
 
 
@@ -151,28 +151,24 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local plant = plantoids.plants[2]
 
-	plant:setAllPixel(color,   "Petales", 1)
+	plant:setAllPixel(rgb(255,0,0),   "Petales", 1)
 	plant:setAllPixel(rgb(0,255,0),   "Petales", 2)
 	plant:setAllPixel(rgb(0,0,255),   "Petales", 3)
 	plant:setAllPixel(rgb(255,255,0), "Petales", 4)
 	plant:setAllPixel(rgb(0,255,255), "Petales", 5)
 	plant:setAllPixel(rgb(255,0,255), "Petales", 6)
 
-	-- plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
-	-- plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
+	plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
+	plant:setLerp(0,	 rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
     --
-	-- plant:setFade(0, 0.6, nil, "Supports", 1)
-	-- plant:setFade(0, 0.6, nil, "Supports", 2)
-	-- plant:setFade(0, 0.6, nil, "Supports", 3)
-	-- plant:setFade(0, 0.6, nil, "Supports", 4)
     --
-	-- moving_dot(plant, "Supports", 1, plantoids.counter, color)
-	-- moving_dot(plant, "Supports", 2, plantoids.counter, color)
-	-- moving_dot(plant, "Supports", 3, plantoids.counter, color)
-	-- moving_dot(plant, "Supports", 4, plantoids.counter, color)
+	plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 1)
+	plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 2)
+	plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 3)
+	plant:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 4)
     --
-	-- plant:setLerp(0,     rgb(255,0,0), rgb(0,0,255), 216/2, "Feuilles" , 1)
-	-- plant:setLerp(216/2, rgb(0,0,255), rgb(255,0,0), 216/2, "Feuilles" , 1)
+	plant:setLerp(0,     rgb(255,0,0), rgb(0,0,255), 216/2, "Feuilles" , 1)
+	plant:setLerp(216/2, rgb(0,0,255), rgb(255,0,0), 216/2, "Feuilles" , 1)
     --
 	-- plant:setLerp(0,     rgb(255,255,0), rgb(0,255,255), 162/2, "Feuilles" , 2)
 	-- plant:setLerp(162/2, rgb(0,255,255), rgb(255,255,0), 162/2, "Feuilles" , 2)
@@ -182,6 +178,8 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
     --
 	-- plant:setLerp(0,     rgb(255,255,0), rgb(0,255,255), 162/2, "Feuilles" , 4)
 	-- plant:setLerp(162/2, rgb(0,255,255), rgb(255,255,0), 162/2, "Feuilles" , 4)
+    --
+	plant:setLerp(0, rgb(0,255,0), rgb(255,0,255), nil, "Spots" , 1)
 
 
 	-- local plant = plantoids.plants[2]
@@ -235,7 +233,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	for k,v in ipairs(plantoids.plants) do
 		v:sendAll(true)
 	end
-	plantoids:printf("Time %f;  fps: %f", socket.gettime() - time, 1/(socket.gettime() - time))
+	-- plantoids:printf("Time %f;  fps: %f", socket.gettime() - time, 1/(socket.gettime() - time))
 end
 
 return {
