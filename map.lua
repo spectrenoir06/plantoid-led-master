@@ -67,17 +67,22 @@ return {
 			Petales =  {
 				ip    =  "192.168.10.60",
 				port  =  12345,
-				size  =  1000
+				size  =  111+111+114+112+111+108
 			},
-			Feuilles =  {
+			Feuilles_L =  {
 				ip    =  "192.168.10.61",
 				port  =  12345,
-				size  =  1000
+				size  =  352
+			},
+			Feuilles_R =  {
+				ip    =  "192.168.10.64",
+				port  =  12345,
+				size  =  352
 			},
 			Tige_et_support =  {
 				ip    =  "192.168.10.62",
 				port  =  12345,
-				size  =  1000
+				size  =  500
 			},
 			Spots =  {
 				ip    =  "192.168.10.63",
@@ -97,32 +102,32 @@ return {
 				{
 					remote =  "Petales",
 					off =  0,
-					size =  72
+					size =  111
 				},
 				{
 					remote =  "Petales",
-					off =  72,
-					size =  72
+					off =  111,
+					size =  111
 				},
 				{
 					remote =  "Petales",
-					off =  144,
-					size =  72
+					off =  111+111,
+					size =  114
 				},
 				{
 					remote =  "Petales",
-					off =  216,
-					size =  72
+					off =  111+111+114,
+					size =  112
 				},
 				{
 					remote =  "Petales",
-					off =  288,
-					size =  72
+					off =  111+111+114+112,
+					size =  111
 				},
 				{
 					remote =  "Petales",
-					off =  360,
-					size =  72
+					off =  111+111+114+112+111,
+					size =  108
 				},
 			},
 			Spots =  {
@@ -132,38 +137,51 @@ return {
 					size =  241
 				}
 			},
-			Feuilles =  {
+			Feuilles_L =  {
 				{
-					remote =  "Feuilles",
+					remote =  "Feuilles_L",
 					off =  0,
-					size =  216
+					size =  210
 				},
 				{
-					remote =  "Feuilles",
-					off =  216,
-					size =  162
+					remote =  "Feuilles_L",
+					off =  210,
+					size =  142
+				},
+			},
+			Feuilles_R =  {
+				{
+					remote =  "Feuilles_R",
+					off =  0,
+					size =  210
 				},
 				{
-					remote =  "Feuilles",
-					off =  378,
-					size =  216
-				},
-				{
-					remote =  "Feuilles",
-					off =  594,
+					remote =  "Feuilles_R",
+					off =  210,
 					size =  162
 				},
 			},
 			Tiges =  {
 				{
 					remote =  "Tige_et_support",
-					off =  114,
-					size =  52
+					off =  51+51+58+57,
+					size =  53
 				},
 				{
 					remote =  "Tige_et_support",
-					off =  166,
-					size =  52,
+					off =  51+51+58+57+53,
+					size =  53,
+					invert =  true
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  51+51+58+57+53+53,
+					size =  33,
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  51+51+58+57+53+53+33,
+					size =  33,
 					invert =  true
 				}
 			},
@@ -171,23 +189,23 @@ return {
 				{
 					remote =  "Tige_et_support",
 					off =  0,
-					size =  58
+					size =  51
 				},
 				{
 					remote =  "Tige_et_support",
-					off =  58,
-					size =  56,
+					off =  51,
+					size =  51,
 					invert =  true
 				},
 				{
 					remote =  "Tige_et_support",
-					off =  218,
-					size =  53
+					off =  51+51,
+					size =  58
 				},
 				{
 					remote =  "Tige_et_support",
-					off =  271,
-					size =  53,
+					off =  51+51+58,
+					size =  57,
 					invert =  true
 				}
 			}
