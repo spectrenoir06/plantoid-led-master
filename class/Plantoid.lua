@@ -122,6 +122,7 @@ function Plantoid:setFade(off, bright, size, part_name, part_number)
 end
 
 function Plantoid:getPixel(index_led, part_name, part_number)
+	-- print(index_led, part_name, part_number)
 	self:check(part_name, part_number)
 	local part = self.parts[part_name][part_number]
 	if index_led >= 0 and index_led < part.size then

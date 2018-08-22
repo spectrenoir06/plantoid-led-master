@@ -154,17 +154,16 @@ function Plantoids:update(dt, dont_send_led)
 		if cmd == CMD_UDP_ALIVE then
 			data = data:sub(2)
 			local seg = self:getSegmentFromIp(ip)
+			local sensor = self:getSensorFromIp(ip)
 			if seg then
 				seg.alive = 2
 				_, seg.dist_rgbw, seg.dist_size, seg.dist_vers, seg.dist_name = upack(data, "bHzz")
+			elseif sensor then
+				self:printf("Sensors Error %s", ip)
+				sensor.alive = 2
+				_, sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack(data, "bbbbzz")
 			else
-				local sensor = self:getSensorFromIp(ip)
-				if not sensor then
-					self:printf("Sensors Error %s", ip)
-				else
-					sensor.alive = 2
-					_, sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack(data, "bbbbzz")
-				end
+				self:printf("Receive CMD_UDP_ALIVE  frron unknow ip: %s", ip)				
 			end
 		elseif cmd == CMD_UDP_SENSOR then
 			if not self.replay then
@@ -274,6 +273,7 @@ end
 function Plantoids:getSegmentFromIp(ip)
 	for k,v in ipairs(self.plants) do
 		for l,w in pairs(v.segments) do
+			-- self:printf("%s == %s",w.remote.ip, ip)
 			if w.remote.ip == ip then
 				return w
 			end

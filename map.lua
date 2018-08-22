@@ -13,12 +13,12 @@ return {
 				size  =  426
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.10.52",
+				ip    =  "192.168.10.52",  -- 73
 				port  =  12345,
-				size  =  426
+				size  =  1000
 			},
 			Spots =  {
-				ip    =  "192.168.10.53",
+				ip    =  "192.168.10.73",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  241
@@ -35,7 +35,7 @@ return {
 				{
 					remote =  "Tige_et_support",
 					off =  0,
-					size =  426
+					size =  1000
 				},
 			},
 			Feuilles =  {
@@ -65,9 +65,10 @@ return {
 		name =  "Plantoid_Moyen",
 		remotes =  {
 			Petales =  {
+				RGBW = true,
 				ip    =  "192.168.10.60",
 				port  =  12345,
-				size  =  111+111+114+112+111+108
+				size  =  1000,--111+111+114+112+111+108
 			},
 			Feuilles_L =  {
 				ip    =  "192.168.10.61",
@@ -82,7 +83,7 @@ return {
 			Tige_et_support =  {
 				ip    =  "192.168.10.62",
 				port  =  12345,
-				size  =  500
+				size  =  1000
 			},
 			Spots =  {
 				ip    =  "192.168.10.63",
@@ -102,7 +103,7 @@ return {
 				{
 					remote =  "Petales",
 					off =  0,
-					size =  111
+					size =  1500
 				},
 				{
 					remote =  "Petales",
@@ -164,8 +165,8 @@ return {
 			Tiges =  {
 				{
 					remote =  "Tige_et_support",
-					off =  51+51+58+57,
-					size =  53
+					off =  0,--51+51+58+57,
+					size =  1000,--53
 				},
 				{
 					remote =  "Tige_et_support",
@@ -217,10 +218,15 @@ return {
 			Petales =  {
 				ip    =  "192.168.10.70",
 				port  =  12345,
-				size  =  288
+				size  =  1000
 			},
 			Feuilles =  {
 				ip    =  "192.168.10.71",
+				port  =  12345,
+				size  =  756
+			},
+			Feuilles =  {
+				ip    =  "192.168.10.73",
 				port  =  12345,
 				size  =  756
 			},
@@ -230,7 +236,7 @@ return {
 				size  =  500
 			},
 			Spots =  {
-				ip    =  "192.168.10.73",
+				ip    =  "192.168.10.103",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  241
@@ -251,7 +257,7 @@ return {
 				{
 					remote =  "Petales",
 					off =  0,
-					size =  72
+					size =  1000
 				},
 				{
 					remote =  "Petales",
