@@ -92,9 +92,11 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local color = color_wheel(plantoids.counter)
 	local plantoid_moyen = plantoids.plants[2]
-	-- color[1] = color[1] / 255 * 100
-	-- color[2] = color[2] / 255 * 100
-	-- color[3] = color[3] / 255 * 100
+	color2 = {color[1],color[2],color[3]}
+	color[1] = color[1] / 255 * 100
+	color[2] = color[2] / 255 * 100
+	color[3] = color[3] / 255 * 100
+
 
 	local plantoid_petit = plantoids.plants[1]
 	local plantoid_moyen = plantoids.plants[2]
@@ -153,7 +155,10 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 -----------------------------------------------------------
 
 	plantoid_petit:setAllPixel(color,	"Tige_et_support", 1)
-	-- plantoid_petit:setAllPixel(color,	"Spots", 1)
+
+	plantoid_petit:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
+	plantoid_moyen:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
+	plantoid_grand:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
 
 	-- plantoid_moyen:setAllPixel(rgb(0,255,255),	"Petales", 1)
 	-- plantoid_moyen:setAllPixel(rgb(255,0,0),		"Petales", 2)
@@ -163,47 +168,71 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plantoid_moyen:setAllPixel(rgb(255,0,255),	"Petales", 6)
 
 	plantoid_moyen:setAllPixel(color,	"Petales", 1)
-	-- plantoid_moyen:setAllPixel(color,   "Petales", 2)
-	-- plantoid_moyen:setAllPixel(color,   "Petales", 3)
-	-- plantoid_moyen:setAllPixel(color,	"Petales", 4)
-	-- plantoid_moyen:setAllPixel(color,	"Petales", 5)
-	-- plantoid_moyen:setAllPixel(color,	"Petales", 6)
+	plantoid_moyen:setAllPixel(color,   "Petales", 2)
+	plantoid_moyen:setAllPixel(color,   "Petales", 3)
+	plantoid_moyen:setAllPixel(color,	"Petales", 4)
+	plantoid_moyen:setAllPixel(color,	"Petales", 5)
+	plantoid_moyen:setAllPixel(color,	"Petales", 6)
 
-	-- plantoid_moyen:setAllPixel(color,   "Feuilles_L", 1)
-	-- plantoid_moyen:setAllPixel(color,   "Feuilles_L", 2)
-	-- plantoid_moyen:setAllPixel(color,   "Feuilles_R", 1)
-	-- plantoid_moyen:setAllPixel(color,   "Feuilles_R", 2)
+	plantoid_moyen:setAllPixel(color,   "Feuilles_L", 1)
+	plantoid_moyen:setAllPixel(color,   "Feuilles_L", 2)
+	plantoid_moyen:setAllPixel(color,   "Feuilles_R", 1)
+	plantoid_moyen:setAllPixel(color,   "Feuilles_R", 2)
     --
 	-- plantoid_grand :setAllPixel(color,	"Petales", 1)
 
-	-- plantoid_moyen:setAllPixel(rgb(255,255,255),   "Feuilles", 1)
+	for i=0,1200 do
+		plantoid_grand:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Petales", 1)
+	end
+
+	for i=0,1200 do
+		plantoid_grand:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Feuilles_L", 1)
+	end
+	for i=0,1200 do
+		plantoid_grand:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Feuilles_R", 1)
+	end
+
+	for i=0,1000 do
+		plantoid_moyen:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Tiges", 1)
+	end
+
+
+
+	-- plantoid_moyen:setAllPixel(color,   "Tiges", 1)
+	-- plantoid_moyen:setAllPixel(color,   "Feuilles_R", 1)
+	-- plantoid_moyen:setAllPixel(color,   "Feuilles_R", 2)
+	-- plantoid_moyen:setAllPixel(color,   "Feuilles_L", 1)
+	-- plantoid_moyen:setAllPixel(color,   "Feuilles_L", 2)
+
+	-- plantoid_grand:setAllPixel(color,   "Spots", 1)
+	-- plantoid_moyen:setAllPixel(color,   "Tiges", 1)
 	-- plantoid_moyen:setAllPixel(rgb(255,255,255),   "Feuilles", 2)
 
 	-- plantoid_moyen:setAllPixel(color, "Tiges", 1)
 
 	--
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 3)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 4)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 3)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 4)
+    --
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 1)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 2)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 3)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 4)
 
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 1)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 2)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 3)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 4)
 
-
-	plantoid_moyen:setLerp(0,     color_wheel(plantoids.counter*3+100), color_wheel(plantoids.counter*3+0), 216/2, "Feuilles_L" , 1)
-	plantoid_moyen:setLerp(216/2, color_wheel(plantoids.counter*3+0), color_wheel(plantoids.counter*3+100), 216/2, "Feuilles_L" , 1)
-
-	plantoid_moyen:setLerp(0,     rgb(0,0,255), rgb(0,255,255), 162/2, "Feuilles_L" , 2)
-	plantoid_moyen:setLerp(162/2, rgb(0,255,255), rgb(0,0,255), 162/2, "Feuilles_L" , 2)
-
-	plantoid_moyen:setLerp(0,     color_wheel(plantoids.counter*3+100), color_wheel(plantoids.counter*3+0), 216/2, "Feuilles_R" , 1)
-	plantoid_moyen:setLerp(216/2, color_wheel(plantoids.counter*3+0), color_wheel(plantoids.counter*3+100), 216/2, "Feuilles_R" , 1)
-
-	plantoid_moyen:setLerp(0,     rgb(0,0,255), rgb(0,255,255), 162/2, "Feuilles_R" , 2)
-	plantoid_moyen:setLerp(162/2, rgb(0,255,255), rgb(0,0,255), 162/2, "Feuilles_R" , 2)
+	-- plantoid_moyen:setLerp(0,     color_wheel(plantoids.counter*3+100), color_wheel(plantoids.counter*3+0), 216/2, "Feuilles_L" , 1)
+	-- plantoid_moyen:setLerp(216/2, color_wheel(plantoids.counter*3+0), color_wheel(plantoids.counter*3+100), 216/2, "Feuilles_L" , 1)
+    --
+	-- plantoid_moyen:setLerp(0,     rgb(0,0,255), rgb(0,255,255), 162/2, "Feuilles_L" , 2)
+	-- plantoid_moyen:setLerp(162/2, rgb(0,255,255), rgb(0,0,255), 162/2, "Feuilles_L" , 2)
+    --
+	-- plantoid_moyen:setLerp(0,     color_wheel(plantoids.counter*3+100), color_wheel(plantoids.counter*3+0), 216/2, "Feuilles_R" , 1)
+	-- plantoid_moyen:setLerp(216/2, color_wheel(plantoids.counter*3+0), color_wheel(plantoids.counter*3+100), 216/2, "Feuilles_R" , 1)
+    --
+	-- plantoid_moyen:setLerp(0,     rgb(0,0,255), rgb(0,255,255), 162/2, "Feuilles_R" , 2)
+	-- plantoid_moyen:setLerp(162/2, rgb(0,255,255), rgb(0,0,255), 162/2, "Feuilles_R" , 2)
 
 	-- plantoid_petit:setLerp(0, rgb(255,0,0), rgb(255,0,255), 241, "Spots" , 1)
 
@@ -227,33 +256,31 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Tige_et_support" , 1)
 
 	-- test = test + 1
-
+    --
 	-- if test == 20 then
-	-- 	plantoid_moyen:clear("Feuilles_L",1)
-	-- 	plantoid_moyen:setAllPixel(rgb(100,100,255),   "Feuilles_L", 1)
-
-	-- 	-- plantoid_moyenoids:printf("%d\n", test)
+	-- 	plantoid_grand:clear("Spots",1)
+	-- 	plantoid_grand:setAllPixel(rgb(100,100,255),   "Spots", 1)
 	-- 	test = 0
 	-- else
 	-- 	for i=1,50 do
-	-- 		plantoid_moyen:setPixel(math.random(0, 500), rgb(0,0,0), "Feuilles_L", 1)
+	-- 		plantoid_grand:setPixel(math.random(0, 500), rgb(0,0,0), "Spots", 1)
 	-- 	end
-	-- 	plantoid_moyen:setFade(0, 0.50, nil, "Feuilles_L", 1)
-
-	-- 	for i=1,885 do
+	-- 	plantoid_grand:setFade(0, 0.50, nil, "Spots", 1)
+    --
+	-- 	for i=1,241 do
 	-- 		if math.random(0, 1) == 0 then
-	-- 			local pixel = plantoid_moyen:getPixel(i+1, "Feuilles_L", 1)
+	-- 			local pixel = plantoid_grand:getPixel(i+1, "Spots", 1)
 	-- 			if pixel then
-	-- 				plantoid_moyen:setPixel(i, pixel, "Feuilles_L", 1)
+	-- 				plantoid_grand:setPixel(i, pixel, "Spots", 1)
 	-- 			end
 	-- 		else
-	-- 			local pixel = plantoid_moyen:getPixel(i-1, "Feuilles_L", 1)
+	-- 			local pixel = plantoid_grand:getPixel(i-1, "Spots", 1)
 	-- 			if pixel then
-	-- 				plantoid_moyen:setPixel(i, pixel, "Feuilles_L", 1)
+	-- 				plantoid_grand:setPixel(i, pixel, "Spots", 1)
 	-- 			end
 	-- 		end
 	-- 	end
-
+    --
 	-- end
 
 	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Feuilles", 1)

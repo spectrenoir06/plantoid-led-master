@@ -94,14 +94,14 @@ function love.draw()
 				love.graphics.print("Sonar 0:", 15, y)
 				love.graphics.rectangle("line", 15+60, y, 330, 12)
 				love.graphics.setColor(1, 1, 0, 1)
-				love.graphics.rectangle("fill", 15+60+1, y+1, (w.data.sonar[1] / 2000 * 330), 12-2)
+				love.graphics.rectangle("fill", 15+60+1, y+1, (w.data.sonar[1] / 1000 * 330), 12-2)
 				love.graphics.setColor(1, 1, 1, 1)
 				y = y + 20
 
 				love.graphics.print("Sonar 1:", 15, y)
 				love.graphics.rectangle("line", 15+60, y, 330, 12)
 				love.graphics.setColor(1, 1, 0, 1)
-				love.graphics.rectangle("fill", 15+60+1, y+1, (w.data.sonar[2] / 2000 * 330), 12-2)
+				love.graphics.rectangle("fill", 15+60+1, y+1, (w.data.sonar[2] / 1000 * 330), 12-2)
 				love.graphics.setColor(1, 1, 1, 1)
 				y = y + 25
 

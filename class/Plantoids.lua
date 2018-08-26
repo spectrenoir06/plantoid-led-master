@@ -35,8 +35,6 @@ local CHECK_REMOTES      = 3 -- secondes
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
 local CLIENT_MUSIC_PORT  = 57120             -- port to connect to super collider
 
-local CLIENT_SENSOR_SEND = {192,168,12,2}
-
 local SERVER_PORT   = 8000
 local UPDATE_SCREEN = true
 
@@ -45,7 +43,7 @@ local CMD_UDP_SENSOR = 1
 local CMD_UDP_ODROID = 2
 local CMD_UDP_INFO_0 = 3
 local CMD_UDP_INFO_1 = 4
-local CMD_SET_LED    = 11;
+local CMD_SET_LED    = 11
 
 local CMD_UDP_OSC   = 47 -- '/''
 
@@ -159,11 +157,10 @@ function Plantoids:update(dt, dont_send_led)
 				seg.alive = 2
 				_, seg.dist_rgbw, seg.dist_size, seg.dist_vers, seg.dist_name = upack(data, "bHzz")
 			elseif sensor then
-				self:printf("Sensors Error %s", ip)
 				sensor.alive = 2
 				_, sensor.dist_iptosend[1], sensor.dist_iptosend[2] , sensor.dist_iptosend[3], sensor.dist_iptosend[4], sensor.dist_vers, sensor.dist_name = upack(data, "bbbbzz")
 			else
-				self:printf("Receive CMD_UDP_ALIVE  frron unknow ip: %s", ip)				
+				self:printf("Receive CMD_UDP_ALIVE  frron unknow ip: %s", ip)
 			end
 		elseif cmd == CMD_UDP_SENSOR then
 			if not self.replay then
@@ -346,7 +343,7 @@ function Plantoids:setEeprom()
 			w:setEeprom(v.name.."_"..l)
 		end
 		for l,w in ipairs(v.sensors) do
-			w:setEeprom(v.name.."_"..l, CLIENT_SENSOR_SEND)
+			w:setEeprom(v.name.."_"..l)
 		end
 	end
 end

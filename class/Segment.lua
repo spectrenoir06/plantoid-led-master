@@ -135,7 +135,7 @@ function Segment:sendLerp(off, color1, color2, size)
 end
 
 function Segment:off()
-	self:sendPixels(0, {0,0,0,0}, self.size)
+	self:sendPixels(0, {100,0,0,0}, self.size)
 	self:show()
 end
 
