@@ -3,7 +3,7 @@ return {
 		name = "Plantoid_Petit",
 		remotes =  {
 			Tige_et_support =  {
-				ip    =  "192.168.10.52",  -- 73
+				ip    =  "192.168.10.52",
 				port  =  12345,
 				size  =  400
 			},
@@ -21,11 +21,26 @@ return {
 			},
 		},
 		parts =  {
-			Tige_et_support =  {
+			Supports =  {
 				{
 					remote =  "Tige_et_support",
 					off =  0,
-					size =  1000
+					size =  37
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  37,
+					size =  37
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  37+37,
+					size =  35
+				},
+				{
+					remote =  "Tige_et_support",
+					off =  37+37+35,
+					size =  35
 				},
 			},
 			Spots =  {
@@ -43,7 +58,7 @@ return {
 			Petales =  {
 				ip    =  "192.168.10.60",
 				port  =  12345,
-				size  =  1000,--111+111+114+112+111+108
+				size  =  111+111+114+112+111+108
 			},
 			Feuilles_L =  {
 				ip    =  "192.168.10.145",
@@ -61,7 +76,7 @@ return {
 				size  =  1000
 			},
 			Spots =  {
-				ip    =  "192.168.10.208",
+				ip    =  "192.168.10.228",
 				port  =  12345,
 				RGBW  =  true,
 				size  =  241
@@ -78,7 +93,7 @@ return {
 				{
 					remote =  "Petales",
 					off =  0,
-					size =  1000
+					size =  111
 				},
 				{
 					remote =  "Petales",
@@ -140,8 +155,8 @@ return {
 			Tiges =  {
 				{
 					remote =  "Tige_et_support",
-					off =  0,--51+51+58+57,
-					size =  1000,--53
+					off =  51+51+58+57,
+					size =  53,
 				},
 				{
 					remote =  "Tige_et_support",
@@ -193,7 +208,7 @@ return {
 			Petales =  {
 				ip    =  "192.168.10.147",
 				port  =  12345,
-				size  =  1200
+				size  =  240*5
 			},
 			Feuilles_L =  {
 				ip    =  "192.168.10.71",
@@ -207,7 +222,7 @@ return {
 				size  =  756
 			},
 			Tige_et_support =  {
-				ip    =  "192.168.10.245",
+				ip    =  "192.168.10.145",
 				port  =  12345,
 				size  =  1000
 			},
@@ -233,32 +248,27 @@ return {
 				{
 					remote =  "Petales",
 					off =  0,
-					size =  1200
+					size =  240
 				},
 				{
 					remote =  "Petales",
-					off =  72,
-					size =  72
+					off =  240,
+					size =  240
 				},
 				{
 					remote =  "Petales",
-					off =  144,
-					size =  72
+					off =  240*2,
+					size =  240
 				},
 				{
 					remote =  "Petales",
-					off =  216,
-					size =  72
+					off =  240*3,
+					size =  240
 				},
 				{
 					remote =  "Petales",
-					off =  288,
-					size =  72
-				},
-				{
-					remote =  "Petales",
-					off =  360,
-					size =  72
+					off =  240*4,
+					size =  240
 				},
 			},
 			Spots =  {

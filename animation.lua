@@ -71,6 +71,35 @@ function test_horloge(plantoids, color)
 	plant:sendAll(true)
 end
 
+function spark(plantoids, plant, part_name, part_number, counter, color, part_size, pixel_to_remove, fade)
+	fade = fade or 0.50
+	pixel_to_remove = pixel_to_remove or 50
+	local part_size = plant:getPartSize(part_name, part_number)
+	if plantoids.counter%counter == 0 then
+		plant:clear(part_name, part_number)
+		plant:setAllPixel(color, part_name, part_number)
+		counter = 0
+	else
+		for i=1, pixel_to_remove do
+			plant:setPixel(math.random(0, part_size), rgb(0,0,0), part_name, part_number)
+		end
+		plant:setFade(0, 0.50, nil, part_name, part_number)
+		for i=1, part_size do
+			if math.random(0, 1) == 0 then
+				local pixel = plant:getPixel(i+1, part_name, part_number)
+				if pixel then
+					plant:setPixel(i, pixel, part_name, part_number)
+				end
+			else
+				local pixel = plant:getPixel(i-1, part_name, part_number)
+				if pixel then
+					plant:setPixel(i, pixel, part_name, part_number)
+				end
+			end
+		end
+	end
+end
+
 function receiveOSC(plantoids, addr, data) -- call when receive osc data
 	plantoids:printf("OSC Receive: %s, data: %s", addr, inspect(data))
 end
@@ -154,11 +183,18 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 -----------------------------------------------------------
 
-	plantoid_petit:setAllPixel(color,	"Tige_et_support", 1)
+	plantoid_petit:setAllPixel(rgb(0,255,0),	"Supports", 1)
+	plantoid_petit:setAllPixel(rgb(255,255,0),	"Supports", 2)
+	plantoid_petit:setAllPixel(rgb(0,0,255),	"Supports", 3)
+	-- plantoid_petit:setAllPixel(color,	"Supports", 4)
+	-- plantoid_petit:setAllPixel(color,	"Tiges", 2)
+	-- plantoid_petit:setAllPixel(color,	"Tige_et_support", 1)
 
-	plantoid_petit:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
+	-- plantoid_petit:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
 	plantoid_moyen:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
 	plantoid_grand:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
+
+	plantoid_grand:setAllPixel(color_wheel(plantoids.counter),	"Tiges", 1)
 
 	-- plantoid_moyen:setAllPixel(rgb(0,255,255),	"Petales", 1)
 	-- plantoid_moyen:setAllPixel(rgb(255,0,0),		"Petales", 2)
@@ -167,19 +203,19 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plantoid_moyen:setAllPixel(rgb(255,255,0),	"Petales", 5)
 	-- plantoid_moyen:setAllPixel(rgb(255,0,255),	"Petales", 6)
 
-	plantoid_moyen:setAllPixel(color,	"Petales", 1)
-	plantoid_moyen:setAllPixel(color,   "Petales", 2)
-	plantoid_moyen:setAllPixel(color,   "Petales", 3)
-	plantoid_moyen:setAllPixel(color,	"Petales", 4)
-	plantoid_moyen:setAllPixel(color,	"Petales", 5)
-	plantoid_moyen:setAllPixel(color,	"Petales", 6)
+	-- plantoid_moyen:setAllPixel(color,	"Petales", 1)
+	-- plantoid_moyen:setAllPixel(color,	"Petales", 2)
+	-- plantoid_moyen:setAllPixel(color,	"Petales", 3)
+	-- plantoid_moyen:setAllPixel(color,	"Petales", 4)
+	-- plantoid_moyen:setAllPixel(color,	"Petales", 5)
+	-- plantoid_moyen:setAllPixel(color,	"Petales", 6)
 
 	plantoid_moyen:setAllPixel(color,   "Feuilles_L", 1)
 	plantoid_moyen:setAllPixel(color,   "Feuilles_L", 2)
 	plantoid_moyen:setAllPixel(color,   "Feuilles_R", 1)
 	plantoid_moyen:setAllPixel(color,   "Feuilles_R", 2)
-    --
-	-- plantoid_grand :setAllPixel(color,	"Petales", 1)
+
+	-- plantoid_grand:setAllPixel(rgb(0,255,0),	"Petales", 1)
 
 	for i=0,1200 do
 		plantoid_grand:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Petales", 1)
@@ -188,6 +224,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	for i=0,1200 do
 		plantoid_grand:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Feuilles_L", 1)
 	end
+
 	for i=0,1200 do
 		plantoid_grand:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Feuilles_R", 1)
 	end
@@ -196,6 +233,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 		plantoid_moyen:setPixel(i, color_wheel((i*3)+plantoids.counter*5), "Tiges", 1)
 	end
 
+	spark(plantoids, plantoid_petit, "Spots", 1, 20, rgb(255,0,0), nil, 50, 0.5)
 
 
 	-- plantoid_moyen:setAllPixel(color,   "Tiges", 1)
@@ -254,34 +292,6 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	-- plant:setFade(0, 0.80, nil, "Petales", 1)
 	-- plant:setLerp(0, rgb(100,0,0), rgb(0,0,100), nil, "Tige_et_support" , 1)
-
-	-- test = test + 1
-    --
-	-- if test == 20 then
-	-- 	plantoid_grand:clear("Spots",1)
-	-- 	plantoid_grand:setAllPixel(rgb(100,100,255),   "Spots", 1)
-	-- 	test = 0
-	-- else
-	-- 	for i=1,50 do
-	-- 		plantoid_grand:setPixel(math.random(0, 500), rgb(0,0,0), "Spots", 1)
-	-- 	end
-	-- 	plantoid_grand:setFade(0, 0.50, nil, "Spots", 1)
-    --
-	-- 	for i=1,241 do
-	-- 		if math.random(0, 1) == 0 then
-	-- 			local pixel = plantoid_grand:getPixel(i+1, "Spots", 1)
-	-- 			if pixel then
-	-- 				plantoid_grand:setPixel(i, pixel, "Spots", 1)
-	-- 			end
-	-- 		else
-	-- 			local pixel = plantoid_grand:getPixel(i-1, "Spots", 1)
-	-- 			if pixel then
-	-- 				plantoid_grand:setPixel(i, pixel, "Spots", 1)
-	-- 			end
-	-- 		end
-	-- 	end
-    --
-	-- end
 
 	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Feuilles", 1)
 	-- plant:setAllPixel(on and color or rgb(0,0,0),   "Spots", 1)
