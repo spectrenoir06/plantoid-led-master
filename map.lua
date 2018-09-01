@@ -126,7 +126,7 @@ return {
 				{
 					remote =  "Petales",
 					off =  0,
-					size =  1000,--111
+					size =  111
 				},
 				{
 					remote =  "Petales",
@@ -165,11 +165,11 @@ return {
 				{
 					remote =  "Feuilles_L",
 					off =  0,
-					size =  210
+					size =  208
 				},
 				{
 					remote =  "Feuilles_L",
-					off =  210,
+					off =  208,
 					size =  142
 				},
 			},

@@ -166,7 +166,7 @@ function main()
 			elseif mode == 1 then
 				local y = 1
 				for k,v in ipairs(plants.plants) do
-					stdscr:attron(curses.A_BOLD)
+						stdscr:attron(curses.A_BOLD)
 						stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
 					stdscr:attroff(curses.A_BOLD)
 					y = y + 1
@@ -233,7 +233,7 @@ function main()
 			-- plants:printf("key = %d", key)
 		end
 
-		socket.sleep(0.001)
+		socket.sleep(0.0001)
 	end
 end
 

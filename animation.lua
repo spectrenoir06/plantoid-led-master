@@ -99,10 +99,17 @@ function spark(plantoids, plant, part_name, part_number, counter, color, part_si
 	end
 end
 
-function rainbow(plantoids, plant, part_name, part_number, density, counter)
+function rainbow(plantoids, plant, part_name, part_number, density, counter, value)
+	value = value or 1
 	local part_size = plant:getPartSize(part_name, part_number)
 	for i=0,part_size do
-		plant:setPixel(i, color_wheel((i*density)+counter), part_name, part_number)
+		local color = color_wheel((i*density)+counter)
+		local tmp =  {
+			color[1] * value,
+			color[2] * value,
+			color[3] * value
+		}
+		plant:setPixel(i, tmp, part_name, part_number)
 	end
 end
 
@@ -115,6 +122,8 @@ function receiveSensor(plantoids, sensor) -- call when receive sensor data
 	local boitier_number  = sensor.boitier_number
 	-- plantoids:printf("Receive sensor: plant: %d  boitier: %d  temp: %d", plantoid_number, boitier_number, sensor.data.temp)
 end
+
+local fire = 0
 
 local test = 0
 local ailes_moyen_1 = 0
@@ -250,28 +259,35 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- plantoid_moyen:setAllPixel(color,	"Petales", 6)
 
 -- plantoid_moyen:setAllPixel(color_wheel(plantoids.counter),	"Spots", 1)
-	movinLerp(plantoid_moyen, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Spots", 1, 1000)
+	-- movinLerp(plantoid_moyen, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Spots", 1, 1000)
+
+	rainbow(plantoids, plantoid_moyen, "Spots", 1, 0.2, plantoids.counter, 0.2)
 
 	-- plantoid_moyen:setAllPixel(color,   "Feuilles_L", 1)
 	-- plantoid_moyen:setAllPixel(color,   "Feuilles_L", 2)
 	-- plantoid_moyen:setAllPixel(color,   "Feuilles_R", 1)
 	-- plantoid_moyen:setAllPixel(color,   "Feuilles_R", 2)
 
-	plantoid_moyen:setAllPixel(color,   "Petales", 1)
+	-- plantoid_moyen:setAllPixel(color,   "Petales", 1)
 
 
 
-	-- rainbow(plantoids, plantoid_moyen, "Petales", 1, 1.0, plantoids.counter)
-	-- rainbow(plantoids, plantoid_moyen, "Petales", 2, 1.0, plantoids.counter)
-	-- rainbow(plantoids, plantoid_moyen, "Petales", 3, 1.0, plantoids.counter)
-	-- rainbow(plantoids, plantoid_moyen, "Petales", 4, 1.0, plantoids.counter)
-	-- rainbow(plantoids, plantoid_moyen, "Petales", 5, 1.0, plantoids.counter)
-	-- rainbow(plantoids, plantoid_moyen, "Petales", 6, 1.0, plantoids.counter)
+	rainbow(plantoids, plantoid_moyen, "Petales", 1, 1.0, plantoids.counter)
+	rainbow(plantoids, plantoid_moyen, "Petales", 2, 1.0, plantoids.counter)
+	rainbow(plantoids, plantoid_moyen, "Petales", 3, 1.0, plantoids.counter)
+	rainbow(plantoids, plantoid_moyen, "Petales", 4, 1.0, plantoids.counter)
+	rainbow(plantoids, plantoid_moyen, "Petales", 5, 1.0, plantoids.counter)
+	rainbow(plantoids, plantoid_moyen, "Petales", 6, 1.0, plantoids.counter)
 
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 3)
-	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 4)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 1)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 2)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 3)
+	-- plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Tiges" , 4)
+
+	movinLerp(plantoid_moyen, plantoids.counter, rgb(0,0,100), rgb(100,0,0), "Tiges", 1, 200)
+	movinLerp(plantoid_moyen, plantoids.counter, rgb(0,0,100), rgb(100,0,0), "Tiges", 2, 200)
+	movinLerp(plantoid_moyen, plantoids.counter, rgb(0,0,100), rgb(100,0,0), "Tiges", 3, 200)
+	movinLerp(plantoid_moyen, plantoids.counter, rgb(0,0,100), rgb(100,0,0), "Tiges", 4, 200)
 
 	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 1)
 	plantoid_moyen:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 2)
@@ -323,14 +339,15 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- movinLerp(plantoid_grand, plantoids.counter, {100,100,0}, {100,0,0}, "Petales", 4,240)
 	-- movinLerp(plantoid_grand, plantoids.counter, {100,100,0}, {100,0,0}, "Petales", 5,240)
 
-	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Spots", 1, 1000)
+	-- movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Spots", 1, 1000)
+	rainbow(plantoids, plantoid_grand, "Spots", 1, 0.2, plantoids.counter, 0.15)
 
 
-	rainbow(plantoids, plantoid_grand, "Petales", 1, 0.3, plantoids.counter)
-	rainbow(plantoids, plantoid_grand, "Petales", 2, 0.3, plantoids.counter)
-	rainbow(plantoids, plantoid_grand, "Petales", 3, 0.3, plantoids.counter)
-	rainbow(plantoids, plantoid_grand, "Petales", 4, 0.3, plantoids.counter)
-	rainbow(plantoids, plantoid_grand, "Petales", 5, 0.3, plantoids.counter)
+	rainbow(plantoids, plantoid_grand, "Petales", 1, 0.3, plantoids.counter,0.3)
+	rainbow(plantoids, plantoid_grand, "Petales", 2, 0.3, plantoids.counter,0.3)
+	rainbow(plantoids, plantoid_grand, "Petales", 3, 0.3, plantoids.counter,0.3)
+	rainbow(plantoids, plantoid_grand, "Petales", 4, 0.3, plantoids.counter,0.3)
+	rainbow(plantoids, plantoid_grand, "Petales", 5, 0.3, plantoids.counter,0.3)
 	-- rainbow(plantoids, plantoid_grand, "Petales", 4, 1.0, plantoids.counter)
 
 	-- plantoid_grand:setLerp(0, {255,255,0}, {255,0,0}, nil, "Feuilles_L", 1)
@@ -365,18 +382,74 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	rainbow(plantoids, plantoid_grand, "Feuilles_L", 4, 0.3, plantoids.counter)
 	rainbow(plantoids, plantoid_grand, "Feuilles_L", 5, 0.3, plantoids.counter)
 
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_L", 1)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_L", 2)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_L", 3)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_L", 4)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_L", 5)
+
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_L", 1)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_L", 2)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_L", 3)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_L", 4)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_L", 5)
+
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_L", 1)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_L", 2)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_L", 3)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_L", 4)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_L", 5)
+
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_R", 1)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_R", 2)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_R", 3)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_R", 4)
+	-- plantoid_grand:setPixel(fire-2, rgb(0,0,0), "Feuilles_R", 5)
+
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_R", 1)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_R", 2)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_R", 3)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_R", 4)
+	plantoid_grand:setPixel(fire-1, rgb(0,0,0), "Feuilles_R", 5)
+
+
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_R", 1)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_R", 2)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_R", 3)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_R", 4)
+	plantoid_grand:setPixel(fire, rgb(0,0,0), "Feuilles_R", 5)
+
+
+	fire = fire + 3
+
+	fire = fire % 100
+
+
+
+
 	-- movinLerp(plantoid_grand, plantoids.counter, {255,255,0}, {255,0,0}, "Supports", 1, 1000)
 
 
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 1)
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 2)
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 3)
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 4)
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 1)
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 2)
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 3)
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(255,0,0), nil, "Tiges" , 4)
 
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 1)
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 2)
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 3)
-	plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 4)
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Tiges", 1, 200)
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Tiges", 2, 200)
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Tiges", 3, 200)
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Tiges", 4, 200)
+
+
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Supports", 1, 200)
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Supports", 2, 200)
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Supports", 3, 200)
+	movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Supports", 4, 200)
+
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 1)
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 2)
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 3)
+	-- plantoid_grand:setLerp(0, rgb(255,0,0), rgb(0,0,255), nil, "Supports" , 4)
 
 
 
