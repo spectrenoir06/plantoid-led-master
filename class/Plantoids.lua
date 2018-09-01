@@ -29,7 +29,7 @@ end
 
 local Plantoids = class('Plantoids')
 
-local LED_FRAMERATE      = 15 -- Hz
+local LED_FRAMERATE      = 5 -- Hz
 local CHECK_REMOTES      = 3 -- secondes
 
 local CLIENT_MUSIC_IP    = "127.0.0.1"       -- ip to connect to super collider
@@ -238,8 +238,8 @@ function Plantoids:load_dump(start, nb)
 			{
 				temp = temp,
 				hum = hum,
-				sonar = {sonar_1, sonar_2},
-				adc = {adc_0, adc_1, adc_2, adc_3, adc_4, adc_5, adc_6, adc_7}
+				sonar = {tonumber(sonar_1), tonumber(sonar_2)},
+				adc = {tonumber(adc_0), tonumber(adc_1), tonumber(adc_2), tonumber(adc_3), tonumber(adc_4), tonumber(adc_5), tonumber(adc_6), tonumber(adc_7)}
 			}
 		}
 	end

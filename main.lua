@@ -1,4 +1,5 @@
 local Plantoids = require("class.Plantoids")
+local inspect   = require("lib.inspect")
 
 function love.load(arg)
 	plants = Plantoids:new((arg[1] == "replay") and arg[2] or nil)
@@ -6,6 +7,19 @@ function love.load(arg)
 	mode = 0
 	local r,g,b = 0,0,0
 	love.graphics.setLineWidth(1)
+	sound = love.audio.newSource("sound/HiHat/OpenHH DeeEmTee 3.wav", "static")
+	sounds = {
+		"sound/HiHat/OpenHH DeeEmTee 3.wav",
+		"sound/Snare/Snare Overtime 1.wav",
+		"sound/Tom/Tom Overtime 1.wav",
+		"sound/Clap/Clap ClikDub.wav"
+	}
+	audio = {}
+	for k,v in pairs(sounds) do
+		audio[k] = {}
+		audio[k].sound = love.audio.newSource(v, "static")
+		audio[k].on = false
+	end
 end
 
 function love.draw()
@@ -183,6 +197,43 @@ end
 
 function love.update(dt)
 	local finish = plants:update(dt)
+	-- print(inspect(plants.plants[1].sensors[1].data.adc[2]))
+	if plants.plants[1].sensors[1].data.adc[1] < 500 then
+		if not audio[1].on then
+			audio[1].sound:play()
+			audio[1].on = true
+		end
+	else
+		audio[1].on = false
+	end
+
+	if plants.plants[1].sensors[1].data.adc[2] < 500 then
+		if not audio[2].on then
+			audio[2].sound:play()
+			audio[2].on = true
+		end
+	else
+		audio[2].on = false
+	end
+
+	if plants.plants[2].sensors[1].data.adc[1] < 500 then
+		if not audio[3].on then
+			audio[3].sound:play()
+			audio[3].on = true
+		end
+	else
+		audio[3].on = false
+	end
+
+	if plants.plants[2].sensors[1].data.adc[2] < 500 then
+		if not audio[4].on then
+			audio[4].sound:play()
+			audio[4].on = true
+		end
+	else
+		audio[4].on = false
+	end
+
 	if finish then
 		love.event.quit()
 	end

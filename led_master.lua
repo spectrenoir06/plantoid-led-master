@@ -178,7 +178,7 @@ function main()
 						stdscr:mvaddstr(y, 4, "Sonar 2: "..w.data.sonar[2]); y=y+2
 
 						for i=1,8 do
-							stdscr:mvaddstr(y, 4 + (i-1) * 12,   "ADC"..i..": "..w.data.adc[i]);
+							stdscr:mvaddstr(y, 4 + (i-1) * 12,   "ADC"..(i-1)..": "..w.data.adc[i]);
 						end
 						y = y + 2
 					end
