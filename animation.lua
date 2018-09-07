@@ -131,6 +131,8 @@ local ailes_moyen_2 = 0
 local on = true
 local spark_color = {255,0,0}
 
+local spot = true
+
 function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 
 	local time = socket.gettime()
@@ -184,6 +186,7 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 -----------------------------------------------------------
 
 	test_horloge(plantoids, color)
+
 
 -----------------------------------------------------------
 
@@ -340,14 +343,34 @@ function led_animation(plantoids) -- call at 15Hz ( 0.06666 seconde)
 	-- movinLerp(plantoid_grand, plantoids.counter, {100,100,0}, {100,0,0}, "Petales", 5,240)
 
 	-- movinLerp(plantoid_grand, plantoids.counter, rgb(255,0,0), rgb(255,255,0), "Spots", 1, 1000)
-	rainbow(plantoids, plantoid_grand, "Spots", 1, 0.2, plantoids.counter, 0.15)
 
+	-- if spot then
+		rainbow(plantoids, plantoid_grand, "Spots", 1, 0.2, plantoids.counter, 0.15)
+		spot = false
+	-- else
+	-- 	plantoid_grand:setAllPixel({0,0,0,20}, "Spots", 1)
+	-- 	spot = true
+	-- end
 
 	rainbow(plantoids, plantoid_grand, "Petales", 1, 0.3, plantoids.counter,0.3)
 	rainbow(plantoids, plantoid_grand, "Petales", 2, 0.3, plantoids.counter,0.3)
 	rainbow(plantoids, plantoid_grand, "Petales", 3, 0.3, plantoids.counter,0.3)
 	rainbow(plantoids, plantoid_grand, "Petales", 4, 0.3, plantoids.counter,0.3)
 	rainbow(plantoids, plantoid_grand, "Petales", 5, 0.3, plantoids.counter,0.3)
+
+	for i=0, 6 do
+		for j=0,1 do
+			plantoid_grand:setPixel(fire+(i*200/6)-j, rgb(0,0,0), "Petales", 1)
+			plantoid_grand:setPixel(fire+(i*200/6)-j, rgb(0,0,0), "Petales", 2)
+			plantoid_grand:setPixel(fire+(i*200/6)-j, rgb(0,0,0), "Petales", 3)
+			plantoid_grand:setPixel(fire+(i*200/6)-j, rgb(0,0,0), "Petales", 4)
+			plantoid_grand:setPixel(fire+(i*200/6)-j, rgb(0,0,0), "Petales", 5)
+		end
+	end
+
+
+
+
 	-- rainbow(plantoids, plantoid_grand, "Petales", 4, 1.0, plantoids.counter)
 
 	-- plantoid_grand:setLerp(0, {255,255,0}, {255,0,0}, nil, "Feuilles_L", 1)
