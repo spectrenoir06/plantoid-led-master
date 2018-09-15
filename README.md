@@ -7,6 +7,7 @@ lua5.1
 luarocks5.1 install luasocket
 luarocks5.1 install luaposix
 luarocks5.1 install lcurses
+luarocks5.1 install lpack
 ```
 
 ### runs serveur (console mode)
@@ -47,5 +48,4 @@ love .
 1. download and flash https://github.com/spectrenoir06/plantoid-sensor-driver on the ESP8266
 2. read the ESP8266 IP on the serial console of arduino IDE
 3. write the ESP8266 IP on map.lua
-5. wrire your laptop IP on `class/Plantoids.lua` in variable `CLIENT_SENSOR_SEND`
 4. start `./led_master.lua`
