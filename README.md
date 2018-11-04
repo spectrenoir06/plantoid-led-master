@@ -1,5 +1,10 @@
 # plantoid-led-master
 
+![Plantoid](/img/plant.jpg)
+![Plantoid](/img/IMG_20180818_213449_769.jpg)
+![console](/img/console.png)
+![GUI](/img/led.png)
+
 ### dependence
 ```
 lua5.1
@@ -19,7 +24,7 @@ luarocks5.1 install lpack
 ./led_master.lua replay dump/log.dump
 ```
 
-### runs serveur with Love ( gui mode )
+### runs serveur with Love ( gui mode ) work on android and IOS
 ```
 love .
 ```
@@ -30,7 +35,7 @@ love .
 - updatesensor
 - seteeprom
 
-## different mode ( press key to change )
+## change mode ( press key to change )
 
 1. main page
 2. Sensors
