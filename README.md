@@ -3,7 +3,7 @@
 ![Plantoid](/img/plant.jpg)
 ![Plantoid](/img/IMG_20180818_213449_769.jpg)
 ![console](/img/console.png)
-![GUI](/img/led.png)
+![GUI](/img/led2.png)
 
 ### dependence
 ```
