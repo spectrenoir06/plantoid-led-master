@@ -246,7 +246,7 @@ return {
 			Feuilles_L =  {
 				ip    =  "192.168.10.71",
 				port  =  12345,
-				size  =  756
+				size  =  20+53+105+70+55
 			},
 
 			Feuilles_R =  {
@@ -257,7 +257,7 @@ return {
 			Tige_et_support =  {
 				ip    =  "192.168.10.234",
 				port  =  12345,
-				size  =  1000
+				size  =  73+73+78+78+71+71+71
 			},
 			Spots =  {
 				ip    =  "192.168.10.121",

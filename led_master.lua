@@ -95,8 +95,14 @@ function main()
 
 				local y = 3
 				for k,v in ipairs(plants.plants) do
+					local pixels_nb = 0
+					local leds_nb = 0
+					for l,w in pairs(v.segments) do
+						pixels_nb = pixels_nb + w.size
+						leds_nb = leds_nb + ((w.RGBW and 4 or 3)*w.size)
+					end
 					stdscr:attron(curses.A_BOLD)
-						stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name)
+						stdscr:mvaddstr(y, 1, "["..k.."]  "..v.name.."   pixels: "..pixels_nb..",  LEDs: "..leds_nb)
 					stdscr:attroff(curses.A_BOLD)
 					y = y + 1
 					stdscr:attron(curses.A_BOLD)
@@ -114,12 +120,12 @@ function main()
 						stdscr:attron(cc)
 							stdscr:mvaddstr(y, 27, w.remote.ip)
 						stdscr:attroff(cc)
-						if w.alive > 0 then
+						-- if w.alive > 0 then
 							stdscr:mvaddstr(y, 47, "V"..(w.dist_vers or "?"))
-							stdscr:mvaddstr(y, 56, w.dist_size or "?")
+							stdscr:mvaddstr(y, 56, w.dist_size or w.size)
 							stdscr:mvaddstr(y, 65, w.RGBW and "RGBW" or "RGB")
 							stdscr:mvaddstr(y, 75, w.dist_name or "?")
-						end
+						-- end
 						y = y + 1
 					end
 					stdscr:attron(curses.A_BOLD)
